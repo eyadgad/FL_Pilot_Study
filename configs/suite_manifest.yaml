@@ -1,0 +1,116 @@
+suite_version: '1.0'
+frozen_confirmatory_seeds:
+- 6101
+- 6102
+- 6103
+- 6104
+- 6105
+tiers:
+  A: required core evidence
+  B: stress/robustness
+  C: sensitivity/communication
+configs:
+- config: core_mnist_label_skew.yaml
+  tier: A
+  role: ordinary non-IID control
+  experiment_name: core_mnist_label_skew
+- config: core_mnist_rotation.yaml
+  tier: A
+  role: coherent covariate/explanation shift
+  experiment_name: core_mnist_rotation
+- config: core_mnist_patch.yaml
+  tier: A
+  role: sparse feature heterogeneity
+  experiment_name: core_mnist_patch
+- config: core_cifar10_label_skew.yaml
+  tier: A
+  role: ordinary non-IID control
+  experiment_name: core_cifar10_label_skew
+- config: core_cifar10_rotation.yaml
+  tier: A
+  role: coherent covariate/explanation shift
+  experiment_name: core_cifar10_rotation
+- config: core_cifar10_color.yaml
+  tier: A
+  role: client-specific photometric shift
+  experiment_name: core_cifar10_color
+- config: stress_mnist_rotation_unequal_sizes.yaml
+  tier: B
+  role: uncertainty/heteroskedasticity stress
+  experiment_name: stress_mnist_rotation_unequal_sizes
+- config: stress_cifar10_rotation_unequal_sizes.yaml
+  tier: B
+  role: uncertainty/heteroskedasticity stress
+  experiment_name: stress_cifar10_rotation_unequal_sizes
+- config: stress_mnist_rotation_partial_task_participation.yaml
+  tier: B
+  role: partial task participation
+  experiment_name: stress_mnist_rotation_partial_task_participation
+- config: stress_mnist_drift_rotation.yaml
+  tier: B
+  role: concept/covariate drift
+  experiment_name: stress_mnist_drift_rotation
+- config: stress_mnist_rotation_task_ig.yaml
+  tier: B
+  role: explainer-source robustness
+  experiment_name: stress_mnist_rotation_task_ig
+- config: stress_cifar10_rotation_task_ig.yaml
+  tier: B
+  role: explainer-source robustness
+  experiment_name: stress_cifar10_rotation_task_ig
+- config: robust_mnist_rotation_artifact_shift.yaml
+  tier: B
+  role: attribution poisoning
+  experiment_name: robust_mnist_rotation_artifact_shift
+- config: robust_mnist_rotation_random_support.yaml
+  tier: B
+  role: attribution poisoning
+  experiment_name: robust_mnist_rotation_random_support
+- config: sweep_mnist_topk_32.yaml
+  tier: C
+  role: communication sparsity sensitivity
+  experiment_name: sweep_mnist_topk_32
+- config: sweep_mnist_topk_64.yaml
+  tier: C
+  role: communication sparsity sensitivity
+  experiment_name: sweep_mnist_topk_64
+- config: sweep_mnist_topk_128.yaml
+  tier: C
+  role: communication sparsity sensitivity
+  experiment_name: sweep_mnist_topk_128
+- config: sweep_mnist_topk_256.yaml
+  tier: C
+  role: communication sparsity sensitivity
+  experiment_name: sweep_mnist_topk_256
+- config: sweep_mnist_dp_0p0.yaml
+  tier: C
+  role: artifact noise sensitivity
+  experiment_name: sweep_mnist_dp_0p0
+- config: sweep_mnist_dp_0p05.yaml
+  tier: C
+  role: artifact noise sensitivity
+  experiment_name: sweep_mnist_dp_0p05
+- config: sweep_mnist_dp_0p1.yaml
+  tier: C
+  role: artifact noise sensitivity
+  experiment_name: sweep_mnist_dp_0p1
+- config: sweep_mnist_dp_0p2.yaml
+  tier: C
+  role: artifact noise sensitivity
+  experiment_name: sweep_mnist_dp_0p2
+- config: sensitivity_mnist_z1_h0p048.yaml
+  tier: C
+  role: UCPA parameter sensitivity
+  experiment_name: sensitivity_mnist_z1_h0p048
+- config: sensitivity_mnist_z4_h0p048.yaml
+  tier: C
+  role: UCPA parameter sensitivity
+  experiment_name: sensitivity_mnist_z4_h0p048
+- config: sensitivity_mnist_z2_h0p024.yaml
+  tier: C
+  role: UCPA parameter sensitivity
+  experiment_name: sensitivity_mnist_z2_h0p024
+- config: sensitivity_mnist_z2_h0p096.yaml
+  tier: C
+  role: UCPA parameter sensitivity
+  experiment_name: sensitivity_mnist_z2_h0p096

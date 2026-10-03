@@ -1,0 +1,93 @@
+experiment_name: core_mnist_patch
+seeds:
+- 6101
+- 6102
+- 6103
+- 6104
+- 6105
+device: auto
+deterministic: true
+num_workers: 2
+dataset:
+  name: mnist
+  root: ./data
+  download: true
+federation:
+  n_clients: 8
+  rounds: 15
+  local_epochs: 1
+  batch_size: 64
+  lr: 0.01
+  momentum: 0.9
+  weight_decay: 0.0001
+  participation_rate: 1.0
+  partition: dirichlet
+  dirichlet_alpha: 0.1
+  min_client_samples: 40
+  sample_size_sigma: 0.0
+shift:
+  kind: patch
+  strength: 1.0
+  rotation_max_deg: 25.0
+  patch_size: 4
+  patch_value: 1.0
+  drift_start_round: 5
+  drift_end_round: 15
+surrogate:
+  kind: linear
+  source: linear_surrogate
+  epochs: 3
+  lr: 0.1
+  temperature: 3.0
+  l1: 0.0001
+  hidden_dim: 128
+  max_samples_per_class: 32
+  eval_samples_per_class: 24
+  ig_steps: 20
+  artifact_samples_per_class: 24
+artifact:
+  topk: 128
+  clip_radius: 5.0
+  quant_bits: 8
+  dp_sigma: 0.1
+  missing_variance_scale: 4.0
+  send_variance: true
+  sparse_intersection_only: true
+alignment:
+  beta: 0.2
+  methods:
+  - local
+  - fedattr_mean
+  - xfedalign_median
+  - ucpa
+  - ucpa_whole_only
+  - ucpa_coord_only
+  - cluster
+  ucpa_z: 2.0
+  ucpa_h: 0.048
+  ucpa_variance_floor_fraction: 0.05
+  cluster_k: 3
+evaluation:
+  deletion_steps: 20
+  eval_batch_size: 128
+  max_eval_samples: 256
+  compute_oracle_local_fidelity: true
+  oracle_samples_per_class: 64
+  topk_overlap_k: 128
+  bootstrap_samples: 5000
+  deletion_insertion_samples_per_client: 24
+  primary_metric: artifact_fidelity_jsd
+attack:
+  enabled: false
+  fraction: 0.25
+  strength: 0.3
+  kind: artifact_shift
+logging:
+  output_root: ./outputs
+  save_checkpoints: true
+  save_artifacts: true
+  log_every_round: true
+tags:
+  status: confirmatory
+  frozen_ucpa: z=2,h=0.048,beta=0.2
+  suite_version: '1.0'

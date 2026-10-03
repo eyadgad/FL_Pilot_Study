@@ -1,0 +1,74 @@
+experiment_name: sanity_synthetic
+device: auto
+seeds: [101]
+deterministic: true
+num_workers: 0
+dataset:
+  name: synthetic
+  train_limit: 320
+  test_limit: 80
+federation:
+  n_clients: 4
+  rounds: 2
+  local_epochs: 1
+  batch_size: 32
+  lr: 0.03
+  momentum: 0.0
+  weight_decay: 0.0
+  participation_rate: 1.0
+  partition: iid
+  dirichlet_alpha: 1.0
+  min_client_samples: 16
+  sample_size_sigma: 0.0
+shift:
+  kind: rotation
+  rotation_max_deg: 15.0
+surrogate:
+  kind: linear
+  source: linear_surrogate
+  epochs: 1
+  lr: 0.05
+  temperature: 2.0
+  l1: 0.0001
+  hidden_dim: 32
+  max_samples_per_class: 8
+  eval_samples_per_class: 4
+  ig_steps: 4
+  artifact_samples_per_class: 6
+artifact:
+  topk: 32
+  clip_radius: 5.0
+  quant_bits: 8
+  dp_sigma: 0.0
+  missing_variance_scale: 4.0
+  send_variance: true
+  sparse_intersection_only: true
+alignment:
+  beta: 0.2
+  methods: [local, fedattr_mean, xfedalign_median, ucpa, ucpa_whole_only, ucpa_coord_only, cluster]
+  ucpa_z: 2.0
+  ucpa_h: 0.048
+  ucpa_variance_floor_fraction: 0.05
+  cluster_k: 2
+evaluation:
+  deletion_steps: 4
+  eval_batch_size: 32
+  max_eval_samples: 32
+  compute_oracle_local_fidelity: true
+  oracle_samples_per_class: 8
+  topk_overlap_k: 32
+  bootstrap_samples: 200
+  deletion_insertion_samples_per_client: 2
+  primary_metric: artifact_fidelity_jsd
+attack:
+  enabled: false
+  fraction: 0.25
+  strength: 0.3
+  kind: artifact_shift
+logging:
+  output_root: ./outputs
+  save_checkpoints: true
+  save_artifacts: true
+  log_every_round: true
+tags:
+  purpose: end_to_end_sanity
