@@ -1,0 +1,6 @@
+{"event": "run_started", "time": 1790991344.932047}
+{"event": "data_loading_started", "time": 1790991344.932129}
+{"event": "round_complete", "round": 0, "selected_clients": [0, 1, 2], "time": 1790991344.9633858}
+{"event": "local_artifacts_built", "time": 1790991344.9798286, "total_bytes": 2064}
+{"event": "artifact_attack_applied", "kind": "random_support", "malicious_clients": [1], "strength": 0.25, "time": 1790991345.1117406}
+{"event": "run_finalized", "status": "completed", "time": 1790991345.1129448}

@@ -1,0 +1,26 @@
+{
+  "per_client": [
+    {
+      "mean_only_auc": 0.546875,
+      "mean_variance_auc": 0.5,
+      "n_member": 8,
+      "n_nonmember": 8
+    },
+    {
+      "mean_only_auc": 0.796875,
+      "mean_variance_auc": 0.828125,
+      "n_member": 8,
+      "n_nonmember": 8
+    },
+    {
+      "mean_only_auc": 0.734375,
+      "mean_variance_auc": 0.828125,
+      "n_member": 8,
+      "n_nonmember": 8
+    }
+  ],
+  "summary": {
+    "mean_only_auc": 0.6927083333333334,
+    "mean_variance_auc": 0.71875
+  }
+}
