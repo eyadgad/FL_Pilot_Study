@@ -1,0 +1,400 @@
+{
+  "all_criteria_pass": true,
+  "criteria": {
+    "A_task_sanity": {
+      "min_test_accuracy": 0.9275453629032251,
+      "pass": true
+    },
+    "B_homogeneous_denoising": {
+      "details": {
+        "patch": {
+          "improvement_vs_local_pct": 81.42728653194433,
+          "local": 0.009904265124968151,
+          "pass": true,
+          "ucpa": 0.0018394907827769002
+        },
+        "rotation": {
+          "improvement_vs_local_pct": 80.79135215597435,
+          "local": 0.0110864430175703,
+          "pass": true,
+          "ucpa": 0.0021295557976736498
+        }
+      },
+      "pass": true
+    },
+    "C_heterogeneous_fidelity": {
+      "details": {
+        "patch_grouped": {
+          "best_global": "GlobalMedian",
+          "best_global_jsd": 0.006520798957174526,
+          "improve_global_pct": 58.7423565868618,
+          "improve_local_pct": 74.23565869933171,
+          "local": 0.010442060016372,
+          "pass": true,
+          "strength_checks": {
+            "moderate": {
+              "improve_pct": 55.05498187948386,
+              "pass": true,
+              "selected_global": "GlobalMedian",
+              "selected_global_jsd": 0.006085146936074351,
+              "ucpa": 0.00273497039307865
+            },
+            "strong": {
+              "improve_pct": 61.96788307627926,
+              "pass": true,
+              "selected_global": "GlobalMedian",
+              "selected_global_jsd": 0.0069564509782747,
+              "ucpa": 0.0026456855697987503
+            }
+          },
+          "ucpa": 0.0026903279814387
+        },
+        "patch_personal": {
+          "best_global": "GlobalMedian",
+          "best_global_jsd": 0.00504638994705905,
+          "improve_global_pct": 50.701833467635424,
+          "improve_local_pct": 77.69787319764343,
+          "local": 0.011154890033675178,
+          "pass": true,
+          "strength_checks": {
+            "moderate": {
+              "improve_pct": 45.62832409726727,
+              "pass": true,
+              "selected_global": "GlobalMedian",
+              "selected_global_jsd": 0.00458552137343635,
+              "ucpa": 0.002493224819615351
+            },
+            "strong": {
+              "improve_pct": 54.92620128490519,
+              "pass": true,
+              "selected_global": "GlobalMedian",
+              "selected_global_jsd": 0.0055072585206817504,
+              "ucpa": 0.0024823306203320002
+            }
+          },
+          "ucpa": 0.0024877777199736753
+        },
+        "rotation_grouped": {
+          "best_global": "GlobalMean",
+          "best_global_jsd": 0.00630333704689455,
+          "improve_global_pct": 30.06514694692088,
+          "improve_local_pct": 48.993513045327504,
+          "local": 0.00864248797433045,
+          "pass": true,
+          "ucpa": 0.004408229501186
+        },
+        "rotation_personal": {
+          "best_global": "GlobalMean",
+          "best_global_jsd": 0.006638856560807651,
+          "improve_global_pct": 27.582014760528036,
+          "improve_local_pct": 47.362889625721174,
+          "local": 0.009133719784558502,
+          "pass": true,
+          "ucpa": 0.004807726164275401
+        }
+      },
+      "pass": true
+    },
+    "D_seed_robustness": {
+      "details": {
+        "patch_grouped": {
+          "best_global": "GlobalMedian",
+          "pass": true,
+          "seed_values": [
+            {
+              "global": 0.006328358819067126,
+              "local": 0.009687255679720876,
+              "seed": 501,
+              "ucpa": 0.00251923707594925,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.00667213611931675,
+              "local": 0.010812758205974,
+              "seed": 502,
+              "ucpa": 0.0027944738224177507,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.006560724338576251,
+              "local": 0.009977488368155377,
+              "seed": 503,
+              "ucpa": 0.0025396034118423754,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.006148813385394875,
+              "local": 0.010878466598619001,
+              "seed": 504,
+              "ucpa": 0.0026143423484690006,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.006893962123517626,
+              "local": 0.010854331229390751,
+              "seed": 505,
+              "ucpa": 0.002983983248515125,
+              "win_global": true,
+              "win_local": true
+            }
+          ],
+          "wins_vs_global": 5,
+          "wins_vs_local": 5
+        },
+        "patch_personal": {
+          "best_global": "GlobalMedian",
+          "pass": true,
+          "seed_values": [
+            {
+              "global": 0.005541894692509,
+              "local": 0.01100868404163475,
+              "seed": 501,
+              "ucpa": 0.0027592194998841257,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.0049819184549241245,
+              "local": 0.011395099404126877,
+              "seed": 502,
+              "ucpa": 0.002265361705885625,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.004847771827212501,
+              "local": 0.01054587741789325,
+              "seed": 503,
+              "ucpa": 0.00249201525019,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.004874623311532876,
+              "local": 0.012067141092082252,
+              "seed": 504,
+              "ucpa": 0.002462206174616125,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.00498574144911675,
+              "local": 0.010757648212638752,
+              "seed": 505,
+              "ucpa": 0.0024600859692925003,
+              "win_global": true,
+              "win_local": true
+            }
+          ],
+          "wins_vs_global": 5,
+          "wins_vs_local": 5
+        },
+        "rotation_grouped": {
+          "best_global": "GlobalMean",
+          "pass": true,
+          "seed_values": [
+            {
+              "global": 0.006117515915753001,
+              "local": 0.007830088758311751,
+              "seed": 501,
+              "ucpa": 0.00449578484289725,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.00623208160070825,
+              "local": 0.0086697734976725,
+              "seed": 502,
+              "ucpa": 0.0043449571651425,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.00608997046049675,
+              "local": 0.0082825233428845,
+              "seed": 503,
+              "ucpa": 0.0042266599132375,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.006886924917883251,
+              "local": 0.009399696121521752,
+              "seed": 504,
+              "ucpa": 0.004848059872139001,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.006190192339631501,
+              "local": 0.00903035815126175,
+              "seed": 505,
+              "ucpa": 0.00412568571251375,
+              "win_global": true,
+              "win_local": true
+            }
+          ],
+          "wins_vs_global": 5,
+          "wins_vs_local": 5
+        },
+        "rotation_personal": {
+          "best_global": "GlobalMean",
+          "pass": true,
+          "seed_values": [
+            {
+              "global": 0.00681871857130375,
+              "local": 0.008857524490654752,
+              "seed": 501,
+              "ucpa": 0.0053013792825755005,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.0060476064735465,
+              "local": 0.009105781040196752,
+              "seed": 502,
+              "ucpa": 0.004038979685932,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.006428943380614,
+              "local": 0.008565641472252751,
+              "seed": 503,
+              "ucpa": 0.004609557611923501,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.00733602717242425,
+              "local": 0.009980615088846501,
+              "seed": 504,
+              "ucpa": 0.0053250902427045,
+              "win_global": true,
+              "win_local": true
+            },
+            {
+              "global": 0.00656298720614975,
+              "local": 0.00915903683084175,
+              "seed": 505,
+              "ucpa": 0.0047636239982415006,
+              "win_global": true,
+              "win_local": true
+            }
+          ],
+          "wins_vs_global": 5,
+          "wins_vs_local": 5
+        }
+      },
+      "pass": true
+    },
+    "E_unified_adaptive_baselines": {
+      "equal_family_mean_jsd": {
+        "Cluster": 0.005819054539633131,
+        "CoordPeer": 0.0043283961043722695,
+        "HGEA": 0.005551650234986676,
+        "QGate": 0.005764320228994944,
+        "UCPA": 0.003598515341718444
+      },
+      "family_values": {
+        "patch_grouped": {
+          "Cluster": 0.0057651822349244,
+          "CoordPeer": 0.002104480811373,
+          "HGEA": 0.0016574038787570001,
+          "QGate": 0.0021599174881440004,
+          "UCPA": 0.0026903279814387
+        },
+        "patch_personal": {
+          "Cluster": 0.006539942902023026,
+          "CoordPeer": 0.002134999708975475,
+          "HGEA": 0.0017412161818357,
+          "QGate": 0.0036878841777578755,
+          "UCPA": 0.0024877777199736753
+        },
+        "rotation_grouped": {
+          "Cluster": 0.005195307493936351,
+          "CoordPeer": 0.006367088253262152,
+          "HGEA": 0.0092059795991577,
+          "QGate": 0.008444615300343801,
+          "UCPA": 0.004408229501186
+        },
+        "rotation_personal": {
+          "Cluster": 0.00577578552764875,
+          "CoordPeer": 0.006707015643878452,
+          "HGEA": 0.0096020012801963,
+          "QGate": 0.0087648639497341,
+          "UCPA": 0.004807726164275401
+        }
+      },
+      "pass": true,
+      "ucpa_improvement_pct": {
+        "Cluster": 38.15979353330969,
+        "CoordPeer": 16.86261481282978,
+        "HGEA": 35.18115894548821,
+        "QGate": 37.5725983504932
+      }
+    },
+    "F_mechanism_sanity": {
+      "details": {
+        "patch": {
+          "difference_effective_peers": 0.8153401224825245,
+          "difference_global_weight": 0.17880783497041097,
+          "max_hetero_effective_peers": 10.67186282353855,
+          "max_hetero_global_weight": 0.5695965126858138,
+          "pass": true,
+          "shared_effective_peers": 11.487202946021075,
+          "shared_global_weight": 0.7484043476562248
+        },
+        "rotation": {
+          "difference_effective_peers": 2.9132763964888433,
+          "difference_global_weight": 0.23838849301263132,
+          "max_hetero_effective_peers": 8.474510980109702,
+          "max_hetero_global_weight": 0.4886841646225255,
+          "pass": true,
+          "shared_effective_peers": 11.387787376598546,
+          "shared_global_weight": 0.7270726576351568
+        }
+      },
+      "pass": true
+    }
+  },
+  "decision": "SMOKE_TEST_APPROVED_FOR_CONTINUATION",
+  "fresh_seeds": [
+    501,
+    502,
+    503,
+    504,
+    505
+  ],
+  "n_rows": 7380,
+  "oracle_tuned_baseline_params": {
+    "patch::grouped::Cluster": "k=4,b=0.8",
+    "patch::grouped::GlobalMean": "b=0.1",
+    "patch::grouped::GlobalMedian": "b=0.4",
+    "patch::personal::Cluster": "k=2,b=0.6",
+    "patch::personal::GlobalMean": "b=0.4",
+    "patch::personal::GlobalMedian": "b=0.6",
+    "patch::shared::Cluster": "k=2,b=0.8",
+    "patch::shared::GlobalMean": "b=1.0",
+    "patch::shared::GlobalMedian": "b=0.8",
+    "rotation::grouped::Cluster": "k=4,b=0.8",
+    "rotation::grouped::GlobalMean": "b=0.2",
+    "rotation::grouped::GlobalMedian": "b=0.2",
+    "rotation::personal::Cluster": "k=3,b=0.6",
+    "rotation::personal::GlobalMean": "b=0.2",
+    "rotation::personal::GlobalMedian": "b=0.2",
+    "rotation::shared::Cluster": "k=2,b=0.8",
+    "rotation::shared::GlobalMean": "b=1.0",
+    "rotation::shared::GlobalMedian": "b=0.8"
+  },
+  "ucpa_params": {
+    "h": 0.048,
+    "lambda": 0.0,
+    "variance_floor_fraction": 0.05,
+    "z": 2.0
+  }
+}
