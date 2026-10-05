@@ -5,7 +5,7 @@ import yaml
 
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'configs'
-SEEDS=[6101,6102,6103,6104,6105]
+SEEDS=[9101,9102,9103,9104,9105]
 
 def base(name,dataset='mnist'):
     is_cifar=dataset=='cifar10'
@@ -19,14 +19,16 @@ def base(name,dataset='mnist'):
                    'max_samples_per_class':32,'eval_samples_per_class':24,'ig_steps':20 if not is_cifar else 16,'artifact_samples_per_class':24},
       'artifact':{'topk':128 if not is_cifar else 256,'clip_radius':5.0,'quant_bits':8,'dp_sigma':0.1,'missing_variance_scale':4.0,
                   'send_variance':True,'sparse_intersection_only':True},
-      'alignment':{'beta':0.2,'methods':['local','fedattr_mean','xfedalign_median','ucpa','ucpa_whole_only','ucpa_coord_only','cluster'],
-                   'ucpa_z':2.0,'ucpa_h':0.048,'ucpa_variance_floor_fraction':0.05,'cluster_k':3},
+      'alignment':{'beta':0.2,'methods':['local','fedattr_mean','xfedalign_median','ucpa','ucpa_whole_only','ucpa_coord_only','sacpa_global_count','nc_sacpa','cluster'],
+                   'ucpa_z':2.0,'ucpa_h':0.048,'ucpa_variance_floor_fraction':0.05,'cluster_k':3,
+                   'sacpa_beta':0.6,'sacpa_kernel_power':2.0,'sacpa_global_min_support':2,
+                   'ncsacpa_beta':0.8,'ncsacpa_kernel_power':2.0,'ncsacpa_neighborhood_size':3,'ncsacpa_min_support':2},
       'evaluation':{'deletion_steps':20,'eval_batch_size':128,'max_eval_samples':256,'compute_oracle_local_fidelity':True,
                     'oracle_samples_per_class':64,'topk_overlap_k':128 if not is_cifar else 256,'bootstrap_samples':5000,
                     'deletion_insertion_samples_per_client':24,'primary_metric':'artifact_fidelity_jsd'},
       'attack':{'enabled':False,'fraction':0.25,'strength':0.3,'kind':'artifact_shift'},
       'logging':{'output_root':'./outputs','save_checkpoints':True,'save_artifacts':True,'log_every_round':True},
-      'tags':{'status':'confirmatory','frozen_ucpa':'z=2,h=0.048,beta=0.2','suite_version':'1.0'}
+      'tags':{'status':'confirmatory','ucpa_v1_status':'frozen negative control','sacpa_v1_status':'frozen rejected predecessor','frozen_ncsacpa':'p=2,beta=0.8,q=3,min_support=2','suite_version':'2.1'}
     }
 
 def dump(cfg,fn):
@@ -45,9 +47,9 @@ for ds in ['mnist','cifar10']:
     else:
         c=base('core_cifar10_color',ds); c['shift']['kind']='color'; add('core_cifar10_color.yaml',c,'A','client-specific photometric shift')
 
-# Heteroskedastic client sample counts: tests the uncertainty term.
-c=base('stress_mnist_rotation_unequal_sizes'); c['shift']['kind']='rotation'; c['federation']['sample_size_sigma']=1.0; add('stress_mnist_rotation_unequal_sizes.yaml',c,'B','uncertainty/heteroskedasticity stress')
-c=base('stress_cifar10_rotation_unequal_sizes','cifar10'); c['shift']['kind']='rotation'; c['federation']['sample_size_sigma']=1.0; add('stress_cifar10_rotation_unequal_sizes.yaml',c,'B','uncertainty/heteroskedasticity stress')
+# Unequal client sample counts: tests whether the peer prior remains useful when explanation precision differs across clients.
+c=base('stress_mnist_rotation_unequal_sizes'); c['shift']['kind']='rotation'; c['federation']['sample_size_sigma']=1.0; add('stress_mnist_rotation_unequal_sizes.yaml',c,'B','unequal-client-size / explanation-precision stress')
+c=base('stress_cifar10_rotation_unequal_sizes','cifar10'); c['shift']['kind']='rotation'; c['federation']['sample_size_sigma']=1.0; add('stress_cifar10_rotation_unequal_sizes.yaml',c,'B','unequal-client-size / explanation-precision stress')
 
 # Task participation stress. Explanation artifacts are still evaluated at final deployment snapshot; label this honestly.
 c=base('stress_mnist_rotation_partial_task_participation'); c['shift']['kind']='rotation'; c['federation']['participation_rate']=0.5; c['tags']['scope_note']='partial participation applies to FedAvg task training; explanation snapshot includes all clients'; add('stress_mnist_rotation_partial_task_participation.yaml',c,'B','partial task participation')
@@ -70,11 +72,16 @@ for sigma in [0.0,0.05,0.1,0.2]:
     tok=str(sigma).replace('.','p')
     c=base(f'sweep_mnist_dp_{tok}'); c['shift']['kind']='rotation'; c['artifact']['dp_sigma']=sigma; c['tags']['status']='sensitivity'; add(f'sweep_mnist_dp_{tok}.yaml',c,'C','artifact noise sensitivity')
 
-# UCPA sensitivity around the frozen smoke-test values. Mark exploratory; core claims use frozen values only.
-for z,h in [(1.0,.048),(4.0,.048),(2.0,.024),(2.0,.096)]:
-    tok=f'z{z:g}_h{h:g}'.replace('.','p')
-    c=base(f'sensitivity_mnist_{tok}'); c['shift']['kind']='rotation'; c['alignment']['ucpa_z']=z; c['alignment']['ucpa_h']=h; c['tags']['status']='exploratory_sensitivity'; add(f'sensitivity_mnist_{tok}.yaml',c,'C','UCPA parameter sensitivity')
+# NC-SACPA sensitivity around the frozen Phase-VIII values. Exploratory only; no Tier-A claim may be retuned from these runs.
+for beta in [0.6,0.9]:
+    tok=str(beta).replace('.','p')
+    c=base(f'sensitivity_ncsacpa_beta_{tok}'); c['shift']['kind']='rotation'; c['alignment']['ncsacpa_beta']=beta; c['tags']['status']='exploratory_sensitivity'; add(f'sensitivity_ncsacpa_beta_{tok}.yaml',c,'C','NC-SACPA beta sensitivity')
+for power in [1.0,3.0]:
+    tok=str(power).replace('.','p')
+    c=base(f'sensitivity_ncsacpa_power_{tok}'); c['shift']['kind']='rotation'; c['alignment']['ncsacpa_kernel_power']=power; c['tags']['status']='exploratory_sensitivity'; add(f'sensitivity_ncsacpa_power_{tok}.yaml',c,'C','NC-SACPA self-tuned kernel sensitivity')
+for q in [2,4]:
+    c=base(f'sensitivity_ncsacpa_neighborhood_{q}'); c['shift']['kind']='rotation'; c['alignment']['ncsacpa_neighborhood_size']=q; c['tags']['status']='exploratory_sensitivity'; add(f'sensitivity_ncsacpa_neighborhood_{q}.yaml',c,'C','NC-SACPA neighborhood-size sensitivity')
 
-manifest={'suite_version':'1.0','frozen_confirmatory_seeds':SEEDS,'tiers':{'A':'required core evidence','B':'stress/robustness','C':'sensitivity/communication'},'configs':configs}
+manifest={'suite_version':'2.1','frozen_confirmatory_seeds':SEEDS,'tiers':{'A':'required core evidence','B':'stress/robustness','C':'sensitivity/communication'},'configs':configs}
 (OUT/'suite_manifest.yaml').write_text(yaml.safe_dump(manifest,sort_keys=False),encoding='utf-8')
 print(f'wrote {len(configs)} configs')

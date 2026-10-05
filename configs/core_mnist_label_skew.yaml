@@ -1,10 +1,10 @@
 experiment_name: core_mnist_label_skew
 seeds:
-- 6101
-- 6102
-- 6103
-- 6104
-- 6105
+- 9101
+- 9102
+- 9103
+- 9104
+- 9105
 device: auto
 deterministic: true
 num_workers: 2
@@ -62,11 +62,20 @@ alignment:
   - ucpa
   - ucpa_whole_only
   - ucpa_coord_only
+  - sacpa_global_count
+  - nc_sacpa
   - cluster
   ucpa_z: 2.0
   ucpa_h: 0.048
   ucpa_variance_floor_fraction: 0.05
   cluster_k: 3
+  sacpa_beta: 0.6
+  sacpa_kernel_power: 2.0
+  sacpa_global_min_support: 2
+  ncsacpa_beta: 0.8
+  ncsacpa_kernel_power: 2.0
+  ncsacpa_neighborhood_size: 3
+  ncsacpa_min_support: 2
 evaluation:
   deletion_steps: 20
   eval_batch_size: 128
@@ -89,5 +98,7 @@ logging:
   log_every_round: true
 tags:
   status: confirmatory
-  frozen_ucpa: z=2,h=0.048,beta=0.2
-  suite_version: '1.0'
+  ucpa_v1_status: frozen negative control
+  sacpa_v1_status: frozen rejected predecessor
+  frozen_ncsacpa: p=2,beta=0.8,q=3,min_support=2
+  suite_version: '2.1'

@@ -1,8 +1,8 @@
-# Full experiment runbook
+# Full NC-SACPA experiment runbook
 
 ## 1. Environment
 
-Recommended: Python 3.10–3.12, recent PyTorch with CUDA, one NVIDIA GPU for practical runtime.
+Recommended: Python 3.10–3.12 and a recent CUDA-enabled PyTorch environment.
 
 ```bash
 python -m venv .venv
@@ -11,77 +11,88 @@ python -m pip install --upgrade pip
 pip install -e '.[dev]'
 ```
 
-PyTorch/CUDA wheels vary by GPU driver; if needed install PyTorch first using the command from https://pytorch.org/get-started/locally/ and then `pip install -e '.[dev]'`.
+If PyTorch/CUDA requires a platform-specific wheel, install PyTorch first using its official installer and then run `pip install -e '.[dev]'`.
 
-## 2. Verify package before experiments
+## 2. Verify the frozen package
 
 ```bash
 python scripts/verify_package.py
 python run_experiment.py --config configs/sanity.yaml
-python scripts/verify_runs.py --outputs outputs
+python scripts/verify_runs.py --outputs verification/ncsacpa_sanity/output
 ```
 
-The first real MNIST/CIFAR run will download torchvision data to `./data` unless already present.
+The package already contains an engineering sanity run under `verification/`; rerunning `configs/sanity.yaml` is optional but recommended after installing on a new system.
 
-## 3. Run the frozen study
+## 3. Run the study without retuning
 
-Start with Tier A. Do not inspect Tier-A results and change UCPA parameters before finishing all Tier-A configs.
+### Tier A — core confirmatory evidence
 
 ```bash
 python scripts/run_suite.py --tier A
 python aggregate_results.py --outputs outputs --out aggregate_tierA
 ```
 
-Then run stress/robustness:
+Do **not** use Tier-A results to change NC-SACPA's frozen `p=2, beta=.8, q=3, min_support=2`.
+
+### Tier B — stress and robustness
 
 ```bash
 python scripts/run_suite.py --tier B
 python aggregate_results.py --outputs outputs --out aggregate_AB
 ```
 
-Then sensitivity/communication:
+After A+B, the seven-gate decision can be evaluated:
+
+```bash
+python aggregate_results.py --outputs outputs --out aggregate_all
+python evaluate_ncsacpa_gates.py --runs aggregate_all/runs.csv --out aggregate_all/ncsacpa_gate_report.json
+```
+
+### Tier C — exploratory sensitivity and communication
 
 ```bash
 python scripts/run_suite.py --tier C
 python aggregate_results.py --outputs outputs --out aggregate_all
 ```
 
-Or run everything:
+Tier C cannot retroactively tune or redefine the confirmatory result.
 
-```bash
-python scripts/run_suite.py --tier all
-```
+## 4. Logging and integrity
 
-## 4. Logging
+Each seed creates an immutable run directory with:
 
-Every seed creates an immutable run directory containing:
+- complete `manifest.json`, including config hash, environment, package versions, seed, and lifecycle status;
+- `events.jsonl` and `metrics.jsonl` append-only logs;
+- `client_partition_summary.json`;
+- saved clean artifacts when enabled;
+- empirical artifact-membership audit;
+- `final_results.json`;
+- `integrity.sha256` for finalized run files.
 
-- `manifest.json`: complete config, environment and pip freeze, config hash, status.
-- `events.jsonl`: lifecycle/selected-client/attack events.
-- `metrics.jsonl`: append-only scalar metrics.
-- `client_partition_summary.json`: per-client sample counts and class histograms for all four splits.
-- `artifacts/clean_artifacts.npz`: transmitted clean explanation artifacts when enabled.
-- `artifact_membership_audit.json`: per-client privacy audit of mean-only vs mean+variance artifacts.
-- `final_results.json`: task/explanation/attack results.
-- `integrity.sha256`: hashes of all finalized run files.
+`aggregate_results.py` never silently double-counts reruns: it selects the latest completed duplicate and writes `duplicate_runs.json`.
 
-Raw JSONL is the source of truth. Aggregated CSVs are regenerable.
-
-## 5. After runs
+Verify all completed runs with:
 
 ```bash
 python scripts/verify_runs.py --outputs outputs
-python aggregate_results.py --outputs outputs --out aggregate_all
 ```
 
-Then send back the entire `outputs/` and `aggregate_all/` directories, or zip this project with those folders. Analysis should begin from the paired UCPA-vs-xFedAlign CSV and the preregistered gates, not from whichever metric looks best.
+## 5. Official xFedAlign cross-check
 
-## 6. Official xFedAlign reference run
-
-If internet is available:
+When internet access is available:
 
 ```bash
 bash scripts/fetch_official_xfedalign.sh
 ```
 
-Follow the official repository's own environment/run instructions in a separate environment. Keep its outputs separate and record the fetched commit. Use it as an external reproduction check, not as a hidden dependency of this pipeline.
+Run the official repository in a separate environment and retain its commit hash and outputs separately. Do not label the built-in `xfedalign_median` results as official-code results.
+
+## 6. What to return for final analysis
+
+Return the project with:
+
+- `outputs/`
+- `aggregate_all/`
+- `aggregate_all/ncsacpa_gate_report.json`
+
+The final analysis must begin from the frozen gates and paired seed results, including failures, rather than selecting favorable Tier-C settings after the fact.

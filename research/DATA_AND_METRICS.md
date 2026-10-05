@@ -1,36 +1,42 @@
-# Data, shifts, and metrics
+# Data, shifts, artifacts, and metrics
 
 ## Datasets
 
-- MNIST: mechanism replication / efficient stress tests.
+- MNIST: efficient mechanism and stress testing.
 - CIFAR-10: required nonlinear/deeper-vision holdout.
 
-Torchvision downloads the official train/test sets. Each federated train shard is subsequently split 65/15/10/10 into task/surrogate/artifact/evaluation sets.
+Torchvision downloads the official train/test sets. Within each federated training shard, samples are split 65/15/10/10 into task-model training, surrogate fitting, artifact estimation, and untouched final explanation evaluation.
 
 ## Client heterogeneity
 
-- Dirichlet alpha=.1 label skew is present in all full core configs.
-- Rotation creates coherent input-space explanation shifts.
-- Patch creates sparse client/label-correlated feature shifts on MNIST.
+- Dirichlet alpha=.1 label skew is present in full core configurations.
+- Rotation creates coherent input/explanation shifts.
+- Patch creates sparse client-specific feature heterogeneity on MNIST.
 - Photometric color shift creates client-specific CIFAR-10 appearance shift.
-- Lognormal subsampling creates unequal explanation-estimation precision.
-- Drift rotation increases over task-training rounds; explanation evaluation is final-snapshot only.
+- Lognormal client-size variation tests unequal local data quantity / explanation precision.
+- Drift rotation changes the task-training environment over rounds; explanation evaluation is final-snapshot only.
 
 ## Explanation artifact
 
-Per-class attributions are nonnegative and normalized. The artifact uses top-k coordinates, L2 clipping, 8-bit mean quantization, and configurable Gaussian perturbation. UCPA additionally transmits variance-of-the-mean estimates on transmitted coordinates. Communication bytes are estimated from indices, quantized means, and float32 variance values.
+Per-class attributions are nonnegative and normalized. The shared artifact uses top-k coordinates, clipping, 8-bit mean quantization, and configurable Gaussian perturbation.
+
+- xFedAlign-style and NC-SACPA coordination use sparse mean/support information.
+- UCPA v1 also uses variance-of-the-mean values and is retained only as a negative control.
+
+Communication is estimated from coordinate indices, quantized means, and any method-specific auxiliary values.
 
 ## Fidelity oracle
 
-Direct integrated gradients of the trained global task model on the **disjoint client evaluation split** is the local functional explanation reference. This is intentionally separate from the surrogate and from artifact estimation.
+Direct integrated gradients of the trained global task model on the **disjoint client evaluation split** is the local functional explanation reference. It is separate from surrogate fitting and artifact estimation.
 
 ## Metrics
 
-- `artifact_fidelity_jsd`: JSD from coordinated class summary to direct-IG client summary. Primary.
+- `artifact_fidelity_jsd`: JSD from coordinated class summary to direct-IG client summary. **Primary.**
 - `sample_fidelity_jsd`: per-example JSD to direct IG.
-- `pairwise_edi`: average pairwise JSD among client explanation summaries for classes represented by both clients. Unlike method-reference EDI, it uses the same definition for every method.
-- `reference_edi`: xFedAlign-style client-to-method-reference consistency. Secondary because different methods induce different references.
-- deletion/insertion AUC: target-class probability as top-ranked input coordinates are removed/inserted.
+- `pairwise_edi`: average pairwise explanation divergence for shared classes; measures coordination using the same definition for all methods.
+- `reference_edi`: method-reference consistency in the style of a global-prior evaluation; secondary because references differ by method.
+- deletion/insertion AUC.
 - top-k oracle overlap.
-- communication bytes.
-- artifact membership AUC: empirical distinguishability of examples used vs not used to estimate a transmitted artifact, using mean-only and mean+variance scores.
+- task and per-client task accuracy sanity checks.
+- communication bytes per client artifact.
+- artifact membership AUC as an empirical privacy exposure audit, not a DP guarantee.

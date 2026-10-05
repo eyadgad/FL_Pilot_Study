@@ -1,34 +1,41 @@
-# Claims that the full pipeline is allowed to test
+# Claims allowed by this study
 
-This file prevents post-hoc inflation of the contribution.
+This file prevents post-hoc claim inflation.
 
-## Claim C1 — personalized prior under genuine explanation heterogeneity
+## C1 — personalized explanation coordination
 
-Candidate claim: UCPA preserves client-local explanation fidelity better than a single global prior when clients have genuinely different feature semantics, while still reducing drift relative to purely local explanations.
+Candidate claim: NC-SACPA can preserve client-local explanation fidelity better than a single global explanation prior under multiple forms of client-specific explanation heterogeneity while still obtaining a measurable coordination benefit over Local-XAI.
 
-Evidence required: Tier-A rotation/patch/color experiments; primary outcome plus pairwise EDI and perturbation fidelity. MNIST alone is insufficient.
+Required evidence: Gates G1 and G2 plus Tier-A paired results. MNIST alone is insufficient.
 
-## Claim C2 — both scales matter
+## C2 — scale-adaptive collaboration avoids UCPA v1 collapse
 
-Candidate claim: whole-explanation similarity and coordinate-level uncertainty solve complementary failure modes.
+Candidate claim: self-tuned explanation-space similarity avoids the fixed-bandwidth peer-collapse observed in UCPA v1 across dataset/explainer scales.
 
-Evidence required: full UCPA beats `ucpa_whole_only` and `ucpa_coord_only` when pooled over heterogeneous and unequal-sample conditions. If not, simplify the method and claim.
+Required evidence: mechanism logs/peer mass across MNIST and CIFAR plus the full Tier-A primary result. Do not claim this from the Phase-VIII smoke test alone.
 
-## Claim C3 — uncertainty helps with unequal estimation quality
+## C3 — neighborhood corroboration addresses sparse support contamination
 
-Candidate claim: UCPA handles heteroskedastic explanation estimates better than similarity-only alignment.
+Candidate claim: local-neighborhood corroboration improves robustness to grouped sparse heterogeneity relative to the Phase-VII global-count predecessor without unacceptable degradation elsewhere.
 
-Evidence required: unequal-size stress experiments, with full UCPA outperforming whole-only alignment on primary fidelity.
+Required evidence: G4 and the patch-family analysis.
 
-## Claim C4 — communication/privacy trade-off is acceptable
+## C4 — the practical cost is competitive
 
-Not automatically granted. UCPA sends variance as well as attribution means, so it incurs additional bytes and may expose membership information. The package reports both. A paper must report any privacy degradation and should add a mitigation if it is material.
+Candidate claim: NC-SACPA does not require a variance channel and can match xFedAlign-style sparse mean/support communication at matched top-k.
 
-## Claims NOT permitted from this package alone
+Required evidence: G6 and actual byte logs.
 
-- Formal differential privacy: Gaussian noise is an experimental hardening mechanism here; no privacy accountant or formal epsilon guarantee is implemented.
-- Byzantine robustness: the poisoning stress is empirical, not a proof.
-- Dynamic partial-participation explanation alignment: current partial-participation config applies to task training; final explanation artifacts include all clients.
-- Generality to text/tabular or real federated deployments: not tested in this package.
-- Exact reproduction of official xFedAlign numbers: official code is external.
-- Conference acceptance likelihood.
+## C5 — robustness is not materially worse than the closest global-prior comparator
+
+Required evidence: G7. Passing this is non-inferiority, not a claim of Byzantine robustness.
+
+## Claims not permitted from this package alone
+
+- formal differential privacy;
+- Byzantine-robust guarantees;
+- exact reproduction of official xFedAlign results;
+- generality to text/tabular modalities or natural cross-silo deployments;
+- superiority to all personalized FL methods;
+- formal optimality of the self-tuned kernel or neighborhood size;
+- conference acceptance probability.

@@ -1,10 +1,10 @@
-suite_version: '1.0'
+suite_version: '2.1'
 frozen_confirmatory_seeds:
-- 6101
-- 6102
-- 6103
-- 6104
-- 6105
+- 9101
+- 9102
+- 9103
+- 9104
+- 9105
 tiers:
   A: required core evidence
   B: stress/robustness
@@ -36,11 +36,11 @@ configs:
   experiment_name: core_cifar10_color
 - config: stress_mnist_rotation_unequal_sizes.yaml
   tier: B
-  role: uncertainty/heteroskedasticity stress
+  role: unequal-client-size / explanation-precision stress
   experiment_name: stress_mnist_rotation_unequal_sizes
 - config: stress_cifar10_rotation_unequal_sizes.yaml
   tier: B
-  role: uncertainty/heteroskedasticity stress
+  role: unequal-client-size / explanation-precision stress
   experiment_name: stress_cifar10_rotation_unequal_sizes
 - config: stress_mnist_rotation_partial_task_participation.yaml
   tier: B
@@ -98,19 +98,27 @@ configs:
   tier: C
   role: artifact noise sensitivity
   experiment_name: sweep_mnist_dp_0p2
-- config: sensitivity_mnist_z1_h0p048.yaml
+- config: sensitivity_ncsacpa_beta_0p6.yaml
   tier: C
-  role: UCPA parameter sensitivity
-  experiment_name: sensitivity_mnist_z1_h0p048
-- config: sensitivity_mnist_z4_h0p048.yaml
+  role: NC-SACPA beta sensitivity
+  experiment_name: sensitivity_ncsacpa_beta_0p6
+- config: sensitivity_ncsacpa_beta_0p9.yaml
   tier: C
-  role: UCPA parameter sensitivity
-  experiment_name: sensitivity_mnist_z4_h0p048
-- config: sensitivity_mnist_z2_h0p024.yaml
+  role: NC-SACPA beta sensitivity
+  experiment_name: sensitivity_ncsacpa_beta_0p9
+- config: sensitivity_ncsacpa_power_1p0.yaml
   tier: C
-  role: UCPA parameter sensitivity
-  experiment_name: sensitivity_mnist_z2_h0p024
-- config: sensitivity_mnist_z2_h0p096.yaml
+  role: NC-SACPA self-tuned kernel sensitivity
+  experiment_name: sensitivity_ncsacpa_power_1p0
+- config: sensitivity_ncsacpa_power_3p0.yaml
   tier: C
-  role: UCPA parameter sensitivity
-  experiment_name: sensitivity_mnist_z2_h0p096
+  role: NC-SACPA self-tuned kernel sensitivity
+  experiment_name: sensitivity_ncsacpa_power_3p0
+- config: sensitivity_ncsacpa_neighborhood_2.yaml
+  tier: C
+  role: NC-SACPA neighborhood-size sensitivity
+  experiment_name: sensitivity_ncsacpa_neighborhood_2
+- config: sensitivity_ncsacpa_neighborhood_4.yaml
+  tier: C
+  role: NC-SACPA neighborhood-size sensitivity
+  experiment_name: sensitivity_ncsacpa_neighborhood_4

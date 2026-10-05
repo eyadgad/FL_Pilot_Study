@@ -1,6 +1,7 @@
 experiment_name: sanity_synthetic
-device: auto
-seeds: [101]
+device: cpu
+seeds:
+- 101
 deterministic: true
 num_workers: 0
 dataset:
@@ -45,11 +46,27 @@ artifact:
   sparse_intersection_only: true
 alignment:
   beta: 0.2
-  methods: [local, fedattr_mean, xfedalign_median, ucpa, ucpa_whole_only, ucpa_coord_only, cluster]
+  methods:
+  - local
+  - fedattr_mean
+  - xfedalign_median
+  - ucpa
+  - ucpa_whole_only
+  - ucpa_coord_only
+  - sacpa_global_count
+  - nc_sacpa
+  - cluster
   ucpa_z: 2.0
   ucpa_h: 0.048
   ucpa_variance_floor_fraction: 0.05
   cluster_k: 2
+  sacpa_beta: 0.6
+  sacpa_kernel_power: 2.0
+  sacpa_global_min_support: 2
+  ncsacpa_beta: 0.8
+  ncsacpa_kernel_power: 2.0
+  ncsacpa_neighborhood_size: 3
+  ncsacpa_min_support: 2
 evaluation:
   deletion_steps: 4
   eval_batch_size: 32
@@ -66,7 +83,7 @@ attack:
   strength: 0.3
   kind: artifact_shift
 logging:
-  output_root: ./outputs
+  output_root: ./verification/ncsacpa_sanity/output
   save_checkpoints: true
   save_artifacts: true
   log_every_round: true

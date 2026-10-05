@@ -1,49 +1,90 @@
-# Method: Uncertainty-Compatible Peer Alignment (UCPA)
+# Method: Neighborhood-Corroborated Scale-Adaptive Peer Alignment (NC-SACPA)
 
-## Motivation
+## Problem
 
-A single global explanation prior can reduce cross-client explanation drift, but under genuine client heterogeneity it can also average away client-specific semantics. Purely local explanations preserve those semantics but can be noisy when a client has few attribution samples. UCPA treats explanation coordination as **heteroskedastic peer smoothing**, not global consensus.
+A single federated explanation prior can denoise client explanations but can also erase real client-specific semantics. Purely local explanations preserve heterogeneity but do not use evidence from related clients. Earlier UCPA attempted continuous peer borrowing with an absolute JSD bandwidth and coordinate uncertainty; full validation showed that the fixed bandwidth collapsed peer mass to approximately one client at realistic sparse-artifact scales. Phase VII SACPA fixed scale collapse but allowed a distant group to authorize a feature merely because enough distant clients reported it.
 
-For client `i`, class `c`, let `E_ic` be the transmitted nonnegative normalized attribution summary and `V_ic` the estimated coordinatewise variance of that summary's sampling mean.
+NC-SACPA addresses both failures without transmitting an uncertainty/variance channel.
 
-### Whole-explanation relevance
+## Inputs
 
-`g_ikc = exp(-JSD(E_ic, E_kc)/h)`.
+For client `i` and class `c`:
 
-This suppresses borrowing across clients whose explanation distributions differ coherently across many features.
+- `E_ic`: nonnegative, simplex-normalized sparse attribution summary.
+- `M_ic`: transmitted top-k support mask.
 
-### Coordinate uncertainty compatibility
+All clients use the same artifact construction and task model in a run.
 
-`q_ikcj = exp(-0.5 * ((E_icj-E_kcj)/(z*sqrt(V_icj+V_kcj+epsilon)))^2)`.
+## 1. Scale-adaptive whole-explanation similarity
 
-This suppresses borrowing on a feature when the observed discrepancy is large relative to the amount expected from estimation uncertainty.
+Let
 
-### Personalized prior
+`d_ikc = JSD(E_ic, E_kc)`.
 
-`w_ikcj = g_ikc q_ikcj`.
+For each client/class, estimate a local distance scale
 
-The client keeps self weight 1. For sparse artifacts, peer borrowing on a coordinate is allowed only where both clients transmitted that coordinate. The personalized prior is
+`σ_ic = median_{r != i} d_irc`.
 
-`P_icj = (E_icj + sum_{k != i} w_ikcj E_kcj) / (1 + sum_{k != i} w_ikcj)`
+The symmetric peer weight is
 
-followed by simplex normalization. Final aligned explanation summaries use the same frozen soft alignment strength `beta=0.2` as the xFedAlign-style comparator.
+`g_ikc = exp(-(d_ikc / sqrt(σ_ic σ_kc))^p)`
 
-## What is and is not claimed as novel
+with frozen `p=2`.
 
-Not individually novel: Jensen-Shannon similarity, kernel smoothing, uncertainty weighting, personalized FL, clustering, sparse top-k communication, or attribution aggregation.
+This removes the absolute-distance scale that caused UCPA v1 to collapse when explanation JSDs changed across datasets, sparsity levels, or explainers.
 
-Candidate novelty: the **two-scale explanation-space peer rule** that combines whole-explanation semantic relevance with coordinate-level *sampling-uncertainty compatibility* to construct a client-specific federated explanation prior. The novelty audit remains medium risk until the full study and a final pre-submission search are complete.
+## 2. Neighborhood corroboration for missing sparse coordinates
 
-## Mechanistic predictions
+For each target client/class, rank peers by `g_ikc` and take the frozen top `q=3` peers.
 
-1. Under homogeneous explanation semantics, whole and coordinate compatibility should be high and UCPA should denoise toward pooled estimates.
-2. Under coherent shifts such as rotation, whole-explanation relevance should contract the peer set rather than force one global prior.
-3. Under sparse feature-specific heterogeneity, coordinate compatibility should block inappropriate borrowing only on the affected features.
-4. With unequal client sample sizes, the uncertainty term should help low-sample clients borrow more while protecting well-estimated genuine differences.
-5. If whole-only or coordinate-only matches full UCPA, the full two-scale mechanism is unnecessary and the contribution must be simplified.
+- If feature `j` is already reported by the target (`M_icj=1`), all peers that report `j` may contribute, weighted by `g_ikc`.
+- If the target did not report `j`, the feature may enter the peer prior only if at least `m=2` of the target's `q=3` nearest peers independently report it.
+- For an imported missing feature, only those local-neighborhood peers contribute.
+- If no eligible peer reports a coordinate, the target value is retained rather than treating missing support as a confident zero.
 
-## Relation to xFedAlign
+This rule was introduced because Phase VII global-count corroboration failed on strong grouped sparse patches: a numerically larger but semantically distant group could authorize a foreign feature.
 
-xFedAlign (ICML 2026) distills local surrogates, sends sparse/noised top-k per-class attribution artifacts, robustly aggregates them into one Global Explanation Prior (coordinatewise median or trimmed mean), and softly aligns local explanations to that prior. UCPA retains the same privacy/communication artifact concept but replaces one global prior with a continuous client- and coordinate-specific peer prior.
+## 3. Personalized peer prior
 
-This package's `xfedalign_median` baseline is a self-contained mechanism reproduction. It is not the authors' official implementation; see `BASELINE_PROVENANCE.md`.
+For eligible coordinates,
+
+`P_icj = sum_{k != i} g_ikc M_kcj E_kcj / sum_{k != i} g_ikc M_kcj`,
+
+with the neighborhood restriction above for coordinates missing from the target. The prior is normalized to the simplex.
+
+The target client is excluded from the peer prior; this avoids counting the local explanation twice.
+
+## 4. Final aligned explanation
+
+`A_ic = normalize((1-β) E_ic + β P_ic)`
+
+with frozen `β=0.8`.
+
+Frozen smoke-approved values:
+
+- kernel power `p=2`
+- alignment `β=0.8`
+- local corroboration neighborhood `q=3`
+- minimum local support `m=2`
+
+The full confirmatory suite must not change these values using Tier-A results.
+
+## Communication
+
+NC-SACPA uses only the sparse attribution mean/support artifact. It does **not** require UCPA v1's variance channel. In this package its communication accounting is therefore matched to the xFedAlign-style mean artifact at the same top-k setting.
+
+## What is not claimed as novel
+
+Jensen-Shannon divergence, self-tuning kernels, nearest-neighbor graphs, sparse top-k explanations, peer averaging, personalized FL, and support voting are established ideas.
+
+The candidate contribution is narrower: a federated explanation-coordination rule that combines **self-tuned explanation-space collaboration** with **local-neighborhood corroboration of sparse explanation support** to create a client-specific prior that can move continuously between pooled and local behavior without a fixed global prior or fixed number of client clusters.
+
+## Frozen negative controls
+
+The package keeps:
+
+- `ucpa`: fixed-bandwidth uncertainty-compatible UCPA v1 — killed after full confirmation.
+- `sacpa_global_count`: scale-adaptive Phase-VII predecessor — rejected because global support counts failed strong grouped sparse heterogeneity.
+- `ucpa_whole_only`, `ucpa_coord_only`: UCPA mechanism ablations.
+
+These are historical/negative controls, not co-primary proposed methods.

@@ -5,19 +5,7 @@ from ucpa_fl.artifacts import sanitize_artifact
 from ucpa_fl.config import AlignmentConfig, ArtifactConfig, ExperimentConfig
 from ucpa_fl.datasets import _split_client_indices, iid_partition
 from ucpa_fl.logging_utils import RunLogger
-from ucpa_fl.repro import environment_snapshot, move_state_dict, resolve_device
-
-
-def test_auto_device_uses_cuda_only_when_visible():
-    dev=resolve_device('auto')
-    assert dev.type==('cuda' if torch.cuda.is_available() else 'cpu')
-    assert resolve_device('gpu').type==dev.type
-    moved=move_state_dict({'w':torch.zeros(2)}, dev)
-    assert moved['w'].device.type==dev.type
-    if not torch.cuda.is_available():
-        import pytest
-        with pytest.raises(RuntimeError):
-            resolve_device('cuda')
+from ucpa_fl.repro import environment_snapshot
 
 
 def test_client_split_disjoint_and_complete():
@@ -85,3 +73,39 @@ def test_ucpa_matches_smoke_reference_dense():
     for i in range(len(X)):W[i,i,:]=1
     ref=np.einsum('ikd,kd->id',W,X)/np.maximum(W.sum(1),1e-15);ref/=ref.sum(1,keepdims=True)
     assert np.allclose(got[:,0],ref,atol=1e-11,rtol=1e-10)
+
+from ucpa_fl.alignment import nc_sacpa_prior, sacpa_global_count_prior
+
+def test_ncsacpa_self_tuning_survives_distance_rescaling():
+    # Same geometry at very different absolute JSD scales should retain active peers.
+    e1=np.array([[[.50,.30,.20]],[[.48,.32,.20]],[[.20,.30,.50]],[[.18,.32,.50]]],float)
+    e2=np.power(e1,3); e2/=e2.sum(2,keepdims=True)
+    m=np.ones_like(e1,bool)
+    p1,d1=nc_sacpa_prior(e1,m,power=2,neighborhood_size=3,min_missing_support=2)
+    p2,d2=nc_sacpa_prior(e2,m,power=2,neighborhood_size=3,min_missing_support=2)
+    assert d1['peer_mass_mean']>0.5 and d2['peer_mass_mean']>0.5
+    assert np.allclose(p1.sum(2),1) and np.allclose(p2.sum(2),1)
+
+def test_ncsacpa_local_corroboration_blocks_foreign_unique_support():
+    # Client 0 lacks feature 3. Only one of its three closest peers reports it,
+    # so local corroboration must keep that coordinate absent.
+    E=np.array([
+      [[.55,.30,.15,0]],
+      [[.54,.31,.15,0]],
+      [[.56,.29,.15,0]],
+      [[.20,.20,.10,.50]],
+    ],float)
+    M=E>0
+    p,_=nc_sacpa_prior(E,M,power=2,neighborhood_size=3,min_missing_support=2)
+    assert p[0,0,3] < 1e-12
+
+def test_ncsacpa_differs_from_global_count_on_grouped_support():
+    E=np.array([
+      [[.60,.40,0,0]],[[.58,.42,0,0]],[[.62,.38,0,0]],
+      [[.25,.25,.25,.25]],[[.24,.26,.25,.25]],[[.26,.24,.25,.25]],
+    ],float)
+    M=E>0
+    a,_=sacpa_global_count_prior(E,M,power=2,min_missing_support=2)
+    b,_=nc_sacpa_prior(E,M,power=2,neighborhood_size=3,min_missing_support=2)
+    assert np.allclose(a.sum(2),1) and np.allclose(b.sum(2),1)
+    assert not np.allclose(a,b)

@@ -66,7 +66,7 @@ def aggregate(output_root, out_dir):
     cols=sorted(set().union(*(r.keys() for r in summary)))
     with open(out/'summary.csv','w',newline='',encoding='utf-8') as f:
         w=csv.DictWriter(f,fieldnames=cols);w.writeheader();w.writerows(summary)
-    # Paired UCPA-vs-xFedAlign differences, the primary comparison.
+    # Paired NC-SACPA-vs-xFedAlign differences, the primary comparison.
     paired=[]
     by={(r['experiment'],r['scenario'],r['seed'],r['method']):r for r in rows}
     exps=sorted(set((r['experiment'],r['scenario']) for r in rows))
@@ -75,7 +75,7 @@ def aggregate(output_root, out_dir):
         for metric in METRICS:
             dif=[]
             for s in seeds:
-                a=by.get((exp,sc,s,'ucpa')); b=by.get((exp,sc,s,'xfedalign_median'))
+                a=by.get((exp,sc,s,'nc_sacpa')); b=by.get((exp,sc,s,'xfedalign_median'))
                 if a and b and np.isfinite(a.get(metric,np.nan)) and np.isfinite(b.get(metric,np.nan)): dif.append(a[metric]-b[metric])
             if dif:
                 mean,sd,lo,hi=_ci(dif,seed=33)
@@ -84,12 +84,12 @@ def aggregate(output_root, out_dir):
                 if wilcoxon is not None and len(dif)>=3 and not np.allclose(dif,0):
                     try: pval=float(wilcoxon(dif,alternative='two-sided',zero_method='wilcox').pvalue)
                     except Exception: pass
-                paired.append({'experiment':exp,'scenario':sc,'metric':metric,'n':len(dif),'ucpa_minus_xfedalign_mean':mean,'sd':sd,'ci95_lo':lo,'ci95_hi':hi,'directional_wins':wins,'wilcoxon_two_sided_p':pval})
+                paired.append({'experiment':exp,'scenario':sc,'metric':metric,'n':len(dif),'ncsacpa_minus_xfedalign_mean':mean,'sd':sd,'ci95_lo':lo,'ci95_hi':hi,'directional_wins':wins,'wilcoxon_two_sided_p':pval})
     if paired:
         cols=list(paired[0]);
-        with open(out/'paired_ucpa_vs_xfedalign.csv','w',newline='',encoding='utf-8') as f:
+        with open(out/'paired_ncsacpa_vs_xfedalign.csv','w',newline='',encoding='utf-8') as f:
             w=csv.DictWriter(f,fieldnames=cols);w.writeheader();w.writerows(paired)
-    md=['# Aggregate results','',f'Runs found: {len(rows)}','', 'Primary paired comparison is UCPA minus xFedAlign-style median prior. Negative is favorable for lower-is-better metrics (JSD/EDI/deletion); positive is favorable for insertion/overlap.','']
+    md=['# Aggregate results','',f'Runs found: {len(rows)}','', 'Primary paired comparison is NC-SACPA minus xFedAlign-style median prior. Negative is favorable for lower-is-better metrics (JSD/EDI/deletion); positive is favorable for insertion/overlap.','']
     for rec in summary:
         md.append(f"## {rec['experiment']} / {rec['scenario']} / {rec['method']} (n={rec['n_seeds']})")
         md.append(f"- artifact fidelity JSD: {rec['artifact_fidelity_jsd_mean']:.6f} [{rec['artifact_fidelity_jsd_ci95_lo']:.6f}, {rec['artifact_fidelity_jsd_ci95_hi']:.6f}]")

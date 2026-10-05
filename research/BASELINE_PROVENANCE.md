@@ -1,30 +1,36 @@
-# Baseline provenance
+# Baseline and predecessor provenance
 
-## Official xFedAlign reference
+## xFedAlign — closest direct explanation-coordination baseline
 
-- Paper: Wasif et al., *Explainable Federated Learning via Global–Local Attribution Alignment*, ICML 2026.
+- Wasif et al., *Explainable Federated Learning via Global–Local Attribution Alignment*, ICML 2026.
 - PMLR: https://proceedings.mlr.press/v306/wasif26a.html
 - Official code: https://github.com/dawoodwasif/xFedAlign
-- Official repository is MIT licensed at the time of the 2026-10-02 audit.
 
-The paper/repository describe 8 clients, 15 communication rounds, one local epoch, batch 64, SGD momentum .9, learning rate .01, Dirichlet alpha .1 for non-IID, top-k sparse attribution artifacts, clipping, 8-bit quantization, light Gaussian noise, a coordinatewise-median global prior, and alignment beta .2 after warm-up. It reports Local-XAI, FedAttr-Agg and Fed-XAI comparators and explanation drift/deletion/insertion metrics.
+xFedAlign communicates compact per-class top-k attribution artifacts, robustly aggregates them into one Global Explanation Prior, and softly aligns local explanations while leaving task-model training decoupled.
 
-## What this package implements
+`xfedalign_median` in this package is a **self-contained mechanism reproduction**, not a byte-for-byte run of the official source. It uses the same trained task model and local explanation samples as the other methods so the coordination mechanism can be isolated.
 
-`xfedalign_median` is a **self-contained xFedAlign-style mechanism reproduction**, not a byte-for-byte execution of the authors' code. It shares the same trained task model with all explanation methods, fits a local sparse linear surrogate, transmits sparse clipped/quantized/noised class summaries, forms a coordinatewise-median global prior, and mixes local explanation with that prior at beta=.2.
+## Local-XAI
 
-This design intentionally isolates the explanation-coordination mechanism. It should be described as a reproduction in any paper until results have also been checked against the official code.
+`local` keeps each client's own explanation and provides the no-sharing fidelity reference.
 
-`fedattr_mean` is a server-side global mean attribution-template comparator implemented inside this package. It should likewise be called a reproduction/operational baseline, not an official third-party implementation.
+## FedAttr-style mean
 
-`cluster` is an intentionally strong generic comparator: k-means on full client explanation vectors followed by cluster-wise explanation pooling. It is not claimed to be a named published method.
+`fedattr_mean` is a transparent server-side global mean attribution-template comparator. It is an operational baseline, not an official external implementation.
 
-## Optional official-code check
+## Cluster comparator
 
-Run:
+`cluster` is a deliberately strong generic baseline: k-means over client explanation vectors followed by cluster-wise pooling. It is not claimed to reproduce a named paper. Its role is to test whether continuous personalized collaboration adds value beyond a discrete grouping solution.
 
-```bash
-bash scripts/fetch_official_xfedalign.sh
-```
+## Frozen negative predecessors
 
-when internet access is available. Record the commit in `external/xfedalign_commit.txt`, then execute the authors' MNIST/CIFAR scripts separately. Do not merge their result files with this package's output unless the experimental settings are matched and provenance is retained.
+- `ucpa`: fixed-bandwidth, uncertainty-compatible UCPA v1. The returned full experiment killed this method; peer weights collapsed at realistic artifact scales.
+- `sacpa_global_count`: Phase-VII scale-adaptive predecessor. It passed most smoke criteria but failed strong grouped sparse heterogeneity because a distant group could authorize foreign support through raw counts.
+
+The full research history and gate reports are preserved under `research_history/`.
+
+## Adjacent literature that constrains novelty
+
+- UncertainXFL (2025) explicitly integrates explanation uncertainty into federated learning, but its uncertainty is attached to logical/rule explanations and is used to prioritize model/rule aggregation rather than to create NC-SACPA's sparse personalized attribution prior: https://arxiv.org/abs/2503.05194
+- Adaptive PFL via kernel mean embeddings (ICML 2026) learns data-dependent collaboration weights for personalized model learning; it is important prior art showing that adaptive peer weighting is not itself novel: https://proceedings.mlr.press/v306/fermanian26a.html
+- Controlled Collaboration Geometry (ICML 2026) studies collapse/degeneracy of collaboration graphs in personalized FL and is relevant prior art for the claim that collaboration structure must be controlled: https://proceedings.mlr.press/v306/yin26j.html

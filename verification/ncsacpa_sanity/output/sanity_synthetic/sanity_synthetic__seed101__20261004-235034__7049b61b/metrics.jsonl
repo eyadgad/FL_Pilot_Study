@@ -1,0 +1,97 @@
+{"metric": "task_accuracy", "round": 0, "stage": "train", "time": 1791157834.547231, "value": 0.3875}
+{"metric": "task_loss", "round": 0, "stage": "train", "time": 1791157834.5474374, "value": 1.3717894792556762}
+{"metric": "local_train_loss_mean", "round": 0, "stage": "train", "time": 1791157834.547564, "value": 1.3837627103695502}
+{"metric": "task_accuracy", "round": 1, "stage": "train", "time": 1791157834.5956419, "value": 0.3875}
+{"metric": "task_loss", "round": 1, "stage": "train", "time": 1791157834.5957906, "value": 1.3712459564208985}
+{"metric": "local_train_loss_mean", "round": 1, "stage": "train", "time": 1791157834.5958967, "value": 1.382554909357658}
+{"metric": "task_accuracy", "stage": "final", "time": 1791157834.5974987, "value": 0.3875}
+{"metric": "task_loss", "stage": "final", "time": 1791157834.5975707, "value": 1.3712459564208985}
+{"client": 0, "metric": "client_task_accuracy", "stage": "final_client", "time": 1791157834.6007385, "value": 0.5}
+{"client": 1, "metric": "client_task_accuracy", "stage": "final_client", "time": 1791157834.6020591, "value": 0.375}
+{"client": 2, "metric": "client_task_accuracy", "stage": "final_client", "time": 1791157834.603199, "value": 0.375}
+{"client": 3, "metric": "client_task_accuracy", "stage": "final_client", "time": 1791157834.604321, "value": 0.25}
+{"metric": "client_task_accuracy_mean", "stage": "final", "time": 1791157834.6044362, "value": 0.375}
+{"metric": "client_task_accuracy_worst", "stage": "final", "time": 1791157834.6045017, "value": 0.25}
+{"metric": "artifact_mia_mean_only_auc", "stage": "privacy", "time": 1791157834.631546, "value": 0.68359375}
+{"metric": "artifact_mia_mean_variance_auc", "stage": "privacy", "time": 1791157834.6316876, "value": 0.60546875}
+{"method": "local", "metric": "artifact_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.6968443, "value": 0.5013062815020111}
+{"method": "local", "metric": "sample_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.6970012, "value": 0.13801255558697484}
+{"method": "local", "metric": "pairwise_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.6970356, "value": 0.5813447329314766}
+{"method": "local", "metric": "reference_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.697061, "value": 0.30371297102643724}
+{"method": "local", "metric": "deletion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.6970818, "value": 0.26607571449130774}
+{"method": "local", "metric": "insertion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.6971014, "value": 0.2664896696805954}
+{"method": "local", "metric": "topk_oracle_overlap", "scenario": "clean", "stage": "explanation", "time": 1791157834.6971195, "value": 0.22265625}
+{"method": "local", "metric": "communication_bytes_per_client_artifact", "scenario": "clean", "stage": "explanation", "time": 1791157834.6971369, "value": 0.0}
+{"method": "local", "metric": "n_eval_explanations", "scenario": "clean", "stage": "explanation", "time": 1791157834.6972063, "value": 8.0}
+{"method": "fedattr_mean", "metric": "artifact_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.7079136, "value": 0.31613788941477816}
+{"method": "fedattr_mean", "metric": "sample_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.7079923, "value": 0.32585615268671464}
+{"method": "fedattr_mean", "metric": "pairwise_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.7080255, "value": 0.0}
+{"method": "fedattr_mean", "metric": "reference_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.7080507, "value": 2.967170504669894e-17}
+{"method": "fedattr_mean", "metric": "deletion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.7080753, "value": 0.2661607228219509}
+{"method": "fedattr_mean", "metric": "insertion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.7080958, "value": 0.2666671285405755}
+{"method": "fedattr_mean", "metric": "topk_oracle_overlap", "scenario": "clean", "stage": "explanation", "time": 1791157834.7081153, "value": 0.15234375}
+{"method": "fedattr_mean", "metric": "communication_bytes_per_client_artifact", "scenario": "clean", "stage": "explanation", "time": 1791157834.7081413, "value": 400.0}
+{"method": "fedattr_mean", "metric": "n_eval_explanations", "scenario": "clean", "stage": "explanation", "time": 1791157834.7081618, "value": 8.0}
+{"method": "xfedalign_median", "metric": "artifact_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.7194679, "value": 0.46485026881674785}
+{"method": "xfedalign_median", "metric": "sample_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.719542, "value": 0.15432599508855419}
+{"method": "xfedalign_median", "metric": "pairwise_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.7195747, "value": 0.3922737734900317}
+{"method": "xfedalign_median", "metric": "reference_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.7195997, "value": 0.23281558523221302}
+{"method": "xfedalign_median", "metric": "deletion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.7196705, "value": 0.26621505804359913}
+{"method": "xfedalign_median", "metric": "insertion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.7196953, "value": 0.2661752086132765}
+{"method": "xfedalign_median", "metric": "topk_oracle_overlap", "scenario": "clean", "stage": "explanation", "time": 1791157834.7197158, "value": 0.17578125}
+{"method": "xfedalign_median", "metric": "communication_bytes_per_client_artifact", "scenario": "clean", "stage": "explanation", "time": 1791157834.7197344, "value": 400.0}
+{"method": "xfedalign_median", "metric": "n_eval_explanations", "scenario": "clean", "stage": "explanation", "time": 1791157834.7197542, "value": 8.0}
+{"method": "ucpa", "metric": "artifact_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.7328253, "value": 0.5013062814554364}
+{"method": "ucpa", "metric": "sample_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.732914, "value": 0.16222173394796285}
+{"method": "ucpa", "metric": "pairwise_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.7329485, "value": 0.5813447327386717}
+{"method": "ucpa", "metric": "reference_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.7329729, "value": 1.6270629007029543e-15}
+{"method": "ucpa", "metric": "deletion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.732996, "value": 0.26609179377555847}
+{"method": "ucpa", "metric": "insertion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.7330165, "value": 0.2664787359535694}
+{"method": "ucpa", "metric": "topk_oracle_overlap", "scenario": "clean", "stage": "explanation", "time": 1791157834.733036, "value": 0.13671875}
+{"method": "ucpa", "metric": "communication_bytes_per_client_artifact", "scenario": "clean", "stage": "explanation", "time": 1791157834.733054, "value": 912.0}
+{"method": "ucpa", "metric": "n_eval_explanations", "scenario": "clean", "stage": "explanation", "time": 1791157834.7330723, "value": 8.0}
+{"method": "ucpa_whole_only", "metric": "artifact_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.745596, "value": 0.5013062809677167}
+{"method": "ucpa_whole_only", "metric": "sample_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.7457325, "value": 0.16222173383593846}
+{"method": "ucpa_whole_only", "metric": "pairwise_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.7457664, "value": 0.5813447300775567}
+{"method": "ucpa_whole_only", "metric": "reference_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.7457922, "value": 1.0109845652209694e-13}
+{"method": "ucpa_whole_only", "metric": "deletion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.7458153, "value": 0.26609179377555847}
+{"method": "ucpa_whole_only", "metric": "insertion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.745835, "value": 0.2664787359535694}
+{"method": "ucpa_whole_only", "metric": "topk_oracle_overlap", "scenario": "clean", "stage": "explanation", "time": 1791157834.7458582, "value": 0.13671875}
+{"method": "ucpa_whole_only", "metric": "communication_bytes_per_client_artifact", "scenario": "clean", "stage": "explanation", "time": 1791157834.7458773, "value": 912.0}
+{"method": "ucpa_whole_only", "metric": "n_eval_explanations", "scenario": "clean", "stage": "explanation", "time": 1791157834.7458975, "value": 8.0}
+{"method": "ucpa_coord_only", "metric": "artifact_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.7590444, "value": 0.5013026246565419}
+{"method": "ucpa_coord_only", "metric": "sample_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.759201, "value": 0.16220992808969706}
+{"method": "ucpa_coord_only", "metric": "pairwise_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.7592342, "value": 0.5813273432430827}
+{"method": "ucpa_coord_only", "metric": "reference_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.7592573, "value": 7.100424405619406e-06}
+{"method": "ucpa_coord_only", "metric": "deletion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.7592816, "value": 0.26609179377555847}
+{"method": "ucpa_coord_only", "metric": "insertion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.759302, "value": 0.2664787359535694}
+{"method": "ucpa_coord_only", "metric": "topk_oracle_overlap", "scenario": "clean", "stage": "explanation", "time": 1791157834.7593215, "value": 0.13671875}
+{"method": "ucpa_coord_only", "metric": "communication_bytes_per_client_artifact", "scenario": "clean", "stage": "explanation", "time": 1791157834.7593403, "value": 912.0}
+{"method": "ucpa_coord_only", "metric": "n_eval_explanations", "scenario": "clean", "stage": "explanation", "time": 1791157834.75936, "value": 8.0}
+{"method": "sacpa_global_count", "metric": "artifact_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.8024123, "value": 0.4571280080817297}
+{"method": "sacpa_global_count", "metric": "sample_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.8025715, "value": 0.23396252899710496}
+{"method": "sacpa_global_count", "metric": "pairwise_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.8026052, "value": 0.3553072665682064}
+{"method": "sacpa_global_count", "metric": "reference_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.802662, "value": 0.00880969329615152}
+{"method": "sacpa_global_count", "metric": "deletion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.8026857, "value": 0.266224074177444}
+{"method": "sacpa_global_count", "metric": "insertion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.8027055, "value": 0.2661745585501194}
+{"method": "sacpa_global_count", "metric": "topk_oracle_overlap", "scenario": "clean", "stage": "explanation", "time": 1791157834.8027234, "value": 0.14453125}
+{"method": "sacpa_global_count", "metric": "communication_bytes_per_client_artifact", "scenario": "clean", "stage": "explanation", "time": 1791157834.8027415, "value": 400.0}
+{"method": "sacpa_global_count", "metric": "n_eval_explanations", "scenario": "clean", "stage": "explanation", "time": 1791157834.8027606, "value": 8.0}
+{"method": "nc_sacpa", "metric": "artifact_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.8161628, "value": 0.4547398144631749}
+{"method": "nc_sacpa", "metric": "sample_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.816251, "value": 0.30829083179060845}
+{"method": "nc_sacpa", "metric": "pairwise_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.8162854, "value": 0.3206012443396257}
+{"method": "nc_sacpa", "metric": "reference_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.8163095, "value": 0.002022165570378172}
+{"method": "nc_sacpa", "metric": "deletion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.8163366, "value": 0.266224074177444}
+{"method": "nc_sacpa", "metric": "insertion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.8163567, "value": 0.2661745585501194}
+{"method": "nc_sacpa", "metric": "topk_oracle_overlap", "scenario": "clean", "stage": "explanation", "time": 1791157834.8163753, "value": 0.13671875}
+{"method": "nc_sacpa", "metric": "communication_bytes_per_client_artifact", "scenario": "clean", "stage": "explanation", "time": 1791157834.816394, "value": 400.0}
+{"method": "nc_sacpa", "metric": "n_eval_explanations", "scenario": "clean", "stage": "explanation", "time": 1791157834.8164134, "value": 8.0}
+{"method": "cluster", "metric": "artifact_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.8324542, "value": 0.44019069518145837}
+{"method": "cluster", "metric": "sample_fidelity_jsd", "scenario": "clean", "stage": "explanation", "time": 1791157834.8325353, "value": 0.1452743369728314}
+{"method": "cluster", "metric": "pairwise_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.8325686, "value": 0.4459589677126952}
+{"method": "cluster", "metric": "reference_edi", "scenario": "clean", "stage": "explanation", "time": 1791157834.8325946, "value": 0.09357900009696946}
+{"method": "cluster", "metric": "deletion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.8326457, "value": 0.26617431640625}
+{"method": "cluster", "metric": "insertion_auc", "scenario": "clean", "stage": "explanation", "time": 1791157834.8326716, "value": 0.2662600539624691}
+{"method": "cluster", "metric": "topk_oracle_overlap", "scenario": "clean", "stage": "explanation", "time": 1791157834.832692, "value": 0.17578125}
+{"method": "cluster", "metric": "communication_bytes_per_client_artifact", "scenario": "clean", "stage": "explanation", "time": 1791157834.832711, "value": 400.0}
+{"method": "cluster", "metric": "n_eval_explanations", "scenario": "clean", "stage": "explanation", "time": 1791157834.8327305, "value": 8.0}

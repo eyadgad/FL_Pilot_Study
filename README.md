@@ -1,105 +1,117 @@
-# UCPA-FL: Full Reproducible Experiment Package
+# NC-SACPA: Full Reproducible Federated Explanation Research Pipeline
 
-This package takes the smoke-tested **Uncertainty-Compatible Peer Alignment (UCPA)** idea into a preregistered, auditable full experiment designed to test whether the approach deserves continued development toward a top-tier ML submission.
+**Current status:** NC-SACPA passed a fresh five-seed Phase-VIII smoke-test gate; the full MNIST/CIFAR-10 confirmatory study has **not** been run. Fresh full-study seeds **9101–9105** are intentionally untouched.
 
-It does **not** contain full-scale results yet. The full-study seeds are frozen and intentionally left for you to run. The included result is only an end-to-end synthetic sanity verification created during packaging.
+This package is the next-stage validation of **Neighborhood-Corroborated Scale-Adaptive Peer Alignment (NC-SACPA)**, developed after two predecessor failures were preserved rather than hidden:
 
-## Research question
+- UCPA v1 was killed by full validation because its fixed JSD bandwidth collapsed peer sharing at realistic sparse-artifact scales.
+- SACPA v1 fixed scale collapse but failed a preregistered strong grouped-patch case because global support counts allowed a distant group to authorize foreign features.
 
-A global federated explanation prior can improve consistency, but it can also erase real client-specific feature semantics. Pure local explanations preserve those semantics but can be noisy. UCPA builds a **personalized explanation prior** by borrowing from peers only when:
+NC-SACPA uses a self-tuned explanation-space kernel and requires local-neighborhood corroboration before importing a feature missing from the target client's sparse artifact.
 
-1. their whole explanation is similar, and
-2. the coordinate-level difference is small relative to the two clients' sampling uncertainty.
+## Smoke-test evidence that authorized this package
 
-See `research/METHOD.md` for the equations and `research/PREREGISTRATION.md` for the frozen decision gates.
+On untouched Phase-VIII seeds 801–805, NC-SACPA passed all 7 frozen smoke gates. Equal-family heterogeneous oracle JSD was:
 
-## Why this package is stricter than the smoke test
+- **NC-SACPA:** 0.07603
+- oracle-tuned GlobalMedian: 0.09040
+- oracle-tuned Cluster: 0.09387
+- Local: 0.13231
+
+NC-SACPA beat Local, GlobalMedian, and Cluster on 5/5 seeds; it beat GlobalMedian in every tested family and patch strength. This is **smoke-test approval only**, not publication evidence.
+
+The complete smoke preregistration, raw confirmation JSONL, evaluator, and gate report are under `research_history/phase8_ncsacpa_smoke_approved/`.
+
+## Frozen method
+
+For each client/class:
+
+1. compute pairwise JSD between sparse normalized explanation summaries;
+2. set each client's local distance scale to its median peer distance;
+3. use a symmetric self-tuned kernel `exp(-(d/sqrt(sigma_i sigma_k))^2)`;
+4. form a peer-only prior;
+5. for coordinates missing from the target, import only when at least **2 of the target's 3 nearest explanation peers** report the feature;
+6. output `normalize(0.2 * local + 0.8 * peer_prior)`.
+
+See `research/METHOD.md` for the exact formulation.
+
+## Why the full study is stricter
 
 - MNIST **and CIFAR-10**.
-- Four disjoint client subsets: task training / surrogate fitting / artifact estimation / final explanation evaluation.
-- Fresh five-seed confirmatory block: **6101–6105**.
-- Same FedAvg task model and same local explanation samples for every coordination method.
-- Close baselines: Local-XAI, FedAttr-Agg reproduction, xFedAlign-style median global prior, clustering, and UCPA ablations.
-- Direct task-model integrated gradients as an independent local-fidelity oracle.
-- Local fidelity, pairwise drift, xFedAlign-style reference EDI, deletion/insertion AUC, top-k overlap, communication cost, task performance, poisoning robustness, and direct audit of privacy exposure from UCPA's variance channel.
-- Raw append-only JSONL logs, complete environment/config manifests, SHA-256 integrity files, and deterministic seed handling.
-- Pre-registered automatic gates in `evaluate_preregistered_gates.py`.
+- Four disjoint per-client partitions: task training / surrogate fitting / artifact estimation / final explanation evaluation.
+- Fresh confirmatory seeds **9101–9105**.
+- Same FedAvg model and local explanation samples for every coordination method.
+- Local-XAI, FedAttr mean, xFedAlign-style global median, clustering, killed UCPA, rejected SACPA predecessor, and NC-SACPA in the same pipeline.
+- Direct task-model Integrated Gradients as the disjoint fidelity oracle.
+- Primary local fidelity, explanation drift, deletion/insertion AUC, top-k overlap, communication, task validity, two poisoning attacks, and empirical privacy audit.
+- Raw JSONL logs, environment/config manifests, SHA-256 per-run integrity files, duplicate-run provenance, paired seed analysis, and frozen decision gates.
+- Exploratory sensitivity is separated from confirmatory evidence.
 
 ## Quick start
 
-Recommended: Python 3.10–3.12 with a CUDA-enabled PyTorch environment.
-
 ```bash
 python -m venv .venv
-source .venv/bin/activate       # Windows: .venv\Scripts\activate
+source .venv/bin/activate       # Windows: .venv\\Scripts\\activate
 python -m pip install --upgrade pip
 pip install -e '.[dev]'
-
 python scripts/verify_package.py
-python run_experiment.py --config configs/sanity.yaml
-python scripts/verify_runs.py --outputs outputs
 ```
 
-### Run the full frozen study
+## Run the study
 
 ```bash
-# Core confirmatory evidence first
+# Core confirmation
 python scripts/run_suite.py --tier A
 python aggregate_results.py --outputs outputs --out aggregate_tierA
 
-# Stress + robustness
+# Stress + robustness required for the final gate
 python scripts/run_suite.py --tier B
-
-# Communication/privacy/parameter sensitivity
-python scripts/run_suite.py --tier C
-
-# Final aggregation and preregistered gate
 python aggregate_results.py --outputs outputs --out aggregate_all
-python evaluate_preregistered_gates.py --runs aggregate_all/runs.csv --out aggregate_all/preregistered_gate_report.json
+python evaluate_ncsacpa_gates.py --runs aggregate_all/runs.csv --out aggregate_all/ncsacpa_gate_report.json
+
+# Exploratory sensitivity/communication
+python scripts/run_suite.py --tier C
+python aggregate_results.py --outputs outputs --out aggregate_all
+
+# Verify raw run integrity
 python scripts/verify_runs.py --outputs outputs
 ```
 
-Or run all three tiers with:
+The authoritative experiment list is `configs/suite_manifest.yaml` (suite 2.1; 28 configurations).
 
-```bash
-python scripts/run_suite.py --tier all
-```
+## Full-study decision
 
-See `research/RUNBOOK.md` before running the full suite.
+The executable frozen gate is `evaluate_ncsacpa_gates.py`:
 
-## Study tiers
+- G1 local fidelity vs xFedAlign-style global median;
+- G2 coordination benefit vs Local-XAI;
+- G3 functional non-inferiority;
+- G4 neighborhood-corroboration revision test vs SACPA predecessor;
+- G5 CIFAR task validity;
+- G6 communication non-inferiority;
+- G7 poisoning robustness.
 
-`configs/suite_manifest.yaml` is the authoritative experiment list.
-
-- **Tier A — required core evidence:** MNIST/CIFAR-10 label-skew controls plus rotation, sparse-patch, and photometric client heterogeneity.
-- **Tier B — stress/robustness:** unequal client sizes, partial task participation, time-varying shift, direct-IG explanation source, and two attribution-poisoning attacks.
-- **Tier C — sensitivity:** sparse communication, artifact noise, and UCPA parameter sensitivity.
-
-The core UCPA values `z=2`, `h=0.048`, `beta=.2` are frozen from the previous smoke-test phase. Tier-C runs are exploratory and cannot be used to retroactively tune Tier A.
-
-## Main files
-
-- `ucpa_fl/` — experiment implementation.
-- `configs/` — frozen YAML configs and suite manifest.
-- `research/PREREGISTRATION.md` — hypotheses, outcomes and pass/revise/kill rules.
-- `research/NOVELTY_POSITIONING.md` — current literature positioning as of 2026-10-02.
-- `research/BASELINE_PROVENANCE.md` — what is official vs reproduced.
-- `research/KNOWN_LIMITATIONS.md` — claims the package cannot support by itself.
-- `research_history/` — selected earlier negative phases, smoke-test approval, and the ten user-provided seed papers.
-- `outputs/` — immutable per-seed run logs (created by runs).
-- `aggregate_results.py` — regenerates CSV/Markdown summaries.
-- `evaluate_preregistered_gates.py` — applies the frozen research gate.
+Only a complete pass returns `CONTINUE`. Otherwise the outcome is `REVISE_OR_KILL`.
 
 ## Baseline honesty
 
-The `xfedalign_median` implementation is a **self-contained reproduction of the published mechanism**, not the authors' exact source code. The official ICML 2026 code is at:
+`xfedalign_median` is a self-contained reproduction of the published xFedAlign coordination mechanism, **not the authors' exact code**. Official paper/code:
 
-https://github.com/dawoodwasif/xFedAlign
+- https://proceedings.mlr.press/v306/wasif26a.html
+- https://github.com/dawoodwasif/xFedAlign
 
-Use `bash scripts/fetch_official_xfedalign.sh` when internet access is available and keep official-code outputs separate. A publication should include an official-code cross-check before claiming superiority to xFedAlign.
+Use `scripts/fetch_official_xfedalign.sh` for a separate official-code cross-check when internet access is available.
 
-## Result handling
+## Important files
 
-Do not edit raw run folders. Every completed run ends with `integrity.sha256`. `aggregate_results.py` selects the latest completed duplicate if a seed/config was accidentally rerun and writes `duplicate_runs.json` so this is auditable rather than silent.
+- `ucpa_fl/` — implementation and logging pipeline.
+- `configs/` — frozen suite.
+- `research/PREREGISTRATION.md` — full-study hypotheses and gates.
+- `research/METHOD.md` — exact NC-SACPA formulation.
+- `research/NOVELTY_POSITIONING.md` — current prior-art audit.
+- `research/BASELINE_PROVENANCE.md` — official vs reproduced baselines.
+- `research/KNOWN_LIMITATIONS.md` — explicit boundaries.
+- `research_history/` — negative/revised earlier phases and raw smoke confirmation.
+- `verification/` — engineering-only sanity evidence.
 
-When the full run is finished, return the `outputs/` and `aggregate_all/` folders. The next analysis should start from the preregistered gates and paired UCPA-vs-xFedAlign results, not from post-hoc selection of favorable metrics.
+Do not interpret the smoke result as evidence that NC-SACPA is conference-ready. The purpose of this package is to try to falsify it at realistic scale before theory/paper development.

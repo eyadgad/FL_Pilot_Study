@@ -1,20 +1,53 @@
-# Final package verification
+# Final package verification — NC-SACPA full pipeline
 
-**Performed:** 2026-10-02/03 UTC-equivalent execution environment, after the final UCPA regression correction and before archive creation.
+**Freeze date:** 2026-10-04  
+**Suite version:** 2.1
 
-## Passed checks
+## Research-state verification
 
-1. Python compile of all `ucpa_fl` modules and entry points.
-2. **7/7 pytest tests**, including a numerical regression test against an independent transcription of the smoke-approved UCPA operator.
-3. All frozen YAML configs parsed successfully: sanity + suite manifest + 26 full-study configs.
-4. Offline editable-install metadata verified with `pip install -e . --no-deps --no-build-isolation`. Standard build isolation could not be tested in the sandbox because outbound package-index access is disabled; this is an environment-network limitation, not a package-code failure.
-5. Clean end-to-end synthetic run using the **linear-surrogate** explanation path completed, aggregated, and passed `integrity.sha256` verification.
-6. Independent end-to-end synthetic run using **direct task-model integrated gradients plus random-support attribution poisoning** completed, produced both clean/attacked results, aggregated, and passed run-integrity verification.
-7. Aggregation produced paired UCPA-vs-xFedAlign-style tables. The preregistered gate script correctly returned `PENDING` on sanity-only results rather than treating missing core experiments as a pass.
-8. Final config parser check reported all configs valid after the verification runs.
+- Phase-VIII NC-SACPA smoke status: `SMOKE_TEST_APPROVED_FOR_CONTINUATION`.
+- Frozen smoke confirmation seeds: 801–805; raw JSONL, preregistration hash, evaluator, and gate report are preserved in `research_history/phase8_ncsacpa_smoke_approved/`.
+- UCPA v1 full negative result and Phase-VII SACPA rejection are preserved in `research_history/`.
+- Full-study seeds are 9101–9105.
+- Search of all packaged result-bearing `manifest.json`, `events.jsonl`, `metrics.jsonl`, and `final_results.json` files found **zero** occurrences of seeds 9101–9105. The full confirmation block is untouched.
 
-## Important scope
+## Static/package checks
 
-The full MNIST/CIFAR-10 Tier-A/B/C study was **not** run during packaging. That is intentional: seeds 6101–6105 remain untouched confirmatory evidence for the user's run. The verification runs use synthetic data/seeds 101 and 909 and are engineering checks only.
+`python scripts/verify_package.py` passed:
 
-The package cannot verify external dataset download or official xFedAlign GitHub execution inside this sandbox because outbound git/package access is blocked. The self-contained experiment does not depend on that checkout; official-code comparison remains an explicit pre-publication step.
+- Python compilation: PASS
+- unit/regression tests: **10/10 PASS**
+- every YAML experiment config parses through the strict dataclass loader
+- suite manifest parses successfully
+
+The NC-SACPA tests include:
+
+- self-tuned-kernel behavior under distance rescaling;
+- neighborhood corroboration blocking unsupported foreign sparse support;
+- a regression distinguishing NC-SACPA from the rejected global-count predecessor.
+
+## End-to-end engineering check
+
+A fresh synthetic federated sanity run was executed after the final NC-SACPA code integration. The run completed and produced task metrics, explanation artifacts, all coordination methods, logs, final results, checkpoint, and a per-run SHA-256 manifest.
+
+`python scripts/verify_runs.py --outputs verification/ncsacpa_sanity/output` verified **2/2** packaged synthetic sanity runs with no integrity failures (the earlier and final rerun).
+
+The final sanity aggregation regenerated successfully. Running `evaluate_ncsacpa_gates.py` on sanity-only evidence returns **PENDING**, confirming that the evaluator does not falsely pass when the required full-study families/seeds are absent.
+
+## Frozen suite audit
+
+- total configs in `configs/suite_manifest.yaml`: **28**
+- Tier A: **6** core confirmatory configs
+- Tier B: **8** stress/robustness configs
+- Tier C: **14** exploratory sensitivity/communication configs
+- every config uses seeds 9101–9105
+- all Tier-A/Tier-B configs retain frozen NC-SACPA values: `p=2`, `beta=.8`, `q=3`, `min_support=2`
+- Tier-C NC-SACPA parameter variations are explicitly labeled exploratory and are not allowed to redefine Tier-A claims
+
+## Environment limitations of this verification
+
+The sandbox can execute the synthetic study but cannot verify external torchvision downloads or run the official xFedAlign GitHub repository in its intended external environment. Those are intentionally runtime/external checks for the user's machine. The package is self-contained for its internal baselines; official xFedAlign is an optional provenance cross-check, not a hidden dependency.
+
+## Freeze rule
+
+No code/config/document changes should be made after `PACKAGE_INTEGRITY.sha256` is generated without regenerating that manifest and changing the package checksum.

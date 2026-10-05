@@ -67,12 +67,19 @@ class AlignmentConfig:
     beta: float = 0.2
     methods: list[str] = field(default_factory=lambda: [
         'local', 'fedattr_mean', 'xfedalign_median', 'ucpa',
-        'ucpa_whole_only', 'ucpa_coord_only', 'cluster'
+        'ucpa_whole_only', 'ucpa_coord_only', 'sacpa_global_count', 'nc_sacpa', 'cluster'
     ])
     ucpa_z: float = 2.0
     ucpa_h: float = 0.048
     ucpa_variance_floor_fraction: float = 0.05
     cluster_k: int = 3
+    sacpa_beta: float = 0.6
+    sacpa_kernel_power: float = 2.0
+    sacpa_global_min_support: int = 2
+    ncsacpa_beta: float = 0.8
+    ncsacpa_kernel_power: float = 2.0
+    ncsacpa_neighborhood_size: int = 3
+    ncsacpa_min_support: int = 2
 
 @dataclass
 class EvaluationConfig:

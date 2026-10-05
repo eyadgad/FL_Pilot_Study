@@ -1,62 +1,44 @@
-# Novelty and current-research positioning
+# NC-SACPA novelty positioning — audit date 2026-10-04
 
-**Search date:** 2026-10-02. This is a living audit, not a guarantee of novelty.
+## Closest direct work: xFedAlign (ICML 2026)
 
-## Closest direct work
+xFedAlign constructs compact per-class top-k attribution artifacts, robustly aggregates them into **one Global Explanation Prior**, and softly aligns client explanations to that prior while decoupling explanation coordination from task optimization.
 
-### xFedAlign — Wasif, Moore, Lu & Cho, ICML 2026
+NC-SACPA changes the coordination object: there is no single global explanation prior. Each client receives a peer prior based on a self-tuned explanation-space neighborhood, and sparse features absent from the target are imported only when multiple nearby peers corroborate them.
 
-Published contribution: a model-agnostic federated XAI framework using local surrogates, sparse top-k attribution artifacts, and a **single Global Explanation Prior** robustly aggregated at the server; it reports IID/non-IID image, text and tabular results, deletion/insertion AUC, privacy, and attribution-poisoning experiments.
+Paper: https://proceedings.mlr.press/v306/wasif26a.html
 
-UCPA difference: replaces the single global explanation object with a continuous personalized peer prior. Peer influence depends jointly on whole-explanation similarity and coordinate-level sampling uncertainty.
+## UncertainXFL (2025)
 
-Paper: https://proceedings.mlr.press/v306/wasif26a.html  
-Official code: https://github.com/dawoodwasif/xFedAlign
-
-### UncertainXFL — Zhang & Yu, 2025
-
-UncertainXFL explicitly evaluates uncertainty of logical/rule explanations and uses explanation quality/uncertainty to prioritize clients during model aggregation. Its uncertainty object and objective differ from UCPA: UCPA estimates sampling uncertainty of attribution coordinates to decide *where explanation information should be shared*, while leaving task-model aggregation unchanged.
+UncertainXFL is important because it explicitly treats uncertainty in federated explanations. It produces logical/rule explanations with uncertainty and uses explanation quality to influence model aggregation. NC-SACPA does not claim that "uncertainty-aware FedXAI" is new; in fact the final NC-SACPA rule removes UCPA v1's variance channel entirely.
 
 Paper: https://arxiv.org/abs/2503.05194
 
-### FedXDS — Hoefler, Mueller & Samek, ICCV 2025
+## Personalized-FL collision risk
 
-Uses feature attribution to guide selective data sharing for heterogeneous FL. It uses XAI as a mechanism for data exchange/model performance, not as a personalized explanation-alignment prior.
+Adaptive collaboration is established beyond FedXAI.
 
-Paper record: https://mlanthology.org/iccv/2025/hoefler2025iccv-fedxds/
+- Fermanian et al. (ICML 2026) learn collaboration weights via kernel mean embeddings and multi-task averaging.
+- Yin et al. (ICML 2026) analyze collaboration-graph degeneration toward global consensus or spontaneous clustering and propose controlled collaboration geometry.
 
-### FedUP — Qi et al., IJCAI 2026
+These works mean NC-SACPA cannot claim novelty for self-tuned kernels, similarity-weighted peers, collaboration graphs, or continuous personalization in general. The contribution must be tied to the **federated explanation artifact problem** and to the specific sparse-support failure identified experimentally.
 
-Models class prototypes probabilistically and uses uncertainty-aware prototype aggregation/personalization. This is important adjacent prior art because it establishes uncertainty-weighted federated knowledge sharing, but the shared object is a class prototype distribution rather than an explanation, and it does not use UCPA's product of global explanation relevance and coordinate sampling compatibility.
+References:
+- https://proceedings.mlr.press/v306/fermanian26a.html
+- https://proceedings.mlr.press/v306/yin26j.html
 
-Paper: https://www.ijcai.org/proceedings/2026/171
+## Why the problem remains current
 
-## Broader personalized-FL collision risk
+The 2026 FedXAI survey identifies non-IID explanation behavior, explanation stability, security, communication cost, and lack of standardized evaluation as open challenges. The package therefore makes local fidelity primary and jointly measures consistency, perturbation fidelity, attacks, privacy exposure, and communication.
 
-Similarity-aware collaboration, soft clustering, mixture-of-experts, and multi-level personalization are established ideas in personalized FL. Therefore the paper must not claim that continuous peer weighting is itself new. UCPA must be justified by the structure of **federated explanation estimation**: attribution coordinates have heterogeneous sampling uncertainty and can be genuinely client-specific.
+Survey: https://arxiv.org/abs/2607.13045
 
-## Why the problem is current
+## Candidate novelty statement
 
-The 2026 FedXAI review describes fragmented evaluation practices and lack of standardized benchmarking for explanation quality, consistency under non-IID data, privacy leakage, and communication costs. The full suite is intentionally built around those axes rather than a single explanation-drift number.
+> Existing global-prior explanation alignment can over-pool genuinely heterogeneous clients, while fixed-bandwidth personalized alignment can collapse when explanation-distance scale changes and global support voting can import sparse features from a semantically distant majority. NC-SACPA forms a client-specific sparse explanation prior using a self-tuned explanation-space peer kernel and requires support corroboration inside the target's nearest explanation neighborhood before importing absent features.
 
-Review: https://arxiv.org/abs/2607.13045
+This statement is **provisional** until the full study and a final pre-submission literature search.
 
-## Conference alignment
+## Novelty risk
 
-ICML 2026 asks reviewers to assess soundness, presentation, significance and originality; it explicitly asks whether experimental claims are well designed/supported and whether the work is properly distinguished from current literature. The package therefore separates development from confirmatory seeds, uses disjoint client subsets, includes close baselines and ablations, and records failures.
-
-ICML reviewer guidance: https://icml.cc/Conferences/2026/ReviewerInstructions
-
-NeurIPS 2026 likewise treats significance and originality broadly but requires clearly supported claims and relevant comparison to prior work. Its guidelines note that simple, practical ideas can be significant and that originality can come from a well-motivated combination, but the reasoning and evidence must explain why that combination is effective.
-
-NeurIPS reviewer guidance: https://neurips.cc/Conferences/2026/ReviewerGuidelines
-
-## Current novelty assessment
-
-**Medium risk.** No direct 2026 collision found for the exact two-scale explanation rule during this audit. The components are individually familiar, and new papers may appear before submission. A final search must be repeated after full results and immediately before paper submission.
-
-### Metric-Guided Attribution Fusion — Schuler et al., 2026 preprint
-
-This July 2026 work studies explanation quality in FL and formulates multi-objective fusion of multiple XAI methods based on explanation metrics. It is relevant because it also treats explanation aggregation/fusion as an optimization problem. Its fusion axis is **across XAI methods**, whereas UCPA's axis is **across federated clients and attribution coordinates under heterogeneous sampling uncertainty**. It should be cited in a final paper if the preprint remains current.
-
-Record: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7129255
+**Medium.** No direct collision was found in the 2026-10-04 audit for the exact combination of self-tuned explanation-space collaboration plus neighborhood-corroborated sparse support. Every major ingredient is known individually, so the paper must demonstrate a non-obvious FedXAI failure mode and evidence that both parts of the rule matter. If a simpler adaptive global/local mixture matches NC-SACPA in the full study, the novelty claim should be revised or killed.

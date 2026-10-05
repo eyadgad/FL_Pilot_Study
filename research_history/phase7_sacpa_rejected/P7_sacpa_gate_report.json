@@ -1,0 +1,146 @@
+{
+  "aggregate_improvements": {
+    "vs_cluster": 0.22671381438510163,
+    "vs_global": 0.19271864264413308,
+    "vs_local": 0.44638128725330917
+  },
+  "aggregate_means": {
+    "ClusterOracle": 0.09471673386256199,
+    "GlobalMedianOracle": 0.090728147225373,
+    "Local": 0.13229889119733307,
+    "SACPA": 0.07324314184248204,
+    "SACPA_no_corroboration": 0.0789329420532148
+  },
+  "corroboration_other_worsen": 0.04070026195341647,
+  "corroboration_personal_patch_improvement": 0.31260411644927033,
+  "family_means": {
+    "patch_grouped": {
+      "ClusterOracle": 0.09633034835741303,
+      "GlobalMedianOracle": 0.09121967433325442,
+      "Local": 0.13114121230764936,
+      "SACPA": 0.09500599606723417,
+      "SACPA_no_corroboration": 0.0909675452518771
+    },
+    "patch_personal": {
+      "ClusterOracle": 0.09797419978174125,
+      "GlobalMedianOracle": 0.09128036834147303,
+      "Local": 0.13673602641239546,
+      "SACPA": 0.06862884521454471,
+      "SACPA_no_corroboration": 0.09983889467019177
+    },
+    "rotation_grouped": {
+      "ClusterOracle": 0.09114580309290175,
+      "GlobalMedianOracle": 0.08980503239520861,
+      "Local": 0.12934595938760907,
+      "SACPA": 0.06404227280393296,
+      "SACPA_no_corroboration": 0.06190139859115491
+    },
+    "rotation_personal": {
+      "ClusterOracle": 0.09341658421819196,
+      "GlobalMedianOracle": 0.09060751383155591,
+      "Local": 0.13197236668167842,
+      "SACPA": 0.0652954532842163,
+      "SACPA_no_corroboration": 0.06302392969963545
+    }
+  },
+  "family_sacpa_over_global": {
+    "patch_grouped": 1.0415077313272036,
+    "patch_personal": 0.7518467164572489,
+    "rotation_grouped": 0.7131256578372975,
+    "rotation_personal": 0.7206406016790612
+  },
+  "family_wins_vs_global": 3,
+  "gates": {
+    "A_task_sanity": true,
+    "B_homogeneous": true,
+    "C_heterogeneous_aggregate": true,
+    "D_no_family_collapse": false,
+    "E_seed_robustness": true,
+    "F_corroboration": true,
+    "G_peer_active": true
+  },
+  "n_rows": 900,
+  "patch_strength_sacpa_over_global": {
+    "('grouped', 'moderate')": 0.9555814092098707,
+    "('grouped', 'strong')": 1.1281179926341072,
+    "('personal', 'moderate')": 0.7592343287623657,
+    "('personal', 'strong')": 0.7445905288803544
+  },
+  "peer_mass_mean": 4.098173924912895,
+  "seed_equal_family_means": {
+    "701": {
+      "ClusterOracle": 0.09479245525016816,
+      "GlobalMedianOracle": 0.09027496527123957,
+      "Local": 0.13282890368393688,
+      "SACPA": 0.07410548467473944,
+      "SACPA_no_corroboration": 0.08043669714457907
+    },
+    "702": {
+      "ClusterOracle": 0.09511855664291323,
+      "GlobalMedianOracle": 0.09148715422822419,
+      "Local": 0.13425027020381108,
+      "SACPA": 0.07332747940763294,
+      "SACPA_no_corroboration": 0.0786158834766937
+    },
+    "703": {
+      "ClusterOracle": 0.09463525342862185,
+      "GlobalMedianOracle": 0.0911481587901345,
+      "Local": 0.13274173010584914,
+      "SACPA": 0.07217791487154766,
+      "SACPA_no_corroboration": 0.07715366461171332
+    },
+    "704": {
+      "ClusterOracle": 0.09434096486750694,
+      "GlobalMedianOracle": 0.08974638882760169,
+      "Local": 0.1296848446051534,
+      "SACPA": 0.0734665215328538,
+      "SACPA_no_corroboration": 0.07883438264944338
+    },
+    "705": {
+      "ClusterOracle": 0.09469643912359982,
+      "GlobalMedianOracle": 0.090984069009665,
+      "Local": 0.13198870738791488,
+      "SACPA": 0.07313830872563634,
+      "SACPA_no_corroboration": 0.0796240823836446
+    }
+  },
+  "seed_wins": {
+    "ClusterOracle": 5,
+    "GlobalMedianOracle": 5,
+    "Local": 5
+  },
+  "seeds": [
+    701,
+    702,
+    703,
+    704,
+    705
+  ],
+  "shared": {
+    "patch": {
+      "ClusterOracle": 0.08534345533328813,
+      "GlobalMedianOracle": 0.07864956329548888,
+      "Local": 0.1263113414993814,
+      "SACPA": 0.06241837460095841,
+      "SACPA_no_corroboration": 0.05961840607246153
+    },
+    "rotation": {
+      "ClusterOracle": 0.09132036393157386,
+      "GlobalMedianOracle": 0.08406894883860311,
+      "Local": 0.13238422074795136,
+      "SACPA": 0.0651863676284511,
+      "SACPA_no_corroboration": 0.0617184681296301
+    }
+  },
+  "shared_checks": {
+    "patch": {
+      "global_ratio": 0.7936264612996085,
+      "local_improvement": 0.5058371333878668
+    },
+    "rotation": {
+      "global_ratio": 0.7753917293957954,
+      "local_improvement": 0.5075971497195231
+    }
+  },
+  "status": "NOT_APPROVED"
+}

@@ -1,0 +1,104 @@
+{
+  "status": "REVISE_OR_KILL",
+  "gates": {
+    "G1_local_fidelity": {
+      "pass": false,
+      "complete": true,
+      "successful_families": [
+        "core_cifar10_rotation",
+        "core_cifar10_color"
+      ],
+      "details": {
+        "core_mnist_rotation": {
+          "n": 5,
+          "wins": 0,
+          "mean_delta": 0.030950318640461234
+        },
+        "core_mnist_patch": {
+          "n": 5,
+          "wins": 0,
+          "mean_delta": 0.017344636992357165
+        },
+        "core_cifar10_rotation": {
+          "n": 5,
+          "wins": 4,
+          "mean_delta": -0.0011567922883080283
+        },
+        "core_cifar10_color": {
+          "n": 5,
+          "wins": 5,
+          "mean_delta": -0.0017985726347385488
+        }
+      }
+    },
+    "G2_consistency_vs_local": {
+      "pass": true,
+      "complete": true,
+      "successful_families": [
+        "core_mnist_rotation",
+        "core_mnist_patch",
+        "core_cifar10_rotation",
+        "core_cifar10_color"
+      ],
+      "details": {
+        "core_mnist_rotation": {
+          "n": 5,
+          "wins": 5,
+          "mean_delta": -0.00010642877744508894
+        },
+        "core_mnist_patch": {
+          "n": 5,
+          "wins": 5,
+          "mean_delta": -0.0001581239327541506
+        },
+        "core_cifar10_rotation": {
+          "n": 5,
+          "wins": 5,
+          "mean_delta": -4.6253798746676014e-08
+        },
+        "core_cifar10_color": {
+          "n": 5,
+          "wins": 5,
+          "mean_delta": -4.64329100058336e-08
+        }
+      }
+    },
+    "G3_functional_fidelity": {
+      "pass": true,
+      "complete": true,
+      "mean_deletion_delta": 0.00021533989194431614,
+      "mean_insertion_delta": -0.0013332016479106492,
+      "n": 20
+    },
+    "G4_two_scale_mechanism": {
+      "pass": false,
+      "complete": true,
+      "mean_delta_vs_whole_only": 0.00022209025257947658,
+      "mean_delta_vs_coord_only": 0.005648643655153368,
+      "n": 30
+    },
+    "G5_cifar_task_validity": {
+      "pass": true,
+      "complete": true,
+      "details": [
+        [
+          "core_cifar10_rotation",
+          0.5687453145970582,
+          5
+        ],
+        [
+          "core_cifar10_color",
+          0.5743807890219895,
+          5
+        ]
+      ]
+    },
+    "G6_privacy_claim_constraint": {
+      "privacy_risk_flag": false,
+      "mean_only_auc": 0.5437162126813616,
+      "mean_variance_auc": 0.5307861328125,
+      "n": 20
+    }
+  },
+  "notes": []
+}

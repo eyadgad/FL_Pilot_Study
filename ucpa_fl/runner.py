@@ -23,6 +23,11 @@ def _class_hist(ds,n_classes):
     return h.tolist()
 
 
+def _method_beta(method,cfg):
+    if method=='sacpa_global_count': return float(cfg.alignment.sacpa_beta)
+    if method=='nc_sacpa': return float(cfg.alignment.ncsacpa_beta)
+    return float(cfg.alignment.beta)
+
 def _aligned_summary(method, local_mean, prior, beta):
     if method=='local': return normalize_np(local_mean)
     if method=='fedattr_mean': return normalize_np(prior)
@@ -39,7 +44,8 @@ def _evaluate_artifacts(label, artifacts, locals_, eval_caches, oracle_summaries
     n=len(artifacts); results={}
     for method in cfg.alignment.methods:
         priors,meta=make_priors(method,means,vars_,counts,masks,cfg.alignment,cfg.artifact,seed)
-        summaries=np.stack([_aligned_summary(method,means[i],priors[i],cfg.alignment.beta) for i in range(n)])
+        mbeta=_method_beta(method,cfg)
+        summaries=np.stack([_aligned_summary(method,means[i],priors[i],mbeta) for i in range(n)])
         # Method-independent pairwise drift plus method-specific reference EDI.
         p_edi=pairwise_edi(summaries,counts)
         if method=='local': ref=global_mean_prior(means,counts)
@@ -54,7 +60,7 @@ def _evaluate_artifacts(label, artifacts, locals_, eval_caches, oracle_summaries
             if np.isfinite(v): fidelity.append(v)
         per_sample=[]
         for i in range(n):
-            pm=evaluate_method_cache(task_model,eval_caches[i],priors[i],method,cfg.alignment.beta,cfg.evaluation,device)
+            pm=evaluate_method_cache(task_model,eval_caches[i],priors[i],method,mbeta,cfg.evaluation,device)
             per_sample.append(pm)
         def avg(key):
             vals=[x[key] for x in per_sample if np.isfinite(x[key])]
@@ -83,9 +89,7 @@ def _evaluate_artifacts(label, artifacts, locals_, eval_caches, oracle_summaries
 
 def run_one(cfg: ExperimentConfig, seed: int):
     set_seed(seed,cfg.deterministic); device=resolve_device(cfg.device)
-    env=environment_snapshot(); env['resolved_device']=str(device)
-    logger=RunLogger(cfg.logging.output_root,cfg.experiment_name,seed,cfg.to_dict(),env)
-    logger.event('device_resolved', device=str(device), cuda_available=bool(torch.cuda.is_available()))
+    env=environment_snapshot(); logger=RunLogger(cfg.logging.output_root,cfg.experiment_name,seed,cfg.to_dict(),env)
     try:
         logger.event('data_loading_started')
         bundle=load_data(cfg,seed)
