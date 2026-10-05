@@ -1,5 +1,5 @@
 experiment_name: sanity_synthetic
-device: cpu
+device: auto
 seeds:
 - 101
 deterministic: true

@@ -18,9 +18,27 @@ def set_seed(seed: int, deterministic: bool = True) -> None:
 
 
 def resolve_device(requested: str = 'auto') -> torch.device:
-    if requested == 'auto':
+    """Use CUDA when the config asks for it and this PyTorch build can see a GPU.
+
+    ``auto`` and ``gpu`` select CUDA when ``torch.cuda.is_available()`` is true
+    and otherwise stay on CPU. An explicit ``cuda`` request fails if no CUDA
+    device is visible, instead of failing later inside a kernel launch.
+    """
+    name = (requested or 'auto').strip().lower()
+    if name in ('auto', 'gpu'):
         return torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    return torch.device(requested)
+    if name.startswith('cuda') and not torch.cuda.is_available():
+        raise RuntimeError(
+            f'Config requested device {requested!r}, but torch.cuda.is_available() is false. '
+            'Install a CUDA build of PyTorch on a machine with an NVIDIA GPU, or set device: auto '
+            'to run on CPU when no CUDA device is visible.'
+        )
+    return torch.device(name)
+
+
+def move_state_dict(state: dict, device) -> dict:
+    """Copy a state dict onto ``device`` so load_state_dict does not leave a module on CPU."""
+    return {k: v.to(device) if torch.is_tensor(v) else v for k, v in state.items()}
 
 
 def environment_snapshot() -> dict:
