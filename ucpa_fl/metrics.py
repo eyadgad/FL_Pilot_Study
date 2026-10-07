@@ -70,7 +70,8 @@ def perturbation_auc(model,x,target,map_flat,device,steps=20):
         if c: xd[idx]=0; xi[idx]=flat[idx]
         dele.append(_prob_target(model,xd.view_as(x).unsqueeze(0),target)); inse.append(_prob_target(model,xi.view_as(x).unsqueeze(0),target))
     axis=np.linspace(0,1,steps+1)
-    return float(np.trapz(dele,axis)),float(np.trapz(inse,axis))
+    trapz = np.trapezoid if hasattr(np, 'trapezoid') else np.trapz
+    return float(trapz(dele, axis)), float(trapz(inse, axis))
 
 
 def evaluate_method_samples(task_model, eval_dataset, surrogate_state, source, prior, method, beta, cfg, input_shape,n_classes,device,seed,num_workers=0,ig_steps=16):

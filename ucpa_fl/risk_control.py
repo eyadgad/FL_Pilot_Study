@@ -97,8 +97,8 @@ def perturbation_auc_many(model, x: torch.Tensor, target: int, maps: np.ndarray,
     for p, (mi, ci, typ) in zip(probs, meta):
         (dele if typ == 0 else inse)[mi, ci] = float(p)
     axis = np.linspace(0, 1, len(cuts))
-    # np.trapezoid is the NumPy 2.x spelling.
-    return np.trapezoid(dele, x=axis, axis=1), np.trapezoid(inse, x=axis, axis=1)
+    trapz = np.trapezoid if hasattr(np, 'trapezoid') else np.trapz
+    return trapz(dele, x=axis, axis=1), trapz(inse, x=axis, axis=1)
 
 
 def calibration_loss_matrix(model, records, prior, beta_grid, device, steps: int, topk: int):

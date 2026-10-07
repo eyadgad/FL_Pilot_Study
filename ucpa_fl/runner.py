@@ -209,7 +209,9 @@ def _evaluate_artifacts(label, artifacts, locals_, calibration_caches, eval_cach
 
 def run_one(cfg: ExperimentConfig, seed: int):
     set_seed(seed,cfg.deterministic); device=resolve_device(cfg.device)
-    env=environment_snapshot(); logger=RunLogger(cfg.logging.output_root,cfg.experiment_name,seed,cfg.to_dict(),env)
+    env=environment_snapshot(); env['resolved_device']=str(device)
+    logger=RunLogger(cfg.logging.output_root,cfg.experiment_name,seed,cfg.to_dict(),env)
+    logger.event('device_resolved', device=str(device), cuda_available=bool(torch.cuda.is_available()))
     try:
         logger.event('data_loading_started')
         bundle=load_data(cfg,seed)
