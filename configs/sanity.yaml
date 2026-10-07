@@ -1,0 +1,100 @@
+device: auto
+deterministic: true
+num_workers: 0
+dataset:
+  name: synthetic
+  root: ./data
+  download: true
+  train_limit: 900
+  test_limit: 160
+federation:
+  n_clients: 3
+  rounds: 2
+  local_epochs: 1
+  batch_size: 32
+  lr: 0.08
+  momentum: 0.9
+  weight_decay: 0.0001
+  participation_rate: 1.0
+  partition: iid
+  dirichlet_alpha: 0.35
+  min_client_samples: 140
+  sample_size_sigma: 0.0
+shift:
+  kind: none
+  strength: 1.0
+  rotation_max_deg: 30
+  patch_size: 4
+  patch_value: 1.0
+  drift_start_round: 7
+  drift_end_round: 18
+surrogate:
+  kind: linear
+  source: linear_surrogate
+  epochs: 1
+  lr: 0.1
+  temperature: 3.0
+  l1: 0.0001
+  hidden_dim: 128
+  max_samples_per_class: 5
+  eval_samples_per_class: 16
+  ig_steps: 3
+  artifact_samples_per_class: 5
+artifact:
+  topk: 24
+  clip_radius: 5.0
+  quant_bits: 8
+  dp_sigma: 0.0
+  missing_variance_scale: 4.0
+  send_variance: false
+  sparse_intersection_only: true
+alignment:
+  methods:
+  - local
+  - xfedalign_median
+  - fedattr_mean
+  - iflash_proxy
+  - rwssa
+  - rwssa_sparse
+  - rwssa_binary
+  - rwssa_no_calibration
+  beta: 0.2
+  rwssa_rho: 0.3
+  rwssa_alpha: 0.2
+  rwssa_grid:
+  - 0.0
+  - 0.25
+  - 0.5
+  - 0.75
+  - 1.0
+  rwssa_selection_samples: 5
+  rwssa_calibration_samples: 7
+  rwssa_risk_mode: jsd_topk
+evaluation:
+  deletion_steps: 2
+  eval_batch_size: 64
+  max_eval_samples: 12
+  compute_oracle_local_fidelity: true
+  oracle_samples_per_class: 24
+  topk_overlap_k: 16
+  bootstrap_samples: 4000
+  deletion_insertion_samples_per_client: 3
+  primary_metric: sample_fidelity_jsd
+attack:
+  enabled: false
+  fraction: 0.25
+  strength: 0.3
+  kind: artifact_shift
+logging:
+  output_root: ./verification/sanity_outputs
+  save_checkpoints: false
+  save_artifacts: true
+  log_every_round: false
+experiment_name: sanity
+seeds:
+- 1991
+tags:
+  tier: S
+  status: exploratory
+  method: RWSSA
+  role: none

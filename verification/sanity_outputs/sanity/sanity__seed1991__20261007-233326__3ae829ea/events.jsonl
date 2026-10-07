@@ -1,0 +1,4 @@
+{"event": "run_started", "time": 1791416006.5849125}
+{"event": "data_loading_started", "time": 1791416006.5849812}
+{"event": "local_artifacts_built", "time": 1791416006.6677501, "total_bytes": 912}
+{"event": "run_finalized", "status": "completed", "time": 1791416006.7925868}

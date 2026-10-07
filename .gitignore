@@ -4,4 +4,4 @@ __pycache__/
 .venv/
 data/
 outputs/
-verification_stdout.txt
+aggregate*/
