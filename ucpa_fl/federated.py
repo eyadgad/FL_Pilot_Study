@@ -6,6 +6,7 @@ import torch.nn.functional as F
 from torch import nn
 from .datasets import DataBundle, make_loader
 from .models import build_model
+from .repro import move_state_dict
 
 
 def _weighted_average(states: list[dict], weights: list[float]) -> dict:
@@ -58,7 +59,10 @@ def train_fedavg(cfg, bundle: DataBundle, seed: int, device, logger):
             ll=train_local(local,loader,device,fed.local_epochs,fed.lr,fed.momentum,fed.weight_decay)
             states.append({k:v.detach().cpu() for k,v in local.state_dict().items()})
             weights.append(len(bundle.task_clients[cid])); local_losses.append(ll)
-        model.load_state_dict(_weighted_average(states,weights))
+        # Average on CPU for a device-independent reduction, then put the global model back
+        # on the training device. A CUDA run must not keep training on the CPU copies.
+        model.load_state_dict(move_state_dict(_weighted_average(states,weights), device))
+        model.to(device)
         if cfg.logging.log_every_round:
             ev=evaluate(model,test_loader,device)
             logger.metric('task_accuracy',ev['accuracy'],stage='train',round=r)
@@ -69,5 +73,5 @@ def train_fedavg(cfg, bundle: DataBundle, seed: int, device, logger):
     logger.metric('task_accuracy',final['accuracy'],stage='final')
     logger.metric('task_loss',final['loss'],stage='final')
     if cfg.logging.save_checkpoints:
-        torch.save(model.state_dict(),logger.run_dir/'checkpoints'/'global_task_model.pt')
+        torch.save({k:v.detach().cpu() for k,v in model.state_dict().items()}, logger.run_dir/'checkpoints'/'global_task_model.pt')
     return model, final

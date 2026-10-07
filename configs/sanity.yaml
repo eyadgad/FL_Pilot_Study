@@ -1,7 +1,7 @@
 experiment_name: sanity_cfba_synthetic
 seeds:
 - 1699
-device: cpu
+device: auto
 deterministic: true
 num_workers: 0
 dataset:
