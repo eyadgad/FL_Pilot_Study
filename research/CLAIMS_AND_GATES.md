@@ -1,41 +1,26 @@
-# Claims allowed by this study
+# Claims and falsification gates
 
-This file prevents post-hoc claim inflation.
+## Candidate claim 1 — heterogeneous safe alignment
+A single globally safe alignment strength can be overly conservative when clients have different fidelity tolerances. CFBA should improve pairwise EDI over a globally certified fixed beta in at least 3/4 primary heterogeneous families while obeying the same risk budget.
 
-## C1 — personalized explanation coordination
+**Killed if:** Gate 4 fails.
 
-Candidate claim: NC-SACPA can preserve client-local explanation fidelity better than a single global explanation prior under multiple forms of client-specific explanation heterogeneity while still obtaining a measurable coordination benefit over Local-XAI.
+## Candidate claim 2 — bounded fidelity cost
+CFBA's improvement must not be purchased through material degradation of the deployed task-model explanation.
 
-Required evidence: Gates G1 and G2 plus Tier-A paired results. MNIST alone is insufficient.
+**Killed/revised if:** held-out risk or pooled Local-XAI non-inferiority gates fail.
 
-## C2 — scale-adaptive collaboration avoids UCPA v1 collapse
+## Candidate claim 3 — no added high-dimensional communication
+CFBA calibration remains private and reuses the xFedAlign-style sparse explanation artifact.
 
-Candidate claim: self-tuned explanation-space similarity avoids the fixed-bandwidth peer-collapse observed in UCPA v1 across dataset/explainer scales.
+**Killed/revised if:** communication exceeds the matched xFedAlign artifact in the implementation.
 
-Required evidence: mechanism logs/peer mass across MNIST and CIFAR plus the full Tier-A primary result. Do not claim this from the Phase-VIII smoke test alone.
+## Candidate claim 4 — attack-aware certification
+When the shared prior is attacked, the client must recalibrate rather than reuse a clean certificate.
 
-## C3 — neighborhood corroboration addresses sparse support contamination
+**Killed/revised if:** attacked-prior risk or fidelity gates fail.
 
-Candidate claim: local-neighborhood corroboration improves robustness to grouped sparse heterogeneity relative to the Phase-VII global-count predecessor without unacceptable degradation elsewhere.
-
-Required evidence: G4 and the patch-family analysis.
-
-## C4 — the practical cost is competitive
-
-Candidate claim: NC-SACPA does not require a variance channel and can match xFedAlign-style sparse mean/support communication at matched top-k.
-
-Required evidence: G6 and actual byte logs.
-
-## C5 — robustness is not materially worse than the closest global-prior comparator
-
-Required evidence: G7. Passing this is non-inferiority, not a claim of Byzantine robustness.
-
-## Claims not permitted from this package alone
-
-- formal differential privacy;
-- Byzantine-robust guarantees;
-- exact reproduction of official xFedAlign results;
-- generality to text/tabular modalities or natural cross-silo deployments;
-- superiority to all personalized FL methods;
-- formal optimality of the self-tuned kernel or neighborhood size;
-- conference acceptance probability.
+## Claims explicitly not made
+- CFBA does not claim to beat unconstrained xFedAlign on raw EDI in every regime.
+- CFBA does not claim CRC, conformal prediction, IG, median aggregation, or per-client calibration are individually novel.
+- The CRC guarantee is not a guarantee of human interpretability.

@@ -1,47 +1,38 @@
-# Package manifest
+# CFBA-CRC full research package manifest — v4
 
-**Frozen:** 2026-10-04
-**Package version:** 2.1
-**Research status:** NC-SACPA Phase-VIII smoke-test approved; full preregistered MNIST/CIFAR-10 validation intentionally unrun.
+## Status
+**Approved for full validation after adversarial smoke testing.** The direction score is 79/100 on the project's pre-full-study readiness rubric; this is not an acceptance probability.
 
-## Frozen research state
+## Frozen confirmatory study
+- method: CFBA-CRC (Conformal Fidelity-Budgeted Alignment)
+- fresh seeds: 1701–1705
+- 22 configs total: 6 Tier A, 8 Tier B, 8 Tier C
+- alpha: .05 for confirmatory/stress study
+- beta grid: `[0,.1,.2,.4,.6,.8]`
+- five disjoint client partitions
+- methods in every full config: Local-XAI, FedAttr mean, xFedAlign-style median, global CRC, client-specific CFBA
+- seven frozen gates: `evaluate_cfba_gates.py`
 
-- Proposed method: Neighborhood-Corroborated Scale-Adaptive Peer Alignment (NC-SACPA).
-- Smoke confirmation: all 7 Phase-VIII gates passed on untouched seeds 801–805.
-- Full confirmatory seeds: 9101–9105, verified absent from packaged result-bearing files.
-- Full suite: 28 configs (6 Tier A / 8 Tier B / 14 Tier C).
-- Frozen NC-SACPA: p=2, beta=.8, q=3, min_support=2.
+## Pre-full-study smoke evidence
+- valid five-seed rotation and patch smoke: seeds 1601–1605
+- erasing stress: seed 1601
+- risk-consistency frontier: seed 1606
+- raw evidence and integrity files: `research_history/phase14_cfba_crc_smoke/`
+- readiness score and interpretation: `research/READINESS_SCORE.md`
 
-## Important contents
+## Verification included
+- unit/regression tests for CRC selector, AUC normalization, data-split disjointness, and baseline identity
+- clean end-to-end synthetic CFBA sanity seed 1699
+- attacked-prior recalibration sanity seed 1698
+- per-run SHA-256 verification
+- frozen gate returns `PENDING` when real confirmatory evidence is absent
 
-- `README.md`: entry point and run commands.
-- `research/PREREGISTRATION.md`: frozen full-study hypotheses/gates.
-- `research/METHOD.md`: exact method.
-- `research/NOVELTY_POSITIONING.md`: 2026-10-04 prior-art positioning.
-- `evaluate_ncsacpa_gates.py`: executable seven-gate full-study decision.
-- `research_history/phase6_ucpa_full_negative/`: killed UCPA full-study evidence.
-- `research_history/phase7_sacpa_rejected/`: preregistered failed predecessor plus raw confirmation.
-- `research_history/phase8_ncsacpa_smoke_approved/`: approved smoke preregistration, raw seeds 801–805, evaluator, and gate report.
-- `verification/FINAL_VERIFICATION.md`: final engineering/integrity audit.
+## Critical implementation safeguards
+1. Local-XAI is evaluated with beta=0 exactly.
+2. Calibration and final evaluation examples are disjoint.
+3. Attacked priors are recalibrated; clean certificates are not reused.
+4. CRC controls the monotonized bounded four-component loss; documentation does not reinterpret it as a per-sample high-probability guarantee.
+5. Tier C cannot redefine Tier A/B success.
 
-## File counts before integrity manifest
-- `.gitignore`: 1 files
-- `PACKAGE_MANIFEST.md`: 1 files
-- `README.md`: 1 files
-- `aggregate_results.py`: 1 files
-- `configs`: 30 files
-- `evaluate_ncsacpa_gates.py`: 1 files
-- `pyproject.toml`: 1 files
-- `pytest.ini`: 1 files
-- `requirements.txt`: 1 files
-- `research`: 12 files
-- `research_history`: 54 files
-- `run_experiment.py`: 1 files
-- `scripts`: 5 files
-- `tests`: 2 files
-- `ucpa_fl`: 16 files
-- `verification`: 78 files
-
-## Integrity
-
-`PACKAGE_INTEGRITY.sha256` hashes every distributable file except itself. The outer ZIP checksum is supplied beside the archive.
+## Known external-dependency limitation
+The package is self-contained for its xFedAlign-style reproduction, but a paper-stage comparison should additionally run the authors' official xFedAlign implementation when accessible.

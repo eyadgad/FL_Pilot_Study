@@ -80,6 +80,11 @@ class AlignmentConfig:
     ncsacpa_kernel_power: float = 2.0
     ncsacpa_neighborhood_size: int = 3
     ncsacpa_min_support: int = 2
+    # CFBA-CRC: client-private conformal risk control of explanation alignment.
+    cfba_alpha: float = 0.05
+    cfba_beta_grid: list[float] = field(default_factory=lambda: [0.0,0.1,0.2,0.4,0.6,0.8])
+    cfba_calibration_samples_per_client: int = 32
+    cfba_min_calibration_samples: int = 20
 
 @dataclass
 class EvaluationConfig:

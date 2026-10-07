@@ -159,10 +159,62 @@ def nc_sacpa_prior(means,masks,power=2.0,neighborhood_size=3,min_missing_support
             out[i,c]=p/max(p.sum(),EPS); masses.append(float(G[c,i].sum()-1.0))
     return out,{'peer_mass_mean':float(np.mean(masses))}
 
+
+
+def pava_nonincreasing(y):
+    """Euclidean projection helper for y_1 >= ... >= y_d using PAVA."""
+    y=np.asarray(y,dtype=float)
+    blocks=[]
+    for i,v in enumerate(y):
+        blocks.append([i,i+1,float(v),1.0])
+        while len(blocks)>=2 and blocks[-2][2] < blocks[-1][2]-1e-18:
+            a,b=blocks[-2],blocks[-1]
+            w=a[3]+b[3]
+            v=(a[2]*a[3]+b[2]*b[3])/w
+            blocks[-2:]=[[a[0],b[1],v,w]]
+    out=np.empty_like(y)
+    for start,end,val,_ in blocks:
+        out[start:end]=val
+    return out
+
+def rank_preserving_projection(local, prior):
+    """Project a shared prior onto the complete local feature-ranking cone.
+
+    The output is the closest (L2) non-increasing sequence to the prior when
+    coordinates are ordered by the local explanation. This preserves the
+    client's complete local feature ranking while moving magnitudes as far as
+    the ranking constraint allows toward the shared prior.
+    """
+    e=_norm(np.asarray(local,dtype=float))
+    g=_norm(np.asarray(prior,dtype=float))
+    if e.ndim!=1 or g.ndim!=1:
+        raise ValueError('rank_preserving_projection expects 1D vectors')
+    order=np.argsort(-e)
+    q=pava_nonincreasing(g[order])
+    if len(q)>1:
+        eps=max(float(q.max()),1.0)*1e-13
+        q=q.copy()
+        for j in range(len(q)-2,-1,-1):
+            if q[j] <= q[j+1]:
+                q[j]=q[j+1]+eps
+        q=np.maximum(q,0)
+        q=q/(q.sum()+EPS)
+    out=np.empty_like(g)
+    out[order]=q
+    out=np.maximum(out,0)
+    total=float(out.sum())
+    return out/total if total>0 else np.full_like(out,1.0/len(out))
+
+def rpga_prior(means):
+    """RPGA uses the same robust global median artifact prior as xFedAlign."""
+    return xfedalign_prior(means)
+
 def make_priors(method,means,var_mean,counts,masks,align_cfg,artifact_cfg,seed=0):
     if method=='local': return means.copy(),{}
     if method=='fedattr_mean': return global_mean_prior(means,counts),{}
     if method=='xfedalign_median': return xfedalign_prior(means),{}
+    if method in ('cfba_crc','global_crc'): return xfedalign_prior(means),{'prior':'xfedalign_coordinate_median'}
+    if method=='rpga': return rpga_prior(means),{'constraint':'complete_local_ranking'}
     if method=='cluster':
         p,l=cluster_prior(means,align_cfg.cluster_k,seed); return p,{'cluster_labels':l.tolist()}
     if method=='sacpa_global_count':

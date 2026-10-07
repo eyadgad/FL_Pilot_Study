@@ -1,90 +1,79 @@
-# Method: Neighborhood-Corroborated Scale-Adaptive Peer Alignment (NC-SACPA)
+# CFBA-CRC: Conformal Fidelity-Budgeted Alignment
 
-## Problem
+## Research question
+Federated explanation alignment can reduce cross-client explanation drift, but stronger alignment can also damage the explanation's fidelity to the deployed task model. A single global alignment strength is especially problematic under non-IID clients: one difficult client can make a globally safe policy overly conservative for everybody else.
 
-A single federated explanation prior can denoise client explanations but can also erase real client-specific semantics. Purely local explanations preserve heterogeneity but do not use evidence from related clients. Earlier UCPA attempted continuous peer borrowing with an absolute JSD bandwidth and coordinate uncertainty; full validation showed that the fixed bandwidth collapsed peer mass to approximately one client at realistic sparse-artifact scales. Phase VII SACPA fixed scale collapse but allowed a distant group to authorize a feature merely because enough distant clients reported it.
+CFBA-CRC asks: **can each client align as strongly as its own private evidence permits while controlling a bounded multi-metric excess-fidelity risk?**
 
-NC-SACPA addresses both failures without transmitting an uncertainty/variance channel.
+## Shared prior
+The server constructs the same coordinate-wise median global explanation prior used by the package's xFedAlign-style reproduction. No new raw data or calibration examples are transmitted.
 
-## Inputs
+For client `i`, local explanation `E_i`, shared prior `G`, and alignment strength `beta`:
 
-For client `i` and class `c`:
+`A_i(beta) = Normalize((1-beta) E_i + beta G)`.
 
-- `E_ic`: nonnegative, simplex-normalized sparse attribution summary.
-- `M_ic`: transmitted top-k support mask.
+The frozen grid is `[0, 0.1, 0.2, 0.4, 0.6, 0.8]`.
 
-All clients use the same artifact construction and task model in a run.
+## Private calibration target
+Each client has a calibration split disjoint from:
 
-## 1. Scale-adaptive whole-explanation similarity
+1. task-model training;
+2. surrogate fitting;
+3. transmitted artifact estimation;
+4. final evaluation.
 
-Let
+On a calibration example, the direct task-model Integrated Gradients (IG) explanation is used as a private higher-fidelity reference. For every candidate beta, define four *excess harms relative to Local-XAI*:
 
-`d_ikc = JSD(E_ic, E_kc)`.
+- deletion harm: `max(0, deletion_beta - deletion_local)`;
+- insertion harm: `max(0, insertion_local - insertion_beta)`;
+- support harm: `max(0, topk_local - topk_beta)`;
+- distributional harm: `max(0, JSD_beta_to_IG - JSD_local_to_IG)`.
 
-For each client/class, estimate a local distance scale
+The per-example loss is their maximum:
 
-`σ_ic = median_{r != i} d_irc`.
+`L(x,beta) = max(0, deletion_harm, insertion_harm, support_harm, distributional_harm)`.
 
-The symmetric peer weight is
+All terms lie in `[0,1]`, so `L in [0,1]`. Controlling expected `L` controls each constituent expected excess harm by the same budget.
 
-`g_ikc = exp(-(d_ikc / sqrt(σ_ic σ_kc))^p)`
+## Monotone envelope
+CRC requires a nested/monotone family. The observed loss over increasing alignment is therefore monotonized client-side:
 
-with frozen `p=2`.
+`L_tilde(x,beta_g) = max_{h <= g} L(x,beta_h)`.
 
-This removes the absolute-distance scale that caused UCPA v1 to collapse when explanation JSDs changed across datasets, sparsity levels, or explainers.
+This is a conservative envelope: once a stronger alignment has demonstrated a harm, even stronger actions inherit at least that harm.
 
-## 2. Neighborhood corroboration for missing sparse coordinates
+## Conformal Risk Control selector
+For `n` calibration examples and bounded loss `B=1`, the implemented finite-sample CRC upper empirical risk is
 
-For each target client/class, rank peers by `g_ikc` and take the frozen top `q=3` peers.
+`U_n(beta) = n/(n+1) * mean_j L_tilde(x_j,beta) + 1/(n+1)`.
 
-- If feature `j` is already reported by the target (`M_icj=1`), all peers that report `j` may contribute, weighted by `g_ikc`.
-- If the target did not report `j`, the feature may enter the peer prior only if at least `m=2` of the target's `q=3` nearest peers independently report it.
-- For an imported missing feature, only those local-neighborhood peers contribute.
-- If no eligible peer reports a coordinate, the target value is retained rather than treating missing support as a confident zero.
+The client chooses the largest beta satisfying
 
-This rule was introduced because Phase VII global-count corroboration failed on strong grouped sparse patches: a numerically larger but semantically distant group could authorize a foreign feature.
+`U_n(beta) <= alpha`,
 
-## 3. Personalized peer prior
+with frozen `alpha=0.05`.
 
-For eligible coordinates,
+`beta=0` is the Local-XAI fallback. If the calibration sample is too small to certify even the fallback under the finite-sample correction, the client returns beta=0 but marks the action uncertified; the confirmatory gate requires complete certification.
 
-`P_icj = sum_{k != i} g_ikc M_kcj E_kcj / sum_{k != i} g_ikc M_kcj`,
+## Global-CRC control
+To test whether client-specific calibration actually adds value, the strongest single globally safe action is
 
-with the neighborhood restriction above for coordinates missing from the target. The prior is normalized to the simplex.
+`beta_global = min_i beta_i^max`.
 
-The target client is excluded from the peer prior; this avoids counting the local explanation twice.
+Every client then uses the same `beta_global`. CFBA only earns a paper-level claim if the client-specific policy improves explanation coordination over this globally certified control under heterogeneous clients.
 
-## 4. Final aligned explanation
-
-`A_ic = normalize((1-β) E_ic + β P_ic)`
-
-with frozen `β=0.8`.
-
-Frozen smoke-approved values:
-
-- kernel power `p=2`
-- alignment `β=0.8`
-- local corroboration neighborhood `q=3`
-- minimum local support `m=2`
-
-The full confirmatory suite must not change these values using Tier-A results.
+## Attack protocol
+For attribution-artifact poisoning experiments, certification is recomputed against the **attacked prior**. A certificate from the clean prior is never reused for an attacked prior.
 
 ## Communication
+Calibration examples, IG explanations, losses, and risk curves remain client-local. The server receives the same sparse mean/support artifact family as the xFedAlign-style baseline. CFBA therefore has equal explanation-artifact communication in this pipeline; implementation metadata such as selected beta is logged for research audit but is not needed as a high-dimensional payload.
 
-NC-SACPA uses only the sparse attribution mean/support artifact. It does **not** require UCPA v1's variance channel. In this package its communication accounting is therefore matched to the xFedAlign-style mean artifact at the same top-k setting.
+## Scope of guarantee
+The CRC result is a finite-sample **expected-risk** guarantee for the defined bounded loss under its exchangeability assumptions. It is not:
 
-## What is not claimed as novel
+- a high-probability guarantee that every calibration draw or every future example has loss <= alpha;
+- a guarantee of human-perceived interpretability;
+- a guarantee under arbitrary temporal distribution shift;
+- a claim that direct IG is ground truth.
 
-Jensen-Shannon divergence, self-tuning kernels, nearest-neighbor graphs, sparse top-k explanations, peer averaging, personalized FL, and support voting are established ideas.
-
-The candidate contribution is narrower: a federated explanation-coordination rule that combines **self-tuned explanation-space collaboration** with **local-neighborhood corroboration of sparse explanation support** to create a client-specific prior that can move continuously between pooled and local behavior without a fixed global prior or fixed number of client clusters.
-
-## Frozen negative controls
-
-The package keeps:
-
-- `ucpa`: fixed-bandwidth uncertainty-compatible UCPA v1 — killed after full confirmation.
-- `sacpa_global_count`: scale-adaptive Phase-VII predecessor — rejected because global support counts failed strong grouped sparse heterogeneity.
-- `ucpa_whole_only`, `ucpa_coord_only`: UCPA mechanism ablations.
-
-These are historical/negative controls, not co-primary proposed methods.
+The full study tests empirical held-out risk, but the theory and the empirical gate must not be conflated.

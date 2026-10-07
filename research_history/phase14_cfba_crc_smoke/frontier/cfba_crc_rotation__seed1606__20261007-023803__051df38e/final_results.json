@@ -1,0 +1,447 @@
+{
+  "alpha": 0.05,
+  "artifact_objective_edi": 0.2457006998431178,
+  "betas": {
+    "caps": [
+      0.2,
+      0.4,
+      0.4,
+      0.4
+    ],
+    "cfba": [
+      0.2,
+      0.4,
+      0.4,
+      0.4
+    ],
+    "global": 0.2,
+    "xfedalign": 0.2
+  },
+  "certification": [
+    {
+      "beta": 0.2,
+      "certified": true,
+      "empirical_risk": [
+        0.0,
+        0.007197411379820551,
+        0.013677433023719321,
+        0.023438425078160553,
+        0.04684390286237346,
+        0.0967513340784597
+      ],
+      "index": 2,
+      "n_calibration": 32,
+      "upper_risk": [
+        0.030303030303030304,
+        0.037282338307704777,
+        0.04356599565936419,
+        0.053031200075792054,
+        0.07572742095745305,
+        0.12412250577305184
+      ]
+    },
+    {
+      "beta": 0.4,
+      "certified": true,
+      "empirical_risk": [
+        0.0,
+        0.005213622308929189,
+        0.00570985298531923,
+        0.01069165380433502,
+        0.03874620430695133,
+        0.09222295285397186
+      ],
+      "index": 3,
+      "n_calibration": 32,
+      "upper_risk": [
+        0.030303030303030304,
+        0.035358664057143455,
+        0.035839857440309555,
+        0.04067069459814305,
+        0.06787510720674068,
+        0.11973134822203332
+      ]
+    },
+    {
+      "beta": 0.4,
+      "certified": true,
+      "empirical_risk": [
+        0.0,
+        0.0032473326718900353,
+        0.0032473326718900353,
+        0.01270656485045665,
+        0.03988747001251311,
+        0.09109939199665582
+      ],
+      "index": 3,
+      "n_calibration": 32,
+      "upper_risk": [
+        0.030303030303030304,
+        0.03345195895456003,
+        0.03345195895456003,
+        0.04262454773377615,
+        0.06898178910304302,
+        0.11864183466342382
+      ]
+    },
+    {
+      "beta": 0.4,
+      "certified": true,
+      "empirical_risk": [
+        0.0,
+        0.004346490256921243,
+        0.006969144287268136,
+        0.017862009792162646,
+        0.04510510471239459,
+        0.0943246263742922
+      ],
+      "index": 3,
+      "n_calibration": 32,
+      "upper_risk": [
+        0.030303030303030304,
+        0.03451780873398424,
+        0.03706098839977516,
+        0.047623767071188025,
+        0.07404131366050384,
+        0.12176933466598032
+      ]
+    }
+  ],
+  "metrics": {
+    "cfba_crc": {
+      "deletion_auc": 0.24490707593665206,
+      "excess_fidelity_risk": 0.01193313331104092,
+      "excess_fidelity_risk_p90": 0.023925558107032313,
+      "insertion_auc": 0.8846814522912609,
+      "pairwise_edi": 0.07256791401662029,
+      "sample_fidelity_jsd": 0.13665340975471993,
+      "topk_oracle_overlap": 0.424560546875
+    },
+    "client_max_crc": {
+      "deletion_auc": 0.24490707593665206,
+      "excess_fidelity_risk": 0.01193313331104092,
+      "excess_fidelity_risk_p90": 0.023925558107032313,
+      "insertion_auc": 0.8846814522912609,
+      "pairwise_edi": 0.07256791401662029,
+      "sample_fidelity_jsd": 0.13665340975471993,
+      "topk_oracle_overlap": 0.424560546875
+    },
+    "fixed_0p4": {
+      "deletion_auc": 0.2435123526886116,
+      "excess_fidelity_risk": 0.014403489918568031,
+      "excess_fidelity_risk_p90": 0.020912391334964225,
+      "insertion_auc": 0.8887699264960247,
+      "pairwise_edi": 0.06506626134416828,
+      "sample_fidelity_jsd": 0.14068486798715787,
+      "topk_oracle_overlap": 0.4248046875
+    },
+    "fixed_0p6": {
+      "deletion_auc": 0.2423519504905869,
+      "excess_fidelity_risk": 0.04284686620400775,
+      "excess_fidelity_risk_p90": 0.04862959757679321,
+      "insertion_auc": 0.8960321054255473,
+      "pairwise_edi": 0.040989723690733185,
+      "sample_fidelity_jsd": 0.17087624976607615,
+      "topk_oracle_overlap": 0.416015625
+    },
+    "global_crc": {
+      "deletion_auc": 0.2483981106791333,
+      "excess_fidelity_risk": 0.0059729658579183754,
+      "excess_fidelity_risk_p90": 0.02165201320030974,
+      "insertion_auc": 0.8760844542339328,
+      "pairwise_edi": 0.09376655250518716,
+      "sample_fidelity_jsd": 0.12602596383453119,
+      "topk_oracle_overlap": 0.41845703125
+    },
+    "local": {
+      "deletion_auc": 0.3137650367176832,
+      "excess_fidelity_risk": 1.734723475976807e-18,
+      "excess_fidelity_risk_p90": 1.734723475976807e-18,
+      "insertion_auc": 0.8181510478934797,
+      "pairwise_edi": 0.13523695862016852,
+      "sample_fidelity_jsd": 0.12945325717468845,
+      "topk_oracle_overlap": 0.39794921875
+    },
+    "xfedalign": {
+      "deletion_auc": 0.2483981106791333,
+      "excess_fidelity_risk": 0.0059729658579183754,
+      "excess_fidelity_risk_p90": 0.02165201320030974,
+      "insertion_auc": 0.8760844542339328,
+      "pairwise_edi": 0.09376655250518716,
+      "sample_fidelity_jsd": 0.12602596383453119,
+      "topk_oracle_overlap": 0.41845703125
+    }
+  },
+  "per_client_metrics": {
+    "cfba_crc": [
+      {
+        "deletion_auc": 0.3361531779746656,
+        "excess_fidelity_risk": 0.010136169331518632,
+        "excess_fidelity_risk_p90": 0.0390625,
+        "insertion_auc": 0.884000862512039,
+        "n": 16,
+        "sample_fidelity_jsd": 0.1298103698368822,
+        "topk_oracle_overlap": 0.3935546875
+      },
+      {
+        "deletion_auc": 0.21084073557744887,
+        "excess_fidelity_risk": 0.009955073637077136,
+        "excess_fidelity_risk_p90": 0.014345777049782099,
+        "insertion_auc": 0.897296159339021,
+        "n": 16,
+        "sample_fidelity_jsd": 0.1356421361871302,
+        "topk_oracle_overlap": 0.4677734375
+      },
+      {
+        "deletion_auc": 0.21874894964082614,
+        "excess_fidelity_risk": 0.009058995222333452,
+        "excess_fidelity_risk_p90": 0.011043955378347153,
+        "insertion_auc": 0.888474882740411,
+        "n": 16,
+        "sample_fidelity_jsd": 0.14285537418622815,
+        "topk_oracle_overlap": 0.439453125
+      },
+      {
+        "deletion_auc": 0.21388544055366765,
+        "excess_fidelity_risk": 0.018582295053234464,
+        "excess_fidelity_risk_p90": 0.03125,
+        "insertion_auc": 0.8689539045735728,
+        "n": 16,
+        "sample_fidelity_jsd": 0.13830575880863916,
+        "topk_oracle_overlap": 0.3974609375
+      }
+    ],
+    "client_max_crc": [
+      {
+        "deletion_auc": 0.3361531779746656,
+        "excess_fidelity_risk": 0.010136169331518632,
+        "excess_fidelity_risk_p90": 0.0390625,
+        "insertion_auc": 0.884000862512039,
+        "n": 16,
+        "sample_fidelity_jsd": 0.1298103698368822,
+        "topk_oracle_overlap": 0.3935546875
+      },
+      {
+        "deletion_auc": 0.21084073557744887,
+        "excess_fidelity_risk": 0.009955073637077136,
+        "excess_fidelity_risk_p90": 0.014345777049782099,
+        "insertion_auc": 0.897296159339021,
+        "n": 16,
+        "sample_fidelity_jsd": 0.1356421361871302,
+        "topk_oracle_overlap": 0.4677734375
+      },
+      {
+        "deletion_auc": 0.21874894964082614,
+        "excess_fidelity_risk": 0.009058995222333452,
+        "excess_fidelity_risk_p90": 0.011043955378347153,
+        "insertion_auc": 0.888474882740411,
+        "n": 16,
+        "sample_fidelity_jsd": 0.14285537418622815,
+        "topk_oracle_overlap": 0.439453125
+      },
+      {
+        "deletion_auc": 0.21388544055366765,
+        "excess_fidelity_risk": 0.018582295053234464,
+        "excess_fidelity_risk_p90": 0.03125,
+        "insertion_auc": 0.8689539045735728,
+        "n": 16,
+        "sample_fidelity_jsd": 0.13830575880863916,
+        "topk_oracle_overlap": 0.3974609375
+      }
+    ],
+    "fixed_0p4": [
+      {
+        "deletion_auc": 0.33057428498250374,
+        "excess_fidelity_risk": 0.020017595761627073,
+        "excess_fidelity_risk_p90": 0.02700983291172765,
+        "insertion_auc": 0.9003547593310941,
+        "n": 16,
+        "sample_fidelity_jsd": 0.14593620276663394,
+        "topk_oracle_overlap": 0.39453125
+      },
+      {
+        "deletion_auc": 0.21084073557744887,
+        "excess_fidelity_risk": 0.009955073637077136,
+        "excess_fidelity_risk_p90": 0.014345777049782099,
+        "insertion_auc": 0.897296159339021,
+        "n": 16,
+        "sample_fidelity_jsd": 0.1356421361871302,
+        "topk_oracle_overlap": 0.4677734375
+      },
+      {
+        "deletion_auc": 0.21874894964082614,
+        "excess_fidelity_risk": 0.009058995222333452,
+        "excess_fidelity_risk_p90": 0.011043955378347153,
+        "insertion_auc": 0.888474882740411,
+        "n": 16,
+        "sample_fidelity_jsd": 0.14285537418622815,
+        "topk_oracle_overlap": 0.439453125
+      },
+      {
+        "deletion_auc": 0.21388544055366765,
+        "excess_fidelity_risk": 0.018582295053234464,
+        "excess_fidelity_risk_p90": 0.03125,
+        "insertion_auc": 0.8689539045735728,
+        "n": 16,
+        "sample_fidelity_jsd": 0.13830575880863916,
+        "topk_oracle_overlap": 0.3974609375
+      }
+    ],
+    "fixed_0p6": [
+      {
+        "deletion_auc": 0.330708666204373,
+        "excess_fidelity_risk": 0.04764338959702998,
+        "excess_fidelity_risk_p90": 0.051758228726888615,
+        "insertion_auc": 0.9132988271594513,
+        "n": 16,
+        "sample_fidelity_jsd": 0.17626914917392073,
+        "topk_oracle_overlap": 0.408203125
+      },
+      {
+        "deletion_auc": 0.2094113974303582,
+        "excess_fidelity_risk": 0.04154995492917726,
+        "excess_fidelity_risk_p90": 0.0546875,
+        "insertion_auc": 0.8976065412134631,
+        "n": 16,
+        "sample_fidelity_jsd": 0.16611788408761996,
+        "topk_oracle_overlap": 0.4306640625
+      },
+      {
+        "deletion_auc": 0.21759300634585088,
+        "excess_fidelity_risk": 0.03873211796423103,
+        "excess_fidelity_risk_p90": 0.04035189892558158,
+        "insertion_auc": 0.8902818636706797,
+        "n": 16,
+        "sample_fidelity_jsd": 0.17238766824736534,
+        "topk_oracle_overlap": 0.4267578125
+      },
+      {
+        "deletion_auc": 0.21169473198176547,
+        "excess_fidelity_risk": 0.04346200232559273,
+        "excess_fidelity_risk_p90": 0.047720762654702625,
+        "insertion_auc": 0.8829411896585952,
+        "n": 16,
+        "sample_fidelity_jsd": 0.1687302975553986,
+        "topk_oracle_overlap": 0.3984375
+      }
+    ],
+    "global_crc": [
+      {
+        "deletion_auc": 0.3361531779746656,
+        "excess_fidelity_risk": 0.010136169331518632,
+        "excess_fidelity_risk_p90": 0.0390625,
+        "insertion_auc": 0.884000862512039,
+        "n": 16,
+        "sample_fidelity_jsd": 0.1298103698368822,
+        "topk_oracle_overlap": 0.3935546875
+      },
+      {
+        "deletion_auc": 0.21621314593028274,
+        "excess_fidelity_risk": 0.00390625,
+        "excess_fidelity_risk_p90": 0.015625,
+        "insertion_auc": 0.8913896836311324,
+        "n": 16,
+        "sample_fidelity_jsd": 0.12169788563964495,
+        "topk_oracle_overlap": 0.4541015625
+      },
+      {
+        "deletion_auc": 0.21866600303792438,
+        "excess_fidelity_risk": 0.0010603816001548694,
+        "excess_fidelity_risk_p90": 0.000670552801238955,
+        "insertion_auc": 0.8840384596696822,
+        "n": 16,
+        "sample_fidelity_jsd": 0.12914645560637444,
+        "topk_oracle_overlap": 0.42578125
+      },
+      {
+        "deletion_auc": 0.22256011577366053,
+        "excess_fidelity_risk": 0.0087890625,
+        "excess_fidelity_risk_p90": 0.03125,
+        "insertion_auc": 0.8449088111228775,
+        "n": 16,
+        "sample_fidelity_jsd": 0.12344914425522308,
+        "topk_oracle_overlap": 0.400390625
+      }
+    ],
+    "local": [
+      {
+        "deletion_auc": 0.39037253909918945,
+        "excess_fidelity_risk": 2.6020852139652106e-18,
+        "excess_fidelity_risk_p90": 0.0,
+        "insertion_auc": 0.8058232727489667,
+        "n": 16,
+        "sample_fidelity_jsd": 0.12862575957689074,
+        "topk_oracle_overlap": 0.3779296875
+      },
+      {
+        "deletion_auc": 0.280006565622557,
+        "excess_fidelity_risk": 2.6020852139652106e-18,
+        "excess_fidelity_risk_p90": 6.938893903907228e-18,
+        "insertion_auc": 0.8771347564616008,
+        "n": 16,
+        "sample_fidelity_jsd": 0.1284313969109006,
+        "topk_oracle_overlap": 0.4228515625
+      },
+      {
+        "deletion_auc": 0.3131026518640283,
+        "excess_fidelity_risk": 1.734723475976807e-18,
+        "excess_fidelity_risk_p90": 0.0,
+        "insertion_auc": 0.8030222573288484,
+        "n": 16,
+        "sample_fidelity_jsd": 0.13419744259115665,
+        "topk_oracle_overlap": 0.396484375
+      },
+      {
+        "deletion_auc": 0.271578390284958,
+        "excess_fidelity_risk": 0.0,
+        "excess_fidelity_risk_p90": 0.0,
+        "insertion_auc": 0.786623905034503,
+        "n": 16,
+        "sample_fidelity_jsd": 0.1265584296198058,
+        "topk_oracle_overlap": 0.39453125
+      }
+    ],
+    "xfedalign": [
+      {
+        "deletion_auc": 0.3361531779746656,
+        "excess_fidelity_risk": 0.010136169331518632,
+        "excess_fidelity_risk_p90": 0.0390625,
+        "insertion_auc": 0.884000862512039,
+        "n": 16,
+        "sample_fidelity_jsd": 0.1298103698368822,
+        "topk_oracle_overlap": 0.3935546875
+      },
+      {
+        "deletion_auc": 0.21621314593028274,
+        "excess_fidelity_risk": 0.00390625,
+        "excess_fidelity_risk_p90": 0.015625,
+        "insertion_auc": 0.8913896836311324,
+        "n": 16,
+        "sample_fidelity_jsd": 0.12169788563964495,
+        "topk_oracle_overlap": 0.4541015625
+      },
+      {
+        "deletion_auc": 0.21866600303792438,
+        "excess_fidelity_risk": 0.0010603816001548694,
+        "excess_fidelity_risk_p90": 0.000670552801238955,
+        "insertion_auc": 0.8840384596696822,
+        "n": 16,
+        "sample_fidelity_jsd": 0.12914645560637444,
+        "topk_oracle_overlap": 0.42578125
+      },
+      {
+        "deletion_auc": 0.22256011577366053,
+        "excess_fidelity_risk": 0.0087890625,
+        "excess_fidelity_risk_p90": 0.03125,
+        "insertion_auc": 0.8449088111228775,
+        "n": 16,
+        "sample_fidelity_jsd": 0.12344914425522308,
+        "topk_oracle_overlap": 0.400390625
+      }
+    ]
+  },
+  "seed": 1606,
+  "shift": "rotation",
+  "task_accuracy_mean": 1.0,
+  "task_accuracy_min": 1.0
+}

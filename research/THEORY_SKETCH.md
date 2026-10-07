@@ -1,17 +1,33 @@
-# Theory sketch: NC-SACPA as self-tuned sparse peer regression
+# Theory sketch — CFBA-CRC
 
-Let client `i` have a latent class-conditional explanation distribution `mu_i` and a sparse estimate `E_i` whose reported support is `M_i`.
+## Setup
+For client `i`, let `beta` index an ordered finite family of explanation-alignment actions. Let `L_i(X,beta) in [0,1]` be the four-component excess-fidelity loss defined in `METHOD.md` on an exchangeable client-local example `X`.
 
-NC-SACPA can be viewed as a Nadaraya-Watson-style peer smoother on explanation space, but with two additions motivated by failures of earlier candidates:
+Because the raw explanation loss need not be monotone in beta, define the nested envelope
 
-1. **Self-tuned metric scale.** The bandwidth for client `i` is its median distance to other clients, and pair bandwidth is the geometric mean of two local scales. Thus multiplying all comparable distances by a common factor leaves the kernel ratios unchanged. This directly targets UCPA v1's fixed-bandwidth scale collapse.
-2. **Local support identifiability.** A coordinate not observed in the target is not treated as a true zero. It may enter the peer prior only when multiple *nearby* clients report it. This is a local support-consensus assumption, not a claim that absence from top-k means irrelevance.
+`Ltilde_i(X,beta_g) = max_{h<=g} L_i(X,beta_h)`.
 
-Under a stylized model with latent client groups separated in explanation distribution and sparse support observations with independent reporting noise, one would expect:
+This loss is bounded and nondecreasing in alignment strength. Equivalently, under `lambda=1-beta`, it is nonincreasing in the CRC control parameter.
 
-- within-group self-tuned weights to dominate cross-group weights when the distance gap is sufficiently large;
-- false support import probability to fall with the number of required local corroborators;
-- true shared support recovery to increase with neighborhood size and artifact sample count;
-- a bias/variance trade-off controlled by `beta` and the collaboration graph.
+## CRC selector
+Given `n_i` calibration examples, define
 
-These are mechanistic hypotheses, **not proved theorems**. If the full preregistered study passes, the next theory phase should formalize conditions for (a) scale invariance, (b) support-import error, and (c) excess explanation-estimation risk relative to local and global pooling. Recent personalized-FL work on adaptive collaboration and collaboration geometry is relevant mathematical prior art; any theorem must be positioned against it rather than presented as a generic novelty of similarity weighting.
+`U_i(beta) = n_i/(n_i+1) * mean_j Ltilde_i(X_j,beta) + 1/(n_i+1)`.
+
+CFBA selects the largest beta with `U_i(beta)<=alpha`.
+
+Under the standard CRC assumptions for bounded monotone risk, this gives the corresponding finite-sample control of the selected action's expected `Ltilde` risk. Since `L <= Ltilde` and each individual excess-harm component is <= `L`, the same budget upper-bounds each constituent expected excess harm.
+
+## Why client-specific calibration can matter
+Let `beta_i^max` denote client i's maximal certified action. A globally certified policy restricted to one shared beta must use at most
+
+`beta_global = min_i beta_i^max`.
+
+If clients have heterogeneous risk curves, there can be clients with `beta_i^max > beta_global`. CFBA can align those clients more strongly without changing the certification rule for the restrictive client. The empirical contribution must establish that this extra admissible alignment translates into lower cross-client explanation drift; it does not follow from the risk theorem alone.
+
+## What remains to prove/write carefully
+- State the exact CRC theorem with the package's beta/lambda reparameterization.
+- Make explicit that the monotone envelope changes the controlled loss to a conservative nested loss.
+- Separate the theorem (expected risk under exchangeability) from empirical held-out tests.
+- Do not claim simultaneous high-probability per-client coverage unless a separate theorem is added.
+- Analyze calibration computation and how the risk budget scales with finite `n`.

@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ncsacpa-fl"
-version = "0.2.0"
-description = "Reproducible NC-SACPA federated explanation-alignment research pipeline"
+name = "cfba-fl"
+version = "0.4.0"
+description = "Reproducible conformal fidelity-budgeted federated explanation alignment pipeline"
 requires-python = ">=3.10"
 dependencies = [
   "numpy>=1.24",

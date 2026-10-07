@@ -80,6 +80,7 @@ class DataBundle:
     task_clients: list[ClientSubset]
     surrogate_clients: list[ClientSubset]
     artifact_clients: list[ClientSubset]
+    calibration_clients: list[ClientSubset]
     eval_clients: list[ClientSubset]
     test: Dataset
     n_classes: int
@@ -88,7 +89,7 @@ class DataBundle:
     client_sizes: list[int]
 
     def set_round(self, r: int):
-        for group in (self.task_clients, self.surrogate_clients, self.artifact_clients, self.eval_clients):
+        for group in (self.task_clients, self.surrogate_clients, self.artifact_clients, self.calibration_clients, self.eval_clients):
             for ds in group: ds.set_round(r)
 
 
@@ -141,15 +142,19 @@ def _subsample_size_heterogeneity(parts, sigma: float, seed: int, min_samples: i
 def _split_client_indices(indices: np.ndarray, seed: int):
     rng=np.random.default_rng(seed); idx=indices.copy(); rng.shuffle(idx)
     n=len(idx)
-    # Disjoint 65/15/10/10 task/surrogate/artifact/evaluation splits.
-    if n < 8:
-        # Tiny synthetic sanity fallback; repeated use is recorded by the config's min-sample setting.
-        chunks=np.array_split(idx,4); return tuple(np.asarray(c,dtype=np.int64) for c in chunks)
-    n_task=max(1,int(0.65*n)); n_surr=max(1,int(0.15*n)); n_art=max(1,int(0.10*n))
-    if n_task+n_surr+n_art>=n:
-        n_task=max(1,n-3); n_surr=n_art=1
-    a=idx[:n_task]; b=idx[n_task:n_task+n_surr]; c=idx[n_task+n_surr:n_task+n_surr+n_art]; d=idx[n_task+n_surr+n_art:]
-    return a,b,c,d
+    # Disjoint 50/15/10/15/10 task/surrogate/artifact/calibration/evaluation.
+    # CFBA's finite-sample guarantee requires calibration and final evaluation to be disjoint.
+    if n < 10:
+        chunks=np.array_split(idx,5); return tuple(np.asarray(c,dtype=np.int64) for c in chunks)
+    n_task=max(1,int(0.50*n)); n_surr=max(1,int(0.15*n)); n_art=max(1,int(0.10*n)); n_cal=max(1,int(0.15*n))
+    if n_task+n_surr+n_art+n_cal>=n:
+        n_task=max(1,n-4); n_surr=n_art=n_cal=1
+    a=idx[:n_task]
+    b=idx[n_task:n_task+n_surr]
+    c=idx[n_task+n_surr:n_task+n_surr+n_art]
+    d=idx[n_task+n_surr+n_art:n_task+n_surr+n_art+n_cal]
+    e=idx[n_task+n_surr+n_art+n_cal:]
+    return a,b,c,d,e
 
 
 def _synthetic(seed: int, n=1600, test_n=400, n_classes=4, shape=(1,16,16)):
@@ -170,7 +175,7 @@ def load_data(cfg: ExperimentConfig, seed: int) -> DataBundle:
     name=cfg.dataset.name.lower()
     root=Path(cfg.dataset.root)
     if name=='synthetic':
-        train,test,n_classes,shape=_synthetic(seed)
+        train,test,n_classes,shape=_synthetic(seed,n=int(cfg.dataset.train_limit or 1600),test_n=int(cfg.dataset.test_limit or 400))
     elif name=='mnist':
         train=tvd.MNIST(root=str(root),train=True,download=cfg.dataset.download,transform=transforms.ToTensor())
         test=tvd.MNIST(root=str(root),train=False,download=cfg.dataset.download,transform=transforms.ToTensor())
@@ -192,14 +197,15 @@ def load_data(cfg: ExperimentConfig, seed: int) -> DataBundle:
     elif fed.partition=='dirichlet': parts=dirichlet_partition(labels,fed.n_clients,fed.dirichlet_alpha,seed,fed.min_client_samples)
     else: raise ValueError(f'unknown partition {fed.partition}')
     parts=_subsample_size_heterogeneity(parts,fed.sample_size_sigma,seed,fed.min_client_samples)
-    task=[];surr=[];art=[];ev=[]
+    task=[];surr=[];art=[];cal=[];ev=[]
     for cid,p in enumerate(parts):
-        a,b,c,d=_split_client_indices(p,seed+cid*1009)
+        a,b,c,d,e=_split_client_indices(p,seed+cid*1009)
         task.append(ClientSubset(train,a,cid,cfg.shift,n_clients=fed.n_clients))
         surr.append(ClientSubset(train,b,cid,cfg.shift,n_clients=fed.n_clients))
         art.append(ClientSubset(train,c,cid,cfg.shift,n_clients=fed.n_clients))
-        ev.append(ClientSubset(train,d,cid,cfg.shift,n_clients=fed.n_clients))
-    return DataBundle(task,surr,art,ev,test,n_classes,shape,labels,[len(p) for p in parts])
+        cal.append(ClientSubset(train,d,cid,cfg.shift,n_clients=fed.n_clients))
+        ev.append(ClientSubset(train,e,cid,cfg.shift,n_clients=fed.n_clients))
+    return DataBundle(task,surr,art,cal,ev,test,n_classes,shape,labels,[len(p) for p in parts])
 
 
 def make_loader(ds: Dataset, batch_size: int, shuffle: bool, seed: int, num_workers: int=0):

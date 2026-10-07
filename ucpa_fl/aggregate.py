@@ -7,7 +7,7 @@ try:
 except Exception:
     wilcoxon=None
 
-METRICS=['artifact_fidelity_jsd','sample_fidelity_jsd','pairwise_edi','reference_edi','deletion_auc','insertion_auc','topk_oracle_overlap','communication_bytes_per_client_artifact']
+METRICS=['artifact_fidelity_jsd','sample_fidelity_jsd','pairwise_edi','reference_edi','deletion_auc','insertion_auc','topk_oracle_overlap','excess_fidelity_risk','excess_fidelity_risk_p90','communication_bytes_per_client_artifact','selected_beta_mean','selected_beta_min','selected_beta_max','certified_fraction']
 
 def _ci(vals,seed=0,B=2000):
     vals=np.asarray(vals,float); vals=vals[np.isfinite(vals)]
@@ -66,30 +66,33 @@ def aggregate(output_root, out_dir):
     cols=sorted(set().union(*(r.keys() for r in summary)))
     with open(out/'summary.csv','w',newline='',encoding='utf-8') as f:
         w=csv.DictWriter(f,fieldnames=cols);w.writeheader();w.writerows(summary)
-    # Paired NC-SACPA-vs-xFedAlign differences, the primary comparison.
+    # Paired CFBA comparisons against both the globally certified policy and fixed xFedAlign.
     paired=[]
     by={(r['experiment'],r['scenario'],r['seed'],r['method']):r for r in rows}
     exps=sorted(set((r['experiment'],r['scenario']) for r in rows))
-    for exp,sc in exps:
-        seeds=sorted(set(r['seed'] for r in rows if r['experiment']==exp and r['scenario']==sc))
-        for metric in METRICS:
-            dif=[]
-            for s in seeds:
-                a=by.get((exp,sc,s,'nc_sacpa')); b=by.get((exp,sc,s,'xfedalign_median'))
-                if a and b and np.isfinite(a.get(metric,np.nan)) and np.isfinite(b.get(metric,np.nan)): dif.append(a[metric]-b[metric])
-            if dif:
-                mean,sd,lo,hi=_ci(dif,seed=33)
-                wins=sum(1 for x in dif if x<0) if metric not in ('insertion_auc','topk_oracle_overlap') else sum(1 for x in dif if x>0)
-                pval=float('nan')
-                if wilcoxon is not None and len(dif)>=3 and not np.allclose(dif,0):
-                    try: pval=float(wilcoxon(dif,alternative='two-sided',zero_method='wilcox').pvalue)
-                    except Exception: pass
-                paired.append({'experiment':exp,'scenario':sc,'metric':metric,'n':len(dif),'ncsacpa_minus_xfedalign_mean':mean,'sd':sd,'ci95_lo':lo,'ci95_hi':hi,'directional_wins':wins,'wilcoxon_two_sided_p':pval})
+    for comparator in ('global_crc','xfedalign_median'):
+        for exp,sc in exps:
+            seeds=sorted(set(r['seed'] for r in rows if r['experiment']==exp and r['scenario']==sc))
+            for metric in METRICS:
+                dif=[]
+                for seed in seeds:
+                    a=by.get((exp,sc,seed,'cfba_crc')); b=by.get((exp,sc,seed,comparator))
+                    if a and b and np.isfinite(a.get(metric,np.nan)) and np.isfinite(b.get(metric,np.nan)):
+                        dif.append(a[metric]-b[metric])
+                if dif:
+                    mean,sd,lo,hi=_ci(dif,seed=33)
+                    higher_better=metric in ('insertion_auc','topk_oracle_overlap','certified_fraction')
+                    wins=sum(1 for x in dif if x>0) if higher_better else sum(1 for x in dif if x<0)
+                    pval=float('nan')
+                    if wilcoxon is not None and len(dif)>=3 and not np.allclose(dif,0):
+                        try:pval=float(wilcoxon(dif,alternative='two-sided',zero_method='wilcox').pvalue)
+                        except Exception:pass
+                    paired.append({'experiment':exp,'scenario':sc,'comparator':comparator,'metric':metric,'n':len(dif),'cfba_minus_comparator_mean':mean,'sd':sd,'ci95_lo':lo,'ci95_hi':hi,'directional_wins':wins,'wilcoxon_two_sided_p':pval})
     if paired:
-        cols=list(paired[0]);
-        with open(out/'paired_ncsacpa_vs_xfedalign.csv','w',newline='',encoding='utf-8') as f:
+        cols=list(paired[0])
+        with open(out/'paired_cfba_comparisons.csv','w',newline='',encoding='utf-8') as f:
             w=csv.DictWriter(f,fieldnames=cols);w.writeheader();w.writerows(paired)
-    md=['# Aggregate results','',f'Runs found: {len(rows)}','', 'Primary paired comparison is NC-SACPA minus xFedAlign-style median prior. Negative is favorable for lower-is-better metrics (JSD/EDI/deletion); positive is favorable for insertion/overlap.','']
+    md=['# Aggregate results','',f'Runs found: {len(rows)}','', 'Primary paired tables compare CFBA against globally certified alignment and fixed xFedAlign-style alignment. Negative differences are favorable for lower-is-better metrics; positive for insertion/overlap.','']
     for rec in summary:
         md.append(f"## {rec['experiment']} / {rec['scenario']} / {rec['method']} (n={rec['n_seeds']})")
         md.append(f"- artifact fidelity JSD: {rec['artifact_fidelity_jsd_mean']:.6f} [{rec['artifact_fidelity_jsd_ci95_lo']:.6f}, {rec['artifact_fidelity_jsd_ci95_hi']:.6f}]")

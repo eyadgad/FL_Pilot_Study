@@ -1,0 +1,602 @@
+[
+  {
+    "seed": 1101,
+    "shift": "rotation",
+    "support_threshold": 0.5,
+    "task": {
+      "accuracy": 0.24333333333333335,
+      "loss": 1.38025634765625,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.2,
+      0.2,
+      0.2,
+      0.1,
+      0.2,
+      0.2
+    ],
+    "fixed_beta": 0.2,
+    "eval": {
+      "local": {
+        "del": 0.2731245309114456,
+        "ins": 0.27239509392529726,
+        "support_local": 1.0,
+        "support_oracle": 0.2109375,
+        "jsd_oracle": 0.11127722471954234
+      },
+      "xfedalign_0p2": {
+        "del": 0.2731166902619104,
+        "ins": 0.2723033935762942,
+        "support_local": 0.53125,
+        "support_oracle": 0.173828125,
+        "jsd_oracle": 0.12073622341512764
+      },
+      "fixed_calibrated": {
+        "del": 0.2731166902619104,
+        "ins": 0.2723033935762942,
+        "support_local": 0.53125,
+        "support_oracle": 0.173828125,
+        "jsd_oracle": 0.12073622341512764
+      },
+      "fba_client": {
+        "del": 0.27310859225690365,
+        "ins": 0.27232667431235313,
+        "support_local": 0.5729166666666666,
+        "support_oracle": 0.17838541666666666,
+        "jsd_oracle": 0.1190799986394349
+      }
+    },
+    "elapsed": 1.5587718486785889
+  },
+  {
+    "seed": 1101,
+    "shift": "rotation",
+    "support_threshold": 0.6,
+    "task": {
+      "accuracy": 0.24333333333333335,
+      "loss": 1.38025634765625,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.1,
+      0.1,
+      0.1,
+      0.1,
+      0.1,
+      0.1
+    ],
+    "fixed_beta": 0.1,
+    "eval": {
+      "local": {
+        "del": 0.2731245309114456,
+        "ins": 0.27239509392529726,
+        "support_local": 1.0,
+        "support_oracle": 0.2109375,
+        "jsd_oracle": 0.11127722471954234
+      },
+      "xfedalign_0p2": {
+        "del": 0.2731166902619104,
+        "ins": 0.2723033935762942,
+        "support_local": 0.53125,
+        "support_oracle": 0.173828125,
+        "jsd_oracle": 0.12073622341512764
+      },
+      "fixed_calibrated": {
+        "del": 0.27309136977419257,
+        "ins": 0.27235987565169734,
+        "support_local": 0.7298177083333334,
+        "support_oracle": 0.19401041666666666,
+        "jsd_oracle": 0.1123069975294018
+      },
+      "fba_client": {
+        "del": 0.27309136977419257,
+        "ins": 0.27235987565169734,
+        "support_local": 0.7298177083333334,
+        "support_oracle": 0.19401041666666666,
+        "jsd_oracle": 0.1123069975294018
+      }
+    },
+    "elapsed": 1.2143890857696533
+  },
+  {
+    "seed": 1101,
+    "shift": "rotation",
+    "support_threshold": 0.7,
+    "task": {
+      "accuracy": 0.24333333333333335,
+      "loss": 1.38025634765625,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.1,
+      0.1,
+      0.0,
+      0.1,
+      0.0,
+      0.1
+    ],
+    "fixed_beta": 0.1,
+    "eval": {
+      "local": {
+        "del": 0.2731245309114456,
+        "ins": 0.27239509392529726,
+        "support_local": 1.0,
+        "support_oracle": 0.2109375,
+        "jsd_oracle": 0.11127722471954234
+      },
+      "xfedalign_0p2": {
+        "del": 0.2731166902619104,
+        "ins": 0.2723033935762942,
+        "support_local": 0.53125,
+        "support_oracle": 0.173828125,
+        "jsd_oracle": 0.12073622341512764
+      },
+      "fixed_calibrated": {
+        "del": 0.27309136977419257,
+        "ins": 0.27235987565169734,
+        "support_local": 0.7298177083333334,
+        "support_oracle": 0.19401041666666666,
+        "jsd_oracle": 0.1123069975294018
+      },
+      "fba_client": {
+        "del": 0.2730946005322039,
+        "ins": 0.2723886443612476,
+        "support_local": 0.8235677083333334,
+        "support_oracle": 0.19791666666666666,
+        "jsd_oracle": 0.11169799422270338
+      }
+    },
+    "elapsed": 1.3012933731079102
+  },
+  {
+    "seed": 1101,
+    "shift": "patch",
+    "support_threshold": 0.5,
+    "task": {
+      "accuracy": 0.24333333333333335,
+      "loss": 1.3770097223917643,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.2,
+      0.1,
+      0.7,
+      0.1,
+      0.2,
+      0.2
+    ],
+    "fixed_beta": 0.2,
+    "eval": {
+      "local": {
+        "del": 0.27349728159606457,
+        "ins": 0.27363820374011993,
+        "support_local": 1.0,
+        "support_oracle": 0.21809895833333334,
+        "jsd_oracle": 0.12100326974468394
+      },
+      "xfedalign_0p2": {
+        "del": 0.2732546945723395,
+        "ins": 0.27384535502642393,
+        "support_local": 0.5052083333333334,
+        "support_oracle": 0.1796875,
+        "jsd_oracle": 0.12763352902790523
+      },
+      "fixed_calibrated": {
+        "del": 0.2732546945723395,
+        "ins": 0.27384535502642393,
+        "support_local": 0.5052083333333334,
+        "support_oracle": 0.1796875,
+        "jsd_oracle": 0.12763352902790523
+      },
+      "fba_client": {
+        "del": 0.27325952813650173,
+        "ins": 0.27381485141813755,
+        "support_local": 0.5625,
+        "support_oracle": 0.18294270833333334,
+        "jsd_oracle": 0.14458209292784585
+      }
+    },
+    "elapsed": 0.9684789180755615
+  },
+  {
+    "seed": 1101,
+    "shift": "patch",
+    "support_threshold": 0.6,
+    "task": {
+      "accuracy": 0.24333333333333335,
+      "loss": 1.3770097223917643,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.1,
+      0.1,
+      0.2,
+      0.1,
+      0.1,
+      0.1
+    ],
+    "fixed_beta": 0.1,
+    "eval": {
+      "local": {
+        "del": 0.27349728159606457,
+        "ins": 0.27363820374011993,
+        "support_local": 1.0,
+        "support_oracle": 0.21809895833333334,
+        "jsd_oracle": 0.12100326974468394
+      },
+      "xfedalign_0p2": {
+        "del": 0.2732546945723395,
+        "ins": 0.27384535502642393,
+        "support_local": 0.5052083333333334,
+        "support_oracle": 0.1796875,
+        "jsd_oracle": 0.12763352902790523
+      },
+      "fixed_calibrated": {
+        "del": 0.2733053833556672,
+        "ins": 0.2737644435837865,
+        "support_local": 0.7200520833333334,
+        "support_oracle": 0.20768229166666666,
+        "jsd_oracle": 0.11999705366075812
+      },
+      "fba_client": {
+        "del": 0.27330300165340304,
+        "ins": 0.27376486159240204,
+        "support_local": 0.6920572916666666,
+        "support_oracle": 0.20768229166666666,
+        "jsd_oracle": 0.12151661475254742
+      }
+    },
+    "elapsed": 0.906670331954956
+  },
+  {
+    "seed": 1101,
+    "shift": "patch",
+    "support_threshold": 0.7,
+    "task": {
+      "accuracy": 0.24333333333333335,
+      "loss": 1.3770097223917643,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.1,
+      0.1,
+      0.1,
+      0.0,
+      0.1,
+      0.1
+    ],
+    "fixed_beta": 0.1,
+    "eval": {
+      "local": {
+        "del": 0.27349728159606457,
+        "ins": 0.27363820374011993,
+        "support_local": 1.0,
+        "support_oracle": 0.21809895833333334,
+        "jsd_oracle": 0.12100326974468394
+      },
+      "xfedalign_0p2": {
+        "del": 0.2732546945723395,
+        "ins": 0.27384535502642393,
+        "support_local": 0.5052083333333334,
+        "support_oracle": 0.1796875,
+        "jsd_oracle": 0.12763352902790523
+      },
+      "fixed_calibrated": {
+        "del": 0.2733053833556672,
+        "ins": 0.2737644435837865,
+        "support_local": 0.7200520833333334,
+        "support_oracle": 0.20768229166666666,
+        "jsd_oracle": 0.11999705366075812
+      },
+      "fba_client": {
+        "del": 0.27336395904421806,
+        "ins": 0.27372381649911404,
+        "support_local": 0.767578125,
+        "support_oracle": 0.21028645833333334,
+        "jsd_oracle": 0.11999963039030881
+      }
+    },
+    "elapsed": 0.8943648338317871
+  },
+  {
+    "seed": 1102,
+    "shift": "rotation",
+    "support_threshold": 0.5,
+    "task": {
+      "accuracy": 0.26666666666666666,
+      "loss": 1.374478759765625,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.2,
+      0.1,
+      0.2,
+      0.1,
+      0.6,
+      0.2
+    ],
+    "fixed_beta": 0.2,
+    "eval": {
+      "local": {
+        "del": 0.28112416543687385,
+        "ins": 0.28017326397821307,
+        "support_local": 1.0,
+        "support_oracle": 0.2109375,
+        "jsd_oracle": 0.12003369709049745
+      },
+      "xfedalign_0p2": {
+        "del": 0.2808508197776973,
+        "ins": 0.2805568004647891,
+        "support_local": 0.515625,
+        "support_oracle": 0.18489583333333334,
+        "jsd_oracle": 0.12669171475499919
+      },
+      "fixed_calibrated": {
+        "del": 0.2808508197776973,
+        "ins": 0.2805568004647891,
+        "support_local": 0.515625,
+        "support_oracle": 0.18489583333333334,
+        "jsd_oracle": 0.12669171475499919
+      },
+      "fba_client": {
+        "del": 0.2808594886834423,
+        "ins": 0.2804879945081969,
+        "support_local": 0.5852864583333334,
+        "support_oracle": 0.19466145833333334,
+        "jsd_oracle": 0.13693628855015264
+      }
+    },
+    "elapsed": 1.3680593967437744
+  },
+  {
+    "seed": 1102,
+    "shift": "rotation",
+    "support_threshold": 0.6,
+    "task": {
+      "accuracy": 0.26666666666666666,
+      "loss": 1.374478759765625,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.1,
+      0.1,
+      0.1,
+      0.1,
+      0.1,
+      0.1
+    ],
+    "fixed_beta": 0.1,
+    "eval": {
+      "local": {
+        "del": 0.28112416543687385,
+        "ins": 0.28017326397821307,
+        "support_local": 1.0,
+        "support_oracle": 0.2109375,
+        "jsd_oracle": 0.12003369709049745
+      },
+      "xfedalign_0p2": {
+        "del": 0.2808508197776973,
+        "ins": 0.2805568004647891,
+        "support_local": 0.515625,
+        "support_oracle": 0.18489583333333334,
+        "jsd_oracle": 0.12669171475499919
+      },
+      "fixed_calibrated": {
+        "del": 0.2810824521196385,
+        "ins": 0.2802866950320701,
+        "support_local": 0.7239583333333334,
+        "support_oracle": 0.19986979166666666,
+        "jsd_oracle": 0.11993006785024324
+      },
+      "fba_client": {
+        "del": 0.2810824521196385,
+        "ins": 0.2802866950320701,
+        "support_local": 0.7239583333333334,
+        "support_oracle": 0.19986979166666666,
+        "jsd_oracle": 0.11993006785024324
+      }
+    },
+    "elapsed": 1.3180947303771973
+  },
+  {
+    "seed": 1102,
+    "shift": "rotation",
+    "support_threshold": 0.7,
+    "task": {
+      "accuracy": 0.26666666666666666,
+      "loss": 1.374478759765625,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.0,
+      0.0,
+      0.1,
+      0.1,
+      0.1,
+      0.1
+    ],
+    "fixed_beta": 0.1,
+    "eval": {
+      "local": {
+        "del": 0.28112416543687385,
+        "ins": 0.28017326397821307,
+        "support_local": 1.0,
+        "support_oracle": 0.2109375,
+        "jsd_oracle": 0.12003369709049745
+      },
+      "xfedalign_0p2": {
+        "del": 0.2808508197776973,
+        "ins": 0.2805568004647891,
+        "support_local": 0.515625,
+        "support_oracle": 0.18489583333333334,
+        "jsd_oracle": 0.12669171475499919
+      },
+      "fixed_calibrated": {
+        "del": 0.2810824521196385,
+        "ins": 0.2802866950320701,
+        "support_local": 0.7239583333333334,
+        "support_oracle": 0.19986979166666666,
+        "jsd_oracle": 0.11993006785024324
+      },
+      "fba_client": {
+        "del": 0.28108645308141905,
+        "ins": 0.2802335404170056,
+        "support_local": 0.818359375,
+        "support_oracle": 0.20247395833333334,
+        "jsd_oracle": 0.11992447775760835
+      }
+    },
+    "elapsed": 1.3995707035064697
+  },
+  {
+    "seed": 1102,
+    "shift": "patch",
+    "support_threshold": 0.5,
+    "task": {
+      "accuracy": 0.26666666666666666,
+      "loss": 1.3700286356608073,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.1,
+      0.1,
+      0.1,
+      0.1,
+      0.1,
+      0.1
+    ],
+    "fixed_beta": 0.1,
+    "eval": {
+      "local": {
+        "del": 0.27963722761099535,
+        "ins": 0.27997772954404354,
+        "support_local": 1.0,
+        "support_oracle": 0.23307291666666666,
+        "jsd_oracle": 0.11967125898143201
+      },
+      "xfedalign_0p2": {
+        "del": 0.2793915408353011,
+        "ins": 0.2801943700760603,
+        "support_local": 0.4889322916666667,
+        "support_oracle": 0.193359375,
+        "jsd_oracle": 0.13207634158340306
+      },
+      "fixed_calibrated": {
+        "del": 0.2795649532539149,
+        "ins": 0.2800731104798615,
+        "support_local": 0.7122395833333334,
+        "support_oracle": 0.22005208333333334,
+        "jsd_oracle": 0.12270078798346895
+      },
+      "fba_client": {
+        "del": 0.2795649532539149,
+        "ins": 0.2800731104798615,
+        "support_local": 0.7122395833333334,
+        "support_oracle": 0.22005208333333334,
+        "jsd_oracle": 0.12270078798346895
+      }
+    },
+    "elapsed": 0.9213387966156006
+  },
+  {
+    "seed": 1102,
+    "shift": "patch",
+    "support_threshold": 0.6,
+    "task": {
+      "accuracy": 0.26666666666666666,
+      "loss": 1.3700286356608073,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.1,
+      0.1,
+      0.1,
+      0.1,
+      0.1,
+      0.1
+    ],
+    "fixed_beta": 0.1,
+    "eval": {
+      "local": {
+        "del": 0.27963722761099535,
+        "ins": 0.27997772954404354,
+        "support_local": 1.0,
+        "support_oracle": 0.23307291666666666,
+        "jsd_oracle": 0.11967125898143201
+      },
+      "xfedalign_0p2": {
+        "del": 0.2793915408353011,
+        "ins": 0.2801943700760603,
+        "support_local": 0.4889322916666667,
+        "support_oracle": 0.193359375,
+        "jsd_oracle": 0.13207634158340306
+      },
+      "fixed_calibrated": {
+        "del": 0.2795649532539149,
+        "ins": 0.2800731104798615,
+        "support_local": 0.7122395833333334,
+        "support_oracle": 0.22005208333333334,
+        "jsd_oracle": 0.12270078798346895
+      },
+      "fba_client": {
+        "del": 0.2795649532539149,
+        "ins": 0.2800731104798615,
+        "support_local": 0.7122395833333334,
+        "support_oracle": 0.22005208333333334,
+        "jsd_oracle": 0.12270078798346895
+      }
+    },
+    "elapsed": 0.8185539245605469
+  },
+  {
+    "seed": 1102,
+    "shift": "patch",
+    "support_threshold": 0.7,
+    "task": {
+      "accuracy": 0.26666666666666666,
+      "loss": 1.3700286356608073,
+      "n": 300
+    },
+    "per_client_beta": [
+      0.0,
+      0.1,
+      0.1,
+      0.1,
+      0.0,
+      0.1
+    ],
+    "fixed_beta": 0.1,
+    "eval": {
+      "local": {
+        "del": 0.27963722761099535,
+        "ins": 0.27997772954404354,
+        "support_local": 1.0,
+        "support_oracle": 0.23307291666666666,
+        "jsd_oracle": 0.11967125898143201
+      },
+      "xfedalign_0p2": {
+        "del": 0.2793915408353011,
+        "ins": 0.2801943700760603,
+        "support_local": 0.4889322916666667,
+        "support_oracle": 0.193359375,
+        "jsd_oracle": 0.13207634158340306
+      },
+      "fixed_calibrated": {
+        "del": 0.2795649532539149,
+        "ins": 0.2800731104798615,
+        "support_local": 0.7122395833333334,
+        "support_oracle": 0.22005208333333334,
+        "jsd_oracle": 0.12270078798346895
+      },
+      "fba_client": {
+        "del": 0.27959331807990867,
+        "ins": 0.28007968437547487,
+        "support_local": 0.8059895833333334,
+        "support_oracle": 0.22005208333333334,
+        "jsd_oracle": 0.12185107725414068
+      }
+    },
+    "elapsed": 0.7784936428070068
+  }
+]

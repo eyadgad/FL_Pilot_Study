@@ -1,0 +1,24 @@
+{"event": "run_started", "time": 1791341199.580568}
+{"event": "data_loading_started", "time": 1791341199.5806978}
+{"event": "round_complete", "round": 0, "selected_clients": [0, 1, 2, 3], "time": 1791341199.6809833}
+{"event": "round_complete", "round": 1, "selected_clients": [0, 1, 2, 3], "time": 1791341199.7494562}
+{"event": "round_complete", "round": 2, "selected_clients": [0, 1, 2, 3], "time": 1791341199.7967746}
+{"event": "round_complete", "round": 3, "selected_clients": [0, 1, 2, 3], "time": 1791341199.8708296}
+{"event": "round_complete", "round": 4, "selected_clients": [0, 1, 2, 3], "time": 1791341199.916312}
+{"event": "round_complete", "round": 5, "selected_clients": [0, 1, 2, 3], "time": 1791341199.9857535}
+{"event": "round_complete", "round": 6, "selected_clients": [0, 1, 2, 3], "time": 1791341200.061481}
+{"event": "round_complete", "round": 7, "selected_clients": [0, 1, 2, 3], "time": 1791341200.108927}
+{"event": "round_complete", "round": 8, "selected_clients": [0, 1, 2, 3], "time": 1791341200.1828547}
+{"event": "round_complete", "round": 9, "selected_clients": [0, 1, 2, 3], "time": 1791341200.254226}
+{"event": "round_complete", "round": 10, "selected_clients": [0, 1, 2, 3], "time": 1791341200.2983568}
+{"event": "round_complete", "round": 11, "selected_clients": [0, 1, 2, 3], "time": 1791341200.376599}
+{"event": "round_complete", "round": 12, "selected_clients": [0, 1, 2, 3], "time": 1791341200.4451091}
+{"event": "round_complete", "round": 13, "selected_clients": [0, 1, 2, 3], "time": 1791341200.4971778}
+{"event": "round_complete", "round": 14, "selected_clients": [0, 1, 2, 3], "time": 1791341200.5672128}
+{"event": "round_complete", "round": 15, "selected_clients": [0, 1, 2, 3], "time": 1791341200.6123803}
+{"event": "round_complete", "round": 16, "selected_clients": [0, 1, 2, 3], "time": 1791341200.687606}
+{"event": "round_complete", "round": 17, "selected_clients": [0, 1, 2, 3], "time": 1791341200.7612057}
+{"event": "round_complete", "round": 18, "selected_clients": [0, 1, 2, 3], "time": 1791341200.8056853}
+{"event": "round_complete", "round": 19, "selected_clients": [0, 1, 2, 3], "time": 1791341200.8724093}
+{"event": "local_artifacts_built", "time": 1791341200.9598093, "total_bytes": 3136}
+{"event": "run_finalized", "status": "completed", "time": 1791341201.4659114}

@@ -6,7 +6,7 @@ sys.path.insert(0,str(ROOT))
 checks=[]
 def run(name,cmd):
     p=subprocess.run(cmd,cwd=ROOT,capture_output=True,text=True);checks.append((name,p.returncode,p.stdout[-1200:],p.stderr[-1200:]));return p.returncode
-rc=run('compile',[sys.executable,'-m','compileall','-q','ucpa_fl','run_experiment.py','aggregate_results.py'])
+rc=run('compile',[sys.executable,'-m','compileall','-q','ucpa_fl','scripts','run_experiment.py','aggregate_results.py','evaluate_cfba_gates.py'])
 rc|=run('pytest',[sys.executable,'-m','pytest','-q'])
 # Parse every config, including generated suite.
 from ucpa_fl.config import load_config

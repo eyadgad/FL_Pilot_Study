@@ -2,7 +2,7 @@ from __future__ import annotations
 import numpy as np
 import torch
 import torch.nn.functional as F
-from .alignment import jsd
+from .alignment import jsd, rank_preserving_projection
 from .datasets import make_loader
 from .explain import integrated_gradients, normalize_rows, explanation_batch
 
@@ -70,8 +70,7 @@ def perturbation_auc(model,x,target,map_flat,device,steps=20):
         if c: xd[idx]=0; xi[idx]=flat[idx]
         dele.append(_prob_target(model,xd.view_as(x).unsqueeze(0),target)); inse.append(_prob_target(model,xi.view_as(x).unsqueeze(0),target))
     axis=np.linspace(0,1,steps+1)
-    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
-    return float(trapz(dele, axis)), float(trapz(inse, axis))
+    return float(np.trapz(dele,axis)),float(np.trapz(inse,axis))
 
 
 def evaluate_method_samples(task_model, eval_dataset, surrogate_state, source, prior, method, beta, cfg, input_shape,n_classes,device,seed,num_workers=0,ig_steps=16):
@@ -89,6 +88,7 @@ def evaluate_method_samples(task_model, eval_dataset, surrogate_state, source, p
             c=int(pred_np[j]); pr=np.asarray(prior[c],float)
             if method=='local': final=local_np[j]
             elif method=='fedattr_mean': final=pr
+            elif method=='rpga': final=rank_preserving_projection(local_np[j],pr)
             else: final=normalize_np(((1-beta)*local_np[j]+beta*pr)[None])[0]
             jsds.append(float(jsd(final,oracle_np[j])))
             topovs.append(topk_overlap(final,oracle_np[j],min(cfg.topk_overlap_k,len(final))))
@@ -125,6 +125,7 @@ def evaluate_method_cache(task_model, cache, prior, method, beta, cfg, device):
         c=int(rec['pred']);local=np.asarray(rec['local_map']);oracle=np.asarray(rec['oracle_map']);pr=np.asarray(prior[c])
         if method=='local': final=local
         elif method=='fedattr_mean': final=pr
+        elif method=='rpga': final=rank_preserving_projection(local,pr)
         else: final=normalize_np(((1-beta)*local+beta*pr)[None])[0]
         jsds.append(float(jsd(final,oracle)));topovs.append(topk_overlap(final,oracle,min(cfg.topk_overlap_k,len(final))))
         x=torch.as_tensor(rec['x'],dtype=torch.float32)

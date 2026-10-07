@@ -1,14 +1,17 @@
-suite_version: '2.1'
+suite_version: '4.0'
 frozen_confirmatory_seeds:
-- 9101
-- 9102
-- 9103
-- 9104
-- 9105
+- 1701
+- 1702
+- 1703
+- 1704
+- 1705
+method: CFBA-CRC
+primary_claim: client-private conformal risk control selects per-client explanation-alignment
+  strength under a bounded multi-metric fidelity budget
 tiers:
   A: required core evidence
-  B: stress/robustness
-  C: sensitivity/communication
+  B: required stress/robustness
+  C: exploratory sensitivity only
 configs:
 - config: core_mnist_label_skew.yaml
   tier: A
@@ -36,11 +39,11 @@ configs:
   experiment_name: core_cifar10_color
 - config: stress_mnist_rotation_unequal_sizes.yaml
   tier: B
-  role: unequal-client-size / explanation-precision stress
+  role: unequal client size
   experiment_name: stress_mnist_rotation_unequal_sizes
 - config: stress_cifar10_rotation_unequal_sizes.yaml
   tier: B
-  role: unequal-client-size / explanation-precision stress
+  role: unequal client size
   experiment_name: stress_cifar10_rotation_unequal_sizes
 - config: stress_mnist_rotation_partial_task_participation.yaml
   tier: B
@@ -48,7 +51,7 @@ configs:
   experiment_name: stress_mnist_rotation_partial_task_participation
 - config: stress_mnist_drift_rotation.yaml
   tier: B
-  role: concept/covariate drift
+  role: distribution drift; guarantee diagnostic only
   experiment_name: stress_mnist_drift_rotation
 - config: stress_mnist_rotation_task_ig.yaml
   tier: B
@@ -60,65 +63,41 @@ configs:
   experiment_name: stress_cifar10_rotation_task_ig
 - config: robust_mnist_rotation_artifact_shift.yaml
   tier: B
-  role: attribution poisoning
+  role: attribution poisoning with recalibration
   experiment_name: robust_mnist_rotation_artifact_shift
 - config: robust_mnist_rotation_random_support.yaml
   tier: B
-  role: attribution poisoning
+  role: support poisoning with recalibration
   experiment_name: robust_mnist_rotation_random_support
-- config: sweep_mnist_topk_32.yaml
+- config: sensitivity_cfba_alpha_0p025.yaml
+  tier: C
+  role: risk-budget sensitivity
+  experiment_name: sensitivity_cfba_alpha_0p025
+- config: sensitivity_cfba_alpha_0p10.yaml
+  tier: C
+  role: risk-budget sensitivity
+  experiment_name: sensitivity_cfba_alpha_0p10
+- config: sensitivity_cfba_calibration_20.yaml
+  tier: C
+  role: calibration-size sensitivity
+  experiment_name: sensitivity_cfba_calibration_20
+- config: sensitivity_cfba_calibration_64.yaml
+  tier: C
+  role: calibration-size sensitivity
+  experiment_name: sensitivity_cfba_calibration_64
+- config: sensitivity_cfba_grid_coarse.yaml
+  tier: C
+  role: alignment-grid sensitivity
+  experiment_name: sensitivity_cfba_grid_coarse
+- config: sensitivity_cfba_grid_fine.yaml
+  tier: C
+  role: alignment-grid sensitivity
+  experiment_name: sensitivity_cfba_grid_fine
+- config: sensitivity_cfba_topk_64.yaml
   tier: C
   role: communication sparsity sensitivity
-  experiment_name: sweep_mnist_topk_32
-- config: sweep_mnist_topk_64.yaml
+  experiment_name: sensitivity_cfba_topk_64
+- config: sensitivity_cfba_dp_0p2.yaml
   tier: C
-  role: communication sparsity sensitivity
-  experiment_name: sweep_mnist_topk_64
-- config: sweep_mnist_topk_128.yaml
-  tier: C
-  role: communication sparsity sensitivity
-  experiment_name: sweep_mnist_topk_128
-- config: sweep_mnist_topk_256.yaml
-  tier: C
-  role: communication sparsity sensitivity
-  experiment_name: sweep_mnist_topk_256
-- config: sweep_mnist_dp_0p0.yaml
-  tier: C
-  role: artifact noise sensitivity
-  experiment_name: sweep_mnist_dp_0p0
-- config: sweep_mnist_dp_0p05.yaml
-  tier: C
-  role: artifact noise sensitivity
-  experiment_name: sweep_mnist_dp_0p05
-- config: sweep_mnist_dp_0p1.yaml
-  tier: C
-  role: artifact noise sensitivity
-  experiment_name: sweep_mnist_dp_0p1
-- config: sweep_mnist_dp_0p2.yaml
-  tier: C
-  role: artifact noise sensitivity
-  experiment_name: sweep_mnist_dp_0p2
-- config: sensitivity_ncsacpa_beta_0p6.yaml
-  tier: C
-  role: NC-SACPA beta sensitivity
-  experiment_name: sensitivity_ncsacpa_beta_0p6
-- config: sensitivity_ncsacpa_beta_0p9.yaml
-  tier: C
-  role: NC-SACPA beta sensitivity
-  experiment_name: sensitivity_ncsacpa_beta_0p9
-- config: sensitivity_ncsacpa_power_1p0.yaml
-  tier: C
-  role: NC-SACPA self-tuned kernel sensitivity
-  experiment_name: sensitivity_ncsacpa_power_1p0
-- config: sensitivity_ncsacpa_power_3p0.yaml
-  tier: C
-  role: NC-SACPA self-tuned kernel sensitivity
-  experiment_name: sensitivity_ncsacpa_power_3p0
-- config: sensitivity_ncsacpa_neighborhood_2.yaml
-  tier: C
-  role: NC-SACPA neighborhood-size sensitivity
-  experiment_name: sensitivity_ncsacpa_neighborhood_2
-- config: sensitivity_ncsacpa_neighborhood_4.yaml
-  tier: C
-  role: NC-SACPA neighborhood-size sensitivity
-  experiment_name: sensitivity_ncsacpa_neighborhood_4
+  role: artifact-noise sensitivity
+  experiment_name: sensitivity_cfba_dp_0p2

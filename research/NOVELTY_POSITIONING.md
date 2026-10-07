@@ -1,44 +1,30 @@
-# NC-SACPA novelty positioning — audit date 2026-10-04
+# Novelty and positioning — CFBA-CRC
 
-## Closest direct work: xFedAlign (ICML 2026)
+## Narrow novelty claim
+CFBA-CRC is **not** proposed as a new conformal framework. It applies finite-sample risk control to a specific unresolved FedXAI decision: how strongly each client should accept a shared explanation prior when alignment can improve consistency but damage fidelity to the deployed task model.
 
-xFedAlign constructs compact per-class top-k attribution artifacts, robustly aggregates them into **one Global Explanation Prior**, and softly aligns client explanations to that prior while decoupling explanation coordination from task optimization.
+The candidate contribution is the combination of:
+1. client-private calibration of federated explanation alignment strength;
+2. a bounded multi-metric *excess explanation-fidelity* loss relative to Local-XAI;
+3. a globally certified control showing when one beta is over-conservative under heterogeneous clients;
+4. attack-time recalibration against the actual received prior;
+5. no additional high-dimensional explanation payload beyond the matched global-prior baseline.
 
-NC-SACPA changes the coordination object: there is no single global explanation prior. Each client receives a peer prior based on a self-tuned explanation-space neighborhood, and sparse features absent from the target are imported only when multiple nearby peers corroborate them.
+## Closest research families
+- **xFedAlign (ICML 2026):** closest FedXAI method; builds a robust Global Explanation Prior and aligns local explanations. CFBA reuses that prior family deliberately and changes the decision rule for alignment strength.
+- **Conformal Risk Control (ICLR 2024):** provides the finite-sample bounded-risk machinery. CRC itself is prior art.
+- **Aligning Model Properties via Conformal Risk Control (NeurIPS 2024):** establishes that CRC can calibrate model/property post-processing. This increases novelty risk and prevents a broad claim that “CRC alignment” is new.
+- **Conformal feature-attribution explanation work (2026):** provides confidence/sufficiency guarantees for feature attribution; CFBA must not claim that conformal XAI is new.
+- **Site-conditional federated CRC (MICCAI 2026 workshop):** directly shows that pooled/global calibration can fail individual sites. Therefore per-client federated CRC by itself is not novel; the paper must focus on explanation alignment and its multi-metric fidelity budget.
+- **2026 FedXAI surveys/reviews:** identify non-IID explanation stability, security, communication, and evaluation as unresolved challenges. These support significance, not originality.
 
-Paper: https://proceedings.mlr.press/v306/wasif26a.html
+## Current novelty risk
+**Medium-high.** The full paper is only defensible if the empirical study shows that the explanation-specific risk formulation and client-specific alignment decision add value over both fixed xFedAlign and a globally certified CRC control.
 
-## UncertainXFL (2025)
-
-UncertainXFL is important because it explicitly treats uncertainty in federated explanations. It produces logical/rule explanations with uncertainty and uses explanation quality to influence model aggregation. NC-SACPA does not claim that "uncertainty-aware FedXAI" is new; in fact the final NC-SACPA rule removes UCPA v1's variance channel entirely.
-
-Paper: https://arxiv.org/abs/2503.05194
-
-## Personalized-FL collision risk
-
-Adaptive collaboration is established beyond FedXAI.
-
-- Fermanian et al. (ICML 2026) learn collaboration weights via kernel mean embeddings and multi-task averaging.
-- Yin et al. (ICML 2026) analyze collaboration-graph degeneration toward global consensus or spontaneous clustering and propose controlled collaboration geometry.
-
-These works mean NC-SACPA cannot claim novelty for self-tuned kernels, similarity-weighted peers, collaboration graphs, or continuous personalization in general. The contribution must be tied to the **federated explanation artifact problem** and to the specific sparse-support failure identified experimentally.
-
-References:
-- https://proceedings.mlr.press/v306/fermanian26a.html
-- https://proceedings.mlr.press/v306/yin26j.html
-
-## Why the problem remains current
-
-The 2026 FedXAI survey identifies non-IID explanation behavior, explanation stability, security, communication cost, and lack of standardized evaluation as open challenges. The package therefore makes local fidelity primary and jointly measures consistency, perturbation fidelity, attacks, privacy exposure, and communication.
-
-Survey: https://arxiv.org/abs/2607.13045
-
-## Candidate novelty statement
-
-> Existing global-prior explanation alignment can over-pool genuinely heterogeneous clients, while fixed-bandwidth personalized alignment can collapse when explanation-distance scale changes and global support voting can import sparse features from a semantically distant majority. NC-SACPA forms a client-specific sparse explanation prior using a self-tuned explanation-space peer kernel and requires support corroboration inside the target's nearest explanation neighborhood before importing absent features.
-
-This statement is **provisional** until the full study and a final pre-submission literature search.
-
-## Novelty risk
-
-**Medium.** No direct collision was found in the 2026-10-04 audit for the exact combination of self-tuned explanation-space collaboration plus neighborhood-corroborated sparse support. Every major ingredient is known individually, so the paper must demonstrate a non-obvious FedXAI failure mode and evidence that both parts of the rule matter. If a simpler adaptive global/local mixture matches NC-SACPA in the full study, the novelty claim should be revised or killed.
+## Verification links
+- xFedAlign (ICML 2026): https://proceedings.mlr.press/v306/wasif26a.html
+- Conformal Risk Control (ICLR 2024): https://openreview.net/forum?id=33XGfHLtZg
+- Aligning Model Properties via Conformal Risk Control (NeurIPS 2024): https://papers.nips.cc/paper_files/paper/2024/hash/c79625091a4f8b5d3abe29f3b14fa43a-Abstract-Conference.html
+- Turning Feature Attributions into Sufficient Explanations Using Conformal Prediction (2026): https://proceedings.mlr.press/v329/alkhatib26a.html
+- When Average Calibration Fails: Site-Conditional Federated Conformal Risk Control (MICCAI 2026 workshop): https://papers.miccai.org/miccai-2026-sat/DeCaF_004.html
+- Federated explainable artificial intelligence review (2026): https://www.sciencedirect.com/science/article/pii/S0957417426020920

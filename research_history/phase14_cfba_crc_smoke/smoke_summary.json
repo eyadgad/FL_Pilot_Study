@@ -1,0 +1,165 @@
+{
+  "seeds": [
+    1601,
+    1602,
+    1603,
+    1604,
+    1605
+  ],
+  "families": {
+    "rotation": {
+      "seeds": [
+        1601,
+        1602,
+        1603,
+        1604,
+        1605
+      ],
+      "methods": {
+        "local": {
+          "sample_fidelity_jsd": 0.14126291476674693,
+          "pairwise_edi": 0.13812743715784223,
+          "excess_fidelity_risk": 3.122502256758253e-18,
+          "deletion_auc": 0.3451325099762008,
+          "insertion_auc": 0.6816651412951273,
+          "topk_oracle_overlap": 0.38681640625
+        },
+        "global_crc": {
+          "sample_fidelity_jsd": 0.14126291476674693,
+          "pairwise_edi": 0.13812743715784223,
+          "excess_fidelity_risk": 3.122502256758253e-18,
+          "deletion_auc": 0.3451325099762008,
+          "insertion_auc": 0.6816651412951273,
+          "topk_oracle_overlap": 0.38681640625
+        },
+        "cfba_crc": {
+          "sample_fidelity_jsd": 0.1430573559352952,
+          "pairwise_edi": 0.1112316744433433,
+          "excess_fidelity_risk": 0.008005090034028668,
+          "deletion_auc": 0.29854009006068394,
+          "insertion_auc": 0.7111558066001293,
+          "topk_oracle_overlap": 0.39794921875
+        },
+        "xfedalign": {
+          "sample_fidelity_jsd": 0.14072856653387006,
+          "pairwise_edi": 0.09607351584271036,
+          "excess_fidelity_risk": 0.01419179510473245,
+          "deletion_auc": 0.28628068799355705,
+          "insertion_auc": 0.7148522398493355,
+          "topk_oracle_overlap": 0.397900390625
+        }
+      },
+      "cfba_vs_global_edi_wins": 5,
+      "cfba_vs_xfed_edi_wins": 0,
+      "caps": [
+        [
+          0.2,
+          0.4,
+          0.0,
+          0.2
+        ],
+        [
+          0.1,
+          0.2,
+          0.1,
+          0.0
+        ],
+        [
+          0.2,
+          0.0,
+          0.2,
+          0.2
+        ],
+        [
+          0.0,
+          0.4,
+          0.4,
+          0.4
+        ],
+        [
+          0.0,
+          0.2,
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    "patch": {
+      "seeds": [
+        1601,
+        1602,
+        1603,
+        1604,
+        1605
+      ],
+      "methods": {
+        "local": {
+          "sample_fidelity_jsd": 0.1279071899969345,
+          "pairwise_edi": 0.12840818480910363,
+          "excess_fidelity_risk": 1.951563910473908e-18,
+          "deletion_auc": 0.3820772052431721,
+          "insertion_auc": 0.8374883813987253,
+          "topk_oracle_overlap": 0.432421875
+        },
+        "global_crc": {
+          "sample_fidelity_jsd": 0.13343339920454686,
+          "pairwise_edi": 0.06587649515668098,
+          "excess_fidelity_risk": 0.008731566175330802,
+          "deletion_auc": 0.24133331959904075,
+          "insertion_auc": 0.884964947856497,
+          "topk_oracle_overlap": 0.493408203125
+        },
+        "cfba_crc": {
+          "sample_fidelity_jsd": 0.15002708752423724,
+          "pairwise_edi": 0.05957122656070592,
+          "excess_fidelity_risk": 0.011521905891891168,
+          "deletion_auc": 0.23774090773359688,
+          "insertion_auc": 0.8860935492790304,
+          "topk_oracle_overlap": 0.491064453125
+        },
+        "xfedalign": {
+          "sample_fidelity_jsd": 0.12197582643001421,
+          "pairwise_edi": 0.08782159081804881,
+          "excess_fidelity_risk": 0.0034459645202277018,
+          "deletion_auc": 0.25121890248101975,
+          "insertion_auc": 0.8786489444435575,
+          "topk_oracle_overlap": 0.477197265625
+        }
+      },
+      "cfba_vs_global_edi_wins": 3,
+      "cfba_vs_xfed_edi_wins": 5,
+      "caps": [
+        [
+          0.4,
+          0.8,
+          0.8,
+          0.8
+        ],
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4
+        ],
+        [
+          0.2,
+          0.4,
+          0.4,
+          0.4
+        ],
+        [
+          0.6,
+          0.4,
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4
+        ]
+      ]
+    }
+  }
+}

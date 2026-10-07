@@ -1,117 +1,56 @@
-# NC-SACPA: Full Reproducible Federated Explanation Research Pipeline
+# CFBA-CRC — Full Reproducible Federated Explanation Research Pipeline
 
-**Current status:** NC-SACPA passed a fresh five-seed Phase-VIII smoke-test gate; the full MNIST/CIFAR-10 confirmatory study has **not** been run. Fresh full-study seeds **9101–9105** are intentionally untouched.
+**Current status:** CFBA-CRC passed an adversarial pre-full-study smoke program and scores **79/100 on the project's paper-direction readiness rubric**. This is permission to run the frozen full validation, **not a 79% acceptance probability**. Full confirmatory seeds **1701–1705 have not been run**.
 
-This package is the next-stage validation of **Neighborhood-Corroborated Scale-Adaptive Peer Alignment (NC-SACPA)**, developed after two predecessor failures were preserved rather than hidden:
+CFBA-CRC (Conformal Fidelity-Budgeted Alignment) reuses an xFedAlign-style robust global attribution prior, but each client privately chooses the strongest alignment it can certify under a bounded multi-metric excess-fidelity budget. The critical control `global_crc` uses the same information and the single strongest beta safe for every client.
 
-- UCPA v1 was killed by full validation because its fixed JSD bandwidth collapsed peer sharing at realistic sparse-artifact scales.
-- SACPA v1 fixed scale collapse but failed a preregistered strong grouped-patch case because global support counts allowed a distant group to authorize foreign features.
+## Why this direction survived
+Earlier methods were killed when harder testing exposed scale collapse, oversmoothing, functional-fidelity loss, or over-conservative heuristics. CFBA directly controls the failure that remained: explanation alignment may reduce cross-client drift while degrading fidelity to the deployed task model.
 
-NC-SACPA uses a self-tuned explanation-space kernel and requires local-neighborhood corroboration before importing a feature missing from the target client's sparse artifact.
+The final smoke used high-accuracy non-IID synthetic tasks, disjoint calibration/test examples, direct task-model IG, and a valid finite-sample CRC correction. Across five rotation seeds, CFBA reduced EDI by ~19% versus the globally safe control while keeping mean held-out composite excess risk ~.008. Patch/erasing tests and a risk–consistency frontier are documented in `research/SMOKE_TEST_REPORT.md`.
 
-## Smoke-test evidence that authorized this package
-
-On untouched Phase-VIII seeds 801–805, NC-SACPA passed all 7 frozen smoke gates. Equal-family heterogeneous oracle JSD was:
-
-- **NC-SACPA:** 0.07603
-- oracle-tuned GlobalMedian: 0.09040
-- oracle-tuned Cluster: 0.09387
-- Local: 0.13231
-
-NC-SACPA beat Local, GlobalMedian, and Cluster on 5/5 seeds; it beat GlobalMedian in every tested family and patch strength. This is **smoke-test approval only**, not publication evidence.
-
-The complete smoke preregistration, raw confirmation JSONL, evaluator, and gate report are under `research_history/phase8_ncsacpa_smoke_approved/`.
-
-## Frozen method
-
-For each client/class:
-
-1. compute pairwise JSD between sparse normalized explanation summaries;
-2. set each client's local distance scale to its median peer distance;
-3. use a symmetric self-tuned kernel `exp(-(d/sqrt(sigma_i sigma_k))^2)`;
-4. form a peer-only prior;
-5. for coordinates missing from the target, import only when at least **2 of the target's 3 nearest explanation peers** report the feature;
-6. output `normalize(0.2 * local + 0.8 * peer_prior)`.
-
-See `research/METHOD.md` for the exact formulation.
-
-## Why the full study is stricter
-
-- MNIST **and CIFAR-10**.
-- Four disjoint per-client partitions: task training / surrogate fitting / artifact estimation / final explanation evaluation.
-- Fresh confirmatory seeds **9101–9105**.
-- Same FedAvg model and local explanation samples for every coordination method.
-- Local-XAI, FedAttr mean, xFedAlign-style global median, clustering, killed UCPA, rejected SACPA predecessor, and NC-SACPA in the same pipeline.
-- Direct task-model Integrated Gradients as the disjoint fidelity oracle.
-- Primary local fidelity, explanation drift, deletion/insertion AUC, top-k overlap, communication, task validity, two poisoning attacks, and empirical privacy audit.
-- Raw JSONL logs, environment/config manifests, SHA-256 per-run integrity files, duplicate-run provenance, paired seed analysis, and frozen decision gates.
-- Exploratory sensitivity is separated from confirmatory evidence.
-
-## Quick start
-
+## Install
 ```bash
-python -m venv .venv
-source .venv/bin/activate       # Windows: .venv\\Scripts\\activate
-python -m pip install --upgrade pip
 pip install -e '.[dev]'
 python scripts/verify_package.py
 ```
 
-## Run the study
-
+## Frozen study
 ```bash
-# Core confirmation
+# Confirmatory core
 python scripts/run_suite.py --tier A
-python aggregate_results.py --outputs outputs --out aggregate_tierA
 
-# Stress + robustness required for the final gate
+# Required robustness/stress
 python scripts/run_suite.py --tier B
-python aggregate_results.py --outputs outputs --out aggregate_all
-python evaluate_ncsacpa_gates.py --runs aggregate_all/runs.csv --out aggregate_all/ncsacpa_gate_report.json
 
-# Exploratory sensitivity/communication
+python aggregate_results.py --outputs outputs --out aggregate_all
+python evaluate_cfba_gates.py \
+  --runs aggregate_all/runs.csv \
+  --out aggregate_all/cfba_gate_report.json
+
+# Exploratory sensitivities only
 python scripts/run_suite.py --tier C
 python aggregate_results.py --outputs outputs --out aggregate_all
 
-# Verify raw run integrity
 python scripts/verify_runs.py --outputs outputs
 ```
 
-The authoritative experiment list is `configs/suite_manifest.yaml` (suite 2.1; 28 configurations).
+## What is frozen
+- confirmatory seeds: 1701–1705;
+- alpha=.05;
+- beta grid `[0,.1,.2,.4,.6,.8]`;
+- four-component bounded excess-fidelity loss;
+- five disjoint client data partitions;
+- seven executable decision gates in `evaluate_cfba_gates.py`.
 
-## Full-study decision
+## Key files
+- `research/METHOD.md` — exact algorithm and guarantee scope.
+- `research/PREREGISTRATION.md` — frozen study and gates.
+- `research/SMOKE_TEST_REPORT.md` — adversarial smoke evidence and discarded failures.
+- `research/READINESS_SCORE.md` — 79/100 direction score and interpretation.
+- `research/NOVELTY_POSITIONING.md` — closest prior art and narrow novelty claim.
+- `research/RUNBOOK.md` — execution instructions.
+- `research_history/phase14_cfba_crc_smoke/` — raw valid smoke evidence.
 
-The executable frozen gate is `evaluate_ncsacpa_gates.py`:
-
-- G1 local fidelity vs xFedAlign-style global median;
-- G2 coordination benefit vs Local-XAI;
-- G3 functional non-inferiority;
-- G4 neighborhood-corroboration revision test vs SACPA predecessor;
-- G5 CIFAR task validity;
-- G6 communication non-inferiority;
-- G7 poisoning robustness.
-
-Only a complete pass returns `CONTINUE`. Otherwise the outcome is `REVISE_OR_KILL`.
-
-## Baseline honesty
-
-`xfedalign_median` is a self-contained reproduction of the published xFedAlign coordination mechanism, **not the authors' exact code**. Official paper/code:
-
-- https://proceedings.mlr.press/v306/wasif26a.html
-- https://github.com/dawoodwasif/xFedAlign
-
-Use `scripts/fetch_official_xfedalign.sh` for a separate official-code cross-check when internet access is available.
-
-## Important files
-
-- `ucpa_fl/` — implementation and logging pipeline.
-- `configs/` — frozen suite.
-- `research/PREREGISTRATION.md` — full-study hypotheses and gates.
-- `research/METHOD.md` — exact NC-SACPA formulation.
-- `research/NOVELTY_POSITIONING.md` — current prior-art audit.
-- `research/BASELINE_PROVENANCE.md` — official vs reproduced baselines.
-- `research/KNOWN_LIMITATIONS.md` — explicit boundaries.
-- `research_history/` — negative/revised earlier phases and raw smoke confirmation.
-- `verification/` — engineering-only sanity evidence.
-
-Do not interpret the smoke result as evidence that NC-SACPA is conference-ready. The purpose of this package is to try to falsify it at realistic scale before theory/paper development.
+## Important interpretation
+A `CONTINUE` gate means the direction survived this validation stage. It does not mean the paper is accepted or finished. Official xFedAlign code comparison, more independent seeds, stronger architectures/datasets, and a paper-level theorem/assumption treatment remain subsequent work.

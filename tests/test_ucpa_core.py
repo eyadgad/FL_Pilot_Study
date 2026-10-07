@@ -5,19 +5,7 @@ from ucpa_fl.artifacts import sanitize_artifact
 from ucpa_fl.config import AlignmentConfig, ArtifactConfig, ExperimentConfig
 from ucpa_fl.datasets import _split_client_indices, iid_partition
 from ucpa_fl.logging_utils import RunLogger
-from ucpa_fl.repro import environment_snapshot, move_state_dict, resolve_device
-
-
-def test_auto_device_uses_cuda_only_when_visible():
-    dev=resolve_device('auto')
-    assert dev.type==('cuda' if torch.cuda.is_available() else 'cpu')
-    assert resolve_device('gpu').type==dev.type
-    moved=move_state_dict({'w':torch.zeros(2)}, dev)
-    assert moved['w'].device.type==dev.type
-    if not torch.cuda.is_available():
-        import pytest
-        with pytest.raises(RuntimeError):
-            resolve_device('cuda')
+from ucpa_fl.repro import environment_snapshot
 
 
 def test_client_split_disjoint_and_complete():

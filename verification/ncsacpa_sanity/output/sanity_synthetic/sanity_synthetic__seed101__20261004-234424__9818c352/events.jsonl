@@ -1,6 +1,0 @@
-{"event": "run_started", "time": 1791157464.263743}
-{"event": "data_loading_started", "time": 1791157464.2638152}
-{"event": "round_complete", "round": 0, "selected_clients": [0, 1, 2, 3], "time": 1791157464.3581355}
-{"event": "round_complete", "round": 1, "selected_clients": [0, 1, 2, 3], "time": 1791157464.4101963}
-{"event": "local_artifacts_built", "time": 1791157464.434544, "total_bytes": 3648}
-{"event": "run_finalized", "status": "completed", "time": 1791157464.62303}

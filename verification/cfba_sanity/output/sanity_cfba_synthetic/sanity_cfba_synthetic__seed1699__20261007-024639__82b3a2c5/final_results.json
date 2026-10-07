@@ -1,0 +1,100 @@
+{
+  "attacked": null,
+  "clean": {
+    "cfba_crc": {
+      "artifact_fidelity_jsd": 0.3711951480132421,
+      "certified_fraction": 1.0,
+      "communication_bytes_per_client_artifact": 784.0,
+      "deletion_auc": 0.2617533097509295,
+      "excess_fidelity_risk": 2.6020852139652106e-18,
+      "excess_fidelity_risk_p90": 5.898059818321145e-18,
+      "insertion_auc": 0.33061589944797254,
+      "n_eval_explanations": 16,
+      "pairwise_edi": 0.48667959564562935,
+      "reference_edi": 0.2667776084198605,
+      "sample_fidelity_jsd": 0.11984622817545733,
+      "selected_beta_max": 0.0,
+      "selected_beta_mean": 0.0,
+      "selected_beta_min": 0.0,
+      "topk_oracle_overlap": 0.291015625
+    },
+    "fedattr_mean": {
+      "artifact_fidelity_jsd": 0.17228751309205356,
+      "communication_bytes_per_client_artifact": 784.0,
+      "deletion_auc": 0.2169641638174653,
+      "excess_fidelity_risk": NaN,
+      "excess_fidelity_risk_p90": NaN,
+      "insertion_auc": 0.36402477898324526,
+      "n_eval_explanations": 16,
+      "pairwise_edi": 0.0,
+      "reference_edi": 1.4205449885249544e-17,
+      "sample_fidelity_jsd": 0.1783313181865433,
+      "selected_beta_max": 0.2,
+      "selected_beta_mean": 0.2,
+      "selected_beta_min": 0.2,
+      "topk_oracle_overlap": 0.322265625
+    },
+    "global_crc": {
+      "artifact_fidelity_jsd": 0.3711951480132421,
+      "certified_fraction": 1.0,
+      "communication_bytes_per_client_artifact": 784.0,
+      "deletion_auc": 0.2617533097509295,
+      "excess_fidelity_risk": 2.6020852139652106e-18,
+      "excess_fidelity_risk_p90": 5.898059818321145e-18,
+      "insertion_auc": 0.33061589944797254,
+      "n_eval_explanations": 16,
+      "pairwise_edi": 0.48667959564562935,
+      "reference_edi": 0.2667776084198605,
+      "sample_fidelity_jsd": 0.11984622817545733,
+      "selected_beta_max": 0.0,
+      "selected_beta_mean": 0.0,
+      "selected_beta_min": 0.0,
+      "topk_oracle_overlap": 0.291015625
+    },
+    "local": {
+      "artifact_fidelity_jsd": 0.3711951480132421,
+      "communication_bytes_per_client_artifact": 0.0,
+      "deletion_auc": 0.2617533097509295,
+      "excess_fidelity_risk": 2.6020852139652106e-18,
+      "excess_fidelity_risk_p90": 5.898059818321145e-18,
+      "insertion_auc": 0.33061589944797254,
+      "n_eval_explanations": 16,
+      "pairwise_edi": 0.48667959564562935,
+      "reference_edi": 0.24465172364922744,
+      "sample_fidelity_jsd": 0.11984622817545733,
+      "selected_beta_max": 0.0,
+      "selected_beta_mean": 0.0,
+      "selected_beta_min": 0.0,
+      "topk_oracle_overlap": 0.291015625
+    },
+    "xfedalign_median": {
+      "artifact_fidelity_jsd": 0.3145696310625725,
+      "communication_bytes_per_client_artifact": 784.0,
+      "deletion_auc": 0.2399219380846868,
+      "excess_fidelity_risk": 0.012237091224797277,
+      "excess_fidelity_risk_p90": 0.027608903019026083,
+      "insertion_auc": 0.3492714671883732,
+      "n_eval_explanations": 16,
+      "pairwise_edi": 0.306450032705573,
+      "reference_edi": 0.1607225721189855,
+      "sample_fidelity_jsd": 0.11738512202769513,
+      "selected_beta_max": 0.2,
+      "selected_beta_mean": 0.2,
+      "selected_beta_min": 0.2,
+      "topk_oracle_overlap": 0.298828125
+    }
+  },
+  "malicious_clients": [],
+  "privacy": {
+    "mean_only_auc": 0.5665972222222222,
+    "mean_variance_auc": 0.4724305555555556
+  },
+  "seed": 1699,
+  "task": {
+    "accuracy": 1.0,
+    "client_accuracy_mean": 0.9958333333333333,
+    "client_accuracy_worst": 0.9833333333333333,
+    "loss": 1.0093634223937988,
+    "n": 400
+  }
+}

@@ -1,10 +1,10 @@
 experiment_name: core_mnist_rotation
 seeds:
-- 9101
-- 9102
-- 9103
-- 9104
-- 9105
+- 1701
+- 1702
+- 1703
+- 1704
+- 1705
 device: auto
 deterministic: true
 num_workers: 2
@@ -23,7 +23,7 @@ federation:
   participation_rate: 1.0
   partition: dirichlet
   dirichlet_alpha: 0.1
-  min_client_samples: 40
+  min_client_samples: 256
   sample_size_sigma: 0.0
 shift:
   kind: rotation
@@ -51,7 +51,7 @@ artifact:
   quant_bits: 8
   dp_sigma: 0.1
   missing_variance_scale: 4.0
-  send_variance: true
+  send_variance: false
   sparse_intersection_only: true
 alignment:
   beta: 0.2
@@ -59,12 +59,8 @@ alignment:
   - local
   - fedattr_mean
   - xfedalign_median
-  - ucpa
-  - ucpa_whole_only
-  - ucpa_coord_only
-  - sacpa_global_count
-  - nc_sacpa
-  - cluster
+  - global_crc
+  - cfba_crc
   ucpa_z: 2.0
   ucpa_h: 0.048
   ucpa_variance_floor_fraction: 0.05
@@ -76,6 +72,16 @@ alignment:
   ncsacpa_kernel_power: 2.0
   ncsacpa_neighborhood_size: 3
   ncsacpa_min_support: 2
+  cfba_alpha: 0.05
+  cfba_beta_grid:
+  - 0.0
+  - 0.1
+  - 0.2
+  - 0.4
+  - 0.6
+  - 0.8
+  cfba_calibration_samples_per_client: 32
+  cfba_min_calibration_samples: 20
 evaluation:
   deletion_steps: 20
   eval_batch_size: 128
@@ -98,7 +104,7 @@ logging:
   log_every_round: true
 tags:
   status: confirmatory
-  ucpa_v1_status: frozen negative control
-  sacpa_v1_status: frozen rejected predecessor
-  frozen_ncsacpa: p=2,beta=0.8,q=3,min_support=2
-  suite_version: '2.1'
+  method: CFBA-CRC
+  suite_version: '4.0'
+  frozen_alpha: 0.05
+  fresh_seeds: 1701-1705

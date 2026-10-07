@@ -1,0 +1,108 @@
+experiment_name: sensitivity_cfba_grid_coarse
+seeds:
+- 1701
+- 1702
+- 1703
+- 1704
+- 1705
+device: auto
+deterministic: true
+num_workers: 2
+dataset:
+  name: mnist
+  root: ./data
+  download: true
+federation:
+  n_clients: 8
+  rounds: 15
+  local_epochs: 1
+  batch_size: 64
+  lr: 0.01
+  momentum: 0.9
+  weight_decay: 0.0001
+  participation_rate: 1.0
+  partition: dirichlet
+  dirichlet_alpha: 0.1
+  min_client_samples: 256
+  sample_size_sigma: 0.0
+shift:
+  kind: rotation
+  strength: 1.0
+  rotation_max_deg: 30.0
+  patch_size: 4
+  patch_value: 1.0
+  drift_start_round: 5
+  drift_end_round: 15
+surrogate:
+  kind: linear
+  source: linear_surrogate
+  epochs: 3
+  lr: 0.1
+  temperature: 3.0
+  l1: 0.0001
+  hidden_dim: 128
+  max_samples_per_class: 32
+  eval_samples_per_class: 24
+  ig_steps: 20
+  artifact_samples_per_class: 24
+artifact:
+  topk: 128
+  clip_radius: 5.0
+  quant_bits: 8
+  dp_sigma: 0.1
+  missing_variance_scale: 4.0
+  send_variance: false
+  sparse_intersection_only: true
+alignment:
+  beta: 0.2
+  methods:
+  - local
+  - fedattr_mean
+  - xfedalign_median
+  - global_crc
+  - cfba_crc
+  ucpa_z: 2.0
+  ucpa_h: 0.048
+  ucpa_variance_floor_fraction: 0.05
+  cluster_k: 3
+  sacpa_beta: 0.6
+  sacpa_kernel_power: 2.0
+  sacpa_global_min_support: 2
+  ncsacpa_beta: 0.8
+  ncsacpa_kernel_power: 2.0
+  ncsacpa_neighborhood_size: 3
+  ncsacpa_min_support: 2
+  cfba_alpha: 0.05
+  cfba_beta_grid:
+  - 0.0
+  - 0.2
+  - 0.4
+  - 0.6
+  - 0.8
+  cfba_calibration_samples_per_client: 32
+  cfba_min_calibration_samples: 20
+evaluation:
+  deletion_steps: 20
+  eval_batch_size: 128
+  max_eval_samples: 256
+  compute_oracle_local_fidelity: true
+  oracle_samples_per_class: 64
+  topk_overlap_k: 128
+  bootstrap_samples: 5000
+  deletion_insertion_samples_per_client: 24
+  primary_metric: artifact_fidelity_jsd
+attack:
+  enabled: false
+  fraction: 0.25
+  strength: 0.3
+  kind: artifact_shift
+logging:
+  output_root: ./outputs
+  save_checkpoints: true
+  save_artifacts: true
+  log_every_round: true
+tags:
+  status: exploratory
+  role: alignment-grid sensitivity
+  method: CFBA-CRC
+  suite_version: '4.0'
