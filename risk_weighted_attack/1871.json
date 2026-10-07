@@ -1,0 +1,108 @@
+{
+  "seed": 1871,
+  "task_acc": 1.0,
+  "conditions": {
+    "clean": {
+      "metrics": {
+        "xfedalign": {
+          "sample_fidelity_jsd": 0.14906754942526235,
+          "deletion_auc": 0.3245819820682906,
+          "insertion_auc": 0.7848052495780091,
+          "topk_oracle_overlap": 0.416015625,
+          "risk": 0.02159647007459058,
+          "pairwise_edi": 0.10248744294330323
+        },
+        "risk_weighted": {
+          "sample_fidelity_jsd": 0.14292095937668767,
+          "deletion_auc": 0.2951845930013709,
+          "insertion_auc": 0.8049057275056839,
+          "topk_oracle_overlap": 0.46484375,
+          "risk": 0.013671638407910382,
+          "pairwise_edi": 0.0740567827287264
+        }
+      }
+    },
+    "artifact_shift": {
+      "bad": [
+        3
+      ],
+      "metrics": {
+        "xfedalign": {
+          "sample_fidelity_jsd": 0.15037978347581166,
+          "deletion_auc": 0.31831677173719675,
+          "insertion_auc": 0.77775204849119,
+          "topk_oracle_overlap": 0.4150390625,
+          "risk": 0.021458227114718807,
+          "pairwise_edi": 0.10160089988603244
+        },
+        "risk_weighted": {
+          "sample_fidelity_jsd": 0.14417715620852833,
+          "deletion_auc": 0.29134756337225554,
+          "insertion_auc": 0.8160359679410856,
+          "topk_oracle_overlap": 0.4677734375,
+          "risk": 0.010490135496048504,
+          "pairwise_edi": 0.07275333715903727
+        }
+      },
+      "diag": [
+        {
+          "lambda": 1.0,
+          "certified": true
+        },
+        {
+          "lambda": 1.0,
+          "certified": true
+        },
+        {
+          "lambda": 1.0,
+          "certified": true
+        },
+        {
+          "lambda": 1.0,
+          "certified": true
+        }
+      ]
+    },
+    "random_support": {
+      "bad": [
+        3
+      ],
+      "metrics": {
+        "xfedalign": {
+          "sample_fidelity_jsd": 0.15285038210605856,
+          "deletion_auc": 0.3403828417770759,
+          "insertion_auc": 0.7752266940660775,
+          "topk_oracle_overlap": 0.40478515625,
+          "risk": 0.032085170581072915,
+          "pairwise_edi": 0.1020957492311489
+        },
+        "risk_weighted": {
+          "sample_fidelity_jsd": 0.1490003202299184,
+          "deletion_auc": 0.31373334106562345,
+          "insertion_auc": 0.807634964895745,
+          "topk_oracle_overlap": 0.46826171875,
+          "risk": 0.01245076035635592,
+          "pairwise_edi": 0.0724362649557942
+        }
+      },
+      "diag": [
+        {
+          "lambda": 1.0,
+          "certified": true
+        },
+        {
+          "lambda": 1.0,
+          "certified": true
+        },
+        {
+          "lambda": 1.0,
+          "certified": true
+        },
+        {
+          "lambda": 1.0,
+          "certified": true
+        }
+      ]
+    }
+  }
+}
