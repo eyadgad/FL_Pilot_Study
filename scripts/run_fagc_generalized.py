@@ -10,7 +10,7 @@ from pathlib import Path
 import torch,numpy as np
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from ucpa_fl.config import load_config
-from ucpa_fl.repro import set_seed
+from ucpa_fl.repro import set_seed, resolve_device
 from ucpa_fl.datasets import load_data,make_loader
 from ucpa_fl.models import MNISTCNN
 from ucpa_fl.federated import evaluate
@@ -25,7 +25,7 @@ from ucpa_fl.risk_control import perturbation_auc_many
 from scripts.verify_real_mnist import verify as verify_idx
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
-def run(kind,seed,replica,n_eval,root_out,config_path=None,checkpoint_override=None,training_rounds_override=None,n_teacher=12):
+def run(kind,seed,replica,n_eval,root_out,config_path=None,checkpoint_override=None,training_rounds_override=None,n_teacher=12,device=None):
     freeze=json.loads((ROOT/'configs/fagc_frozen_confirmation.json').read_text())
     if checkpoint_override is None and seed not in freeze['trained_task_seeds'][kind]:raise ValueError('seed not in frozen confirmation matrix')
     cfg=load_config(config_path or ROOT/'configs'/f'mnist_real_qualified_{kind}.yaml')
@@ -52,14 +52,15 @@ def run(kind,seed,replica,n_eval,root_out,config_path=None,checkpoint_override=N
       partition={str(i):{'task':bundle.task_clients[i].indices.tolist(),'surrogate':bundle.surrogate_clients[i].indices.tolist(),'artifact':bundle.artifact_clients[i].indices.tolist(),'teacher':bundle.calibration_clients[i].indices.tolist(),'evaluation':bundle.eval_clients[i].indices.tolist()} for i in range(cfg.federation.n_clients)}
       p_hash=hashlib.sha256(json.dumps(partition,sort_keys=True).encode()).hexdigest()
       if p_hash!=meta['partition_sha256']:raise ValueError('task-vs-explanation partition mismatch')
-    model=MNISTCNN().cpu();model.load_state_dict(torch.load(checkpoint,weights_only=True,map_location='cpu'));model.eval()
+    device=resolve_device('auto' if device is None else device)
+    model=MNISTCNN();model.load_state_dict(torch.load(checkpoint,weights_only=True,map_location='cpu'));model.to(device).eval()
     checkpoint_hash=sha(checkpoint)
-    acc=evaluate(model,make_loader(bundle.test,256,False,seed,0),torch.device('cpu'))
+    acc=evaluate(model,make_loader(bundle.test,256,False,seed,0),device)
     if len(bundle.test)!=10000 or acc['accuracy']<freeze['task_accuracy_min_full10k']:
       print('FAILED TASK GATE',kind,seed,acc,flush=True);return {'failed_task_accuracy':acc}
     print('TASK GATE PASSED',kind,seed,acc['accuracy'],flush=True)
     bundle.set_round(training_rounds-1)
-    device=torch.device('cpu');rng=np.random.default_rng(seed+replica*100001+70707)
+    rng=np.random.default_rng(seed+replica*100001+70707)
     locals_,artifacts=[],[];art_recs=[]
     for i in range(cfg.federation.n_clients):
         le=build_local_explanation(model,bundle.surrogate_clients[i],bundle.artifact_clients[i],bundle.input_shape,bundle.n_classes,cfg.surrogate,seed+i*97+replica*100001,device,0)
@@ -69,7 +70,7 @@ def run(kind,seed,replica,n_eval,root_out,config_path=None,checkpoint_override=N
         bucket=[[] for _ in range(10)];maxper=cfg.surrogate.artifact_samples_per_class
         for x,_ in make_loader(bundle.artifact_clients[i],64,False,seed+i*97+replica*100001+17,0):
             loc,pred=explanation_batch(model,le.surrogate_state,cfg.surrogate.source,x,bundle.input_shape,bundle.n_classes,device,cfg.surrogate.ig_steps)
-            loc=loc.numpy();pred=pred.numpy();x=x.numpy()
+            loc=loc.detach().cpu().numpy();pred=pred.detach().cpu().numpy();x=x.detach().cpu().numpy()
             for j,c in enumerate(pred):
                 if len(bucket[c])<maxper:bucket[c].append({'x':x[j],'pred':int(c),'local_map':loc[j]})
             if all(len(row)>=maxper for row in bucket):break

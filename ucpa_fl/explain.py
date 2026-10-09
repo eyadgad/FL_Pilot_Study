@@ -4,6 +4,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from .datasets import make_loader
+from .repro import move_state_dict
 from .surrogate import fit_surrogate
 
 EPS=1e-12
@@ -99,7 +100,7 @@ def direct_ig_maps(task_model, xs: torch.Tensor, device, steps: int=16):
 def load_surrogate_from_state(input_shape, n_classes, state, device):
     from .surrogate import SparseLinearSurrogate
     s=SparseLinearSurrogate(input_shape,n_classes).to(device)
-    s.load_state_dict(state); s.eval(); return s
+    s.load_state_dict(move_state_dict(state, device)); s.eval(); return s
 
 
 def explanation_batch(task_model, surrogate_state, source: str, x: torch.Tensor, input_shape, n_classes: int, device, ig_steps: int):

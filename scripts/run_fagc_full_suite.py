@@ -10,7 +10,7 @@ from pathlib import Path
 import torch
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from ucpa_fl.config import load_config
-from ucpa_fl.repro import set_seed
+from ucpa_fl.repro import set_seed, resolve_device
 from ucpa_fl.datasets import load_data, make_loader
 from ucpa_fl.federated import train_fedavg, evaluate
 from ucpa_fl.models import MNISTCNN
@@ -43,14 +43,14 @@ def run_one(config_path,seed,output_root,teacher_n,eval_n,require_existing_check
   if len(bundle.test)!=10000:raise ValueError('full 10k original MNIST test required')
   dest=Path(output_root)/cfg.experiment_name/f'seed_{seed}';dest.mkdir(parents=True,exist_ok=True)
   parhash=_partition_hash(bundle);cfgsha=hashlib.sha256(path.read_bytes()).hexdigest()
-  log=AuditLogger(dest);dev=torch.device('cpu')
+  log=AuditLogger(dest);dev=resolve_device('auto')
   ckpt=dest/'checkpoints'/'global_task_model.pt'
   if require_existing_checkpoint:
     if not ckpt.exists():raise FileNotFoundError('No reusable checkpoint')
     meta=json.loads((dest/'train_manifest.json').read_text())
     if meta['config_sha256']!=cfgsha or meta['partition_sha256']!=parhash or meta['seed']!=seed:raise ValueError('frozen training metadata mismatch')
     if meta['checkpoint_sha256']!=hashlib.sha256(ckpt.read_bytes()).hexdigest():raise ValueError('tampered checkpoint')
-    model=MNISTCNN();model.load_state_dict(torch.load(ckpt,weights_only=True,map_location='cpu'));model.eval()
+    model=MNISTCNN();model.load_state_dict(torch.load(ckpt,weights_only=True,map_location='cpu'));model.to(dev).eval()
     task=evaluate(model,make_loader(bundle.test,256,False,seed,0),dev)
   else:
     if ckpt.exists():raise FileExistsError('Fail closed: checkpoint exists. Use --reuse-checkpoint, do not overwrite')
@@ -69,7 +69,7 @@ def run_one(config_path,seed,output_root,teacher_n,eval_n,require_existing_check
     # No explanation queries are made on an unqualified CNN.
     return {'status':'FAIL_TASK_GATE','manifest':manifest}
   explanation_root=dest/'fagc_explanations'
-  result=run_explanations(cfg.shift.kind,int(seed),0,eval_n,explanation_root,path,ckpt,cfg.federation.rounds,teacher_n)
+  result=run_explanations(cfg.shift.kind,int(seed),0,eval_n,explanation_root,path,ckpt,cfg.federation.rounds,teacher_n,device=dev)
   if result['checkpoint_sha256']!=cksha or result['partition_sha256']!=parhash:raise RuntimeError('task vs explanation split/checkpoint mismatch')
   (dest/'complete_manifest.json').write_text(json.dumps({'training':manifest,'evaluation':result},indent=2))
   print('COMPLETED qualified MNIST full pipeline',cfg.experiment_name,seed,flush=True)

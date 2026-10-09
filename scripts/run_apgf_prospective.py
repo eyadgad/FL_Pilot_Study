@@ -14,7 +14,7 @@ sys.path.insert(0,str(ROOT))
 import numpy as np
 import torch
 from ucpa_fl.config import load_config
-from ucpa_fl.repro import set_seed
+from ucpa_fl.repro import set_seed, resolve_device
 from ucpa_fl.datasets import load_data
 from ucpa_fl.federated import train_fedavg
 from scripts.verify_real_mnist import verify
@@ -38,7 +38,7 @@ def frozen_configs():
     return json.loads((ROOT/'configs'/'APGF_FROZEN_YAML_HASHES.json').read_text())
 
 
-def train_then_evaluate(cfgpath,seed,outroot,device='cpu',reuse=False):
+def train_then_evaluate(cfgpath,seed,outroot,device='auto',reuse=False):
     cfgpath=Path(cfgpath).resolve();rule=frozen_configs()
     if cfgpath.parent!=(ROOT/'configs').resolve() or cfgpath.name not in rule:raise ValueError('Not a frozen APGF config')
     if sha(cfgpath)!=rule[cfgpath.name]:raise ValueError('Frozen config modified after pre-registration')
@@ -48,8 +48,7 @@ def train_then_evaluate(cfgpath,seed,outroot,device='cpu',reuse=False):
     if seed not in cfg.seeds:raise ValueError('Seed not frozen in scenario YAML')
     if cfg.federation.rounds!=25 or cfg.federation.local_epochs!=2 or cfg.federation.n_clients!=5:
         raise ValueError('Prospective train protocol modified')
-    if device not in ('cpu','cuda'):raise ValueError('unsupported device')
-    if device=='cuda' and not torch.cuda.is_available():raise ValueError('CUDA requested but not available')
+    dev=resolve_device(device)
     data=verify(ROOT/'data')
     assert data['status']=='PASS' and data['train']['rows']==60000 and data['test']['rows']==10000
     cfg.dataset.root=str(ROOT/'data')
@@ -70,7 +69,7 @@ def train_then_evaluate(cfgpath,seed,outroot,device='cpu',reuse=False):
         if ck.exists() or mt.exists():raise FileExistsError('Run already exists; only verified --reuse is allowed')
         log=Logger(out)
         try:
-            model,metrics=train_fedavg(cfg,bundle,seed,torch.device(device),log)
+            model,metrics=train_fedavg(cfg,bundle,seed,dev,log)
         finally:
             log.close()
         if not ck.is_file():raise RuntimeError('CNN checkpoint was not saved')
@@ -80,7 +79,7 @@ def train_then_evaluate(cfgpath,seed,outroot,device='cpu',reuse=False):
              'rounds':cfg.federation.rounds,'local_epochs':cfg.federation.local_epochs,'n_clients':cfg.federation.n_clients,
              'checkpoint_sha256':sha(ck),'partition_sha256':p_hash,'config_sha256':sha(cfgpath),
              'status':status,'passes_gate':status=='PASS','model_type':'MNISTCNN',
-             'dataset_hash':data['source_archive_sha256'],'device':device}
+             'dataset_hash':data['source_archive_sha256'],'device':str(dev)}
         mt.write_text(json.dumps(manifest,indent=2)+'\n')
         # Retain exact train/surrogate/artifact/teacher/eval index lists for audit (not pixel data).
         split={}
@@ -93,7 +92,7 @@ def train_then_evaluate(cfgpath,seed,outroot,device='cpu',reuse=False):
     if not manifest['passes_gate']:raise ValueError('CNN did not pass full 10k accuracy gate, explanations stopped')
     smoke=json.loads((ROOT/'configs'/'smoke_predeclared.json').read_text())
     smoke['final_heldout_eval_per_client']=64
-    report=eval_apgf(ROOT,cfg.shift.kind,seed,smoke,out/'apgf_evaluation',cfgpath,ck,mt)
+    report=eval_apgf(ROOT,cfg.shift.kind,seed,smoke,out/'apgf_evaluation',cfgpath,ck,mt,device=dev)
     (out/'apgf_complete_manifest.json').write_text(json.dumps({'train_manifest':manifest,'explanation_report':report},indent=2)+'\n')
     return report
 
@@ -102,7 +101,7 @@ if __name__=='__main__':
     p.add_argument('--config',required=True,help='configs/apgf_full_<scenario>.yaml, sha256 frozen')
     p.add_argument('--seed',required=True,type=int)
     p.add_argument('--output-root',default='apgf_prospective_outputs')
-    p.add_argument('--device',choices=['cpu','cuda'],default='cpu')
+    p.add_argument('--device',choices=['auto','cpu','cuda'],default='auto')
     p.add_argument('--threads',type=int,default=3)
     p.add_argument('--reuse',action='store_true',help='requires verified checkpoint metadata')
     a=p.parse_args();torch.set_num_threads(a.threads)

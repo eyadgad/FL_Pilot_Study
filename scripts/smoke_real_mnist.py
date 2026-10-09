@@ -11,22 +11,24 @@ from torch.utils.data import DataLoader
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
-def records(model,ds,count,ig_steps,thread_seed):
+def records(model,ds,count,ig_steps,thread_seed,device):
     from ucpa_fl.explain import integrated_gradients
     it=DataLoader(ds,batch_size=16,shuffle=False,num_workers=0)
     out=[]
     for x,_ in it:
         if len(out)>=count:break
+        x=x.to(device)
         with torch.no_grad(): p=model(x).argmax(1)
         o=integrated_gradients(model,x,p,steps=ig_steps).flatten(1)
-        o=(o.clamp_min(0)/(o.sum(1,keepdim=True)+1e-12)).detach().numpy()
+        o=(o.clamp_min(0)/(o.sum(1,keepdim=True)+1e-12)).detach().cpu().numpy()
+        xcpu=x.detach().cpu(); pcpu=p.detach().cpu()
         for k in range(x.shape[0]):
             if len(out)>=count:break
-            out.append({'x':x[k].numpy().copy(),'pred':int(p[k]),'oracle_map':o[k].copy()})
+            out.append({'x':xcpu[k].numpy().copy(),'pred':int(pcpu[k]),'oracle_map':o[k].copy()})
     if len(out)!=count:raise ValueError('Insufficient real-MNIST records')
     return out
 
-def run(root,experiment,seed,settings,outdir,config_override=None,checkpoint_override=None,manifest_override=None):
+def run(root,experiment,seed,settings,outdir,config_override=None,checkpoint_override=None,manifest_override=None,device=None):
     root=Path(root).resolve();outdir=Path(outdir).resolve()
     sys.path.insert(0,str(root));sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
     from ucpa_fl.config import load_config
@@ -54,18 +56,20 @@ def run(root,experiment,seed,settings,outdir,config_override=None,checkpoint_ove
     if len(bundle.test)!=10000:raise ValueError('No full real MNIST test split')
     from scripts.run_fagc_full_suite import _partition_hash
     assert _partition_hash(bundle)==manifest['partition_sha256'], 'Disjoint partition changed'
-    model=MNISTCNN();model.load_state_dict(torch.load(checkpoint,weights_only=True,map_location='cpu'));model.eval()
-    acc=evaluate(model,make_loader(bundle.test,256,False,seed,0),torch.device('cpu'))['accuracy']
+    from ucpa_fl.repro import resolve_device
+    device=resolve_device('auto' if device is None else device)
+    model=MNISTCNN();model.load_state_dict(torch.load(checkpoint,weights_only=True,map_location='cpu'));model.to(device).eval()
+    acc=evaluate(model,make_loader(bundle.test,256,False,seed,0),device)['accuracy']
     if acc<settings['checkpoint_accuracy_gate']:raise ValueError('Below accuracy floor, no IG permitted')
     print(kind,seed,'qualified',round(acc,5),flush=True)
     bundle.set_round(manifest['rounds']-1)
     nfit=settings['teacher_fit_per_client'];nval=settings['teacher_validation_per_client'];neval=settings['final_heldout_eval_per_client']
     teachers=[];evals=[]
     for i in range(cfg.federation.n_clients):
-        t=records(model,bundle.calibration_clients[i],nfit+nval,settings['ig_steps'],seed)
+        t=records(model,bundle.calibration_clients[i],nfit+nval,settings['ig_steps'],seed,device)
         # CALIBRATION and VALIDATION separate; no teacher/eval overlap via data partition
         teachers.append((t[:nfit],t[nfit:]))
-        evals.append(records(model,bundle.eval_clients[i],neval,settings['ig_steps'],seed))
+        evals.append(records(model,bundle.eval_clients[i],neval,settings['ig_steps'],seed,device))
         print(kind,seed,'client',i,'fit/val/eval',nfit,nval,neval,flush=True)
     fitted=fit_gated_fields([t[0] for t in teachers],[t[1] for t in teachers],tuple(settings['peer_candidates']),
                             improvement_margin=settings['validation_min_improvement_jsd'],
