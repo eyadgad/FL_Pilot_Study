@@ -1,0 +1,14 @@
+{
+  "cifar10_iid.yaml": "1ceec89a04cc3b3e5d428ef4e786773dd63c5f9e7682845063d427b84b2ea565",
+  "cifar10_noniid_005.yaml": "6e614e03dc73f56ce9034619c5ff5585714cd7ae6411b0d3bc304e9f75bf0ed2",
+  "cifar10_noniid_035.yaml": "6de5b15e73dc7a75e24e4382fe9c37805592b2f5a52cb5cfb5ba32b8be2668f0",
+  "cifar10_partial_clients.yaml": "d4cbdb390d7bbadeedcd107ede670e97d64cf5284f9347e08d1248328281f0a1",
+  "cifar10_patch.yaml": "464a1d99f639bd53d5c6e5737dec3df5ea08394012a355b4176d17b33fe25c95",
+  "cifar10_rotation.yaml": "946b5aa0a2dc8c7801f67adf5d17977d17707fab28e99a4fbc5c0028da76603b",
+  "mnist_iid.yaml": "168c704bc5f4f9ee494e1320fc6382c2ea3e574073768167b8cf373ffe709493",
+  "mnist_noniid_005.yaml": "764c535b07b581e6c9ea12d966d347594e9ce63edff71b60496ac870916474ac",
+  "mnist_noniid_035.yaml": "bdb2cf74e0dfa381f3d2eba2ed1346d7bcc7449c0ab1045abccc76b243ea3ed8",
+  "mnist_partial_clients.yaml": "abd03dbeb2cf745f43e54f6729c27b9f0691ee51c07342edf48538af4212640e",
+  "mnist_patch.yaml": "9f08599d7cd0db5e3c0eb16f8503b428fa208385ea580ccf82aa6bf17ab0eebb",
+  "mnist_rotation.yaml": "2b95c2e3b7e137237d94b4a8585f439b74fd3ea1cb6901d38def246af6a811fa"
+}

@@ -1,5 +1,10 @@
+data/
+full_study_outputs/
+study_analysis/
 __pycache__/
 .pytest_cache/
 *.pyc
-.venv/
-data/
+*.pt
+*.pth
+*.npz
+!partition_indices.example.npz

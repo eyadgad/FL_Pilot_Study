@@ -9,8 +9,8 @@ import argparse, hashlib, json, struct, zipfile
 from pathlib import Path
 import numpy as np
 
-TRAIN = [f'data/mnist/MNIST_train_{j}.csv' for j in range(1, 7)]
-TEST = ['data/mnist/MNIST_test.csv']
+TRAIN = [f'MNIST_train_{j}.csv' for j in range(1, 7)]
+TEST = ['MNIST_test.csv']
 HEADER = 'label,'+','.join(f'pixel{j}' for j in range(784))
 
 def convert(zf, paths, image_path: Path, label_path: Path):
@@ -43,10 +43,15 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--source-zip',required=True);p.add_argument('--dataset-root',default='data');a=p.parse_args()
     root=Path(a.dataset_root)/'MNIST'/'raw';root.mkdir(parents=True,exist_ok=True)
     with zipfile.ZipFile(a.source_zip) as z:
-        for item in TRAIN+TEST:
-            if item not in z.namelist():raise FileNotFoundError(item)
-        train=convert(z,TRAIN,root/'train-images-idx3-ubyte',root/'train-labels-idx1-ubyte')
-        test=convert(z,TEST,root/'t10k-images-idx3-ubyte',root/'t10k-labels-idx1-ubyte')
+        source_names=z.namelist()
+        # Accept both previously-used original project.zip and mnist.zip layouts.
+        def locate(base):
+            matches=[v for v in source_names if v.split('/')[-1]==base and not v.startswith('__MACOSX/')];
+            if len(matches)!=1:
+                raise FileNotFoundError(f'Expected exactly one genuine CSV shard: {base}')
+            return matches[0]
+        train=convert(z,[locate(q) for q in TRAIN],root/'train-images-idx3-ubyte',root/'train-labels-idx1-ubyte')
+        test=convert(z,[locate(q) for q in TEST],root/'t10k-images-idx3-ubyte',root/'t10k-labels-idx1-ubyte')
     report={'dataset':'MNIST, real handwritten digit pixels from supplied CSV shards',
             'train':train,'test':test,'source_archive':str(Path(a.source_zip).resolve()),
             'source_zip_sha256':hashlib.sha256(Path(a.source_zip).read_bytes()).hexdigest(),

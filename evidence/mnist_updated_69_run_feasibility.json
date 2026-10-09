@@ -1,0 +1,627 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "config": "mnist_primary_iid_c10_r50_e5_fedavg.yaml",
+      "seed": 300000,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_iid_c10_r50_e5_fedavg.yaml",
+      "seed": 300001,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_iid_c10_r50_e5_fedavg.yaml",
+      "seed": 300002,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_iid_c10_r50_e5_fedavg.yaml",
+      "seed": 300003,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_iid_c10_r50_e5_fedavg.yaml",
+      "seed": 300004,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_100_c10_r50_e5_fedavg.yaml",
+      "seed": 300101,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 474,
+      "min_eval": 317,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_100_c10_r50_e5_fedavg.yaml",
+      "seed": 300102,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 635,
+      "min_eval": 424,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_100_c10_r50_e5_fedavg.yaml",
+      "seed": 300103,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 343,
+      "min_eval": 231,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_100_c10_r50_e5_fedavg.yaml",
+      "seed": 300104,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 568,
+      "min_eval": 380,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_100_c10_r50_e5_fedavg.yaml",
+      "seed": 300105,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 541,
+      "min_eval": 362,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_035_c10_r50_e5_fedavg.yaml",
+      "seed": 300202,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 502,
+      "min_eval": 337,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_035_c10_r50_e5_fedavg.yaml",
+      "seed": 300203,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 292,
+      "min_eval": 197,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_035_c10_r50_e5_fedavg.yaml",
+      "seed": 300204,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 551,
+      "min_eval": 371,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_035_c10_r50_e5_fedavg.yaml",
+      "seed": 300205,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 456,
+      "min_eval": 305,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_035_c10_r50_e5_fedavg.yaml",
+      "seed": 300206,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 462,
+      "min_eval": 308,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_005_c10_r50_e5_fedavg.yaml",
+      "seed": 300303,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 123,
+      "min_eval": 83,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_005_c10_r50_e5_fedavg.yaml",
+      "seed": 300304,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 303,
+      "min_eval": 202,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_005_c10_r50_e5_fedavg.yaml",
+      "seed": 300305,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 138,
+      "min_eval": 95,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_005_c10_r50_e5_fedavg.yaml",
+      "seed": 300306,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 211,
+      "min_eval": 143,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_noniid_005_c10_r50_e5_fedavg.yaml",
+      "seed": 300307,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 97,
+      "min_eval": 67,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_rotation_c10_r50_e5_fedavg.yaml",
+      "seed": 300404,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_rotation_c10_r50_e5_fedavg.yaml",
+      "seed": 300405,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_rotation_c10_r50_e5_fedavg.yaml",
+      "seed": 300406,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_rotation_c10_r50_e5_fedavg.yaml",
+      "seed": 300407,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_rotation_c10_r50_e5_fedavg.yaml",
+      "seed": 300408,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_patch_c10_r50_e5_fedavg.yaml",
+      "seed": 300505,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_patch_c10_r50_e5_fedavg.yaml",
+      "seed": 300506,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_patch_c10_r50_e5_fedavg.yaml",
+      "seed": 300507,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_patch_c10_r50_e5_fedavg.yaml",
+      "seed": 300508,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_patch_c10_r50_e5_fedavg.yaml",
+      "seed": 300509,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_partial_clients_c10_r50_e5_fedavg.yaml",
+      "seed": 300606,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_partial_clients_c10_r50_e5_fedavg.yaml",
+      "seed": 300607,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_partial_clients_c10_r50_e5_fedavg.yaml",
+      "seed": 300608,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_partial_clients_c10_r50_e5_fedavg.yaml",
+      "seed": 300609,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_primary_partial_clients_c10_r50_e5_fedavg.yaml",
+      "seed": 300610,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_clients_iid_c3_r50_e5_fedavg.yaml",
+      "seed": 300000,
+      "clients": 3,
+      "dataset": "mnist",
+      "min_teacher": 3000,
+      "min_eval": 2000,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_clients_iid_c3_r50_e5_fedavg.yaml",
+      "seed": 300001,
+      "clients": 3,
+      "dataset": "mnist",
+      "min_teacher": 3000,
+      "min_eval": 2000,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_clients_iid_c3_r50_e5_fedavg.yaml",
+      "seed": 300002,
+      "clients": 3,
+      "dataset": "mnist",
+      "min_teacher": 3000,
+      "min_eval": 2000,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_clients_iid_c5_r50_e5_fedavg.yaml",
+      "seed": 300000,
+      "clients": 5,
+      "dataset": "mnist",
+      "min_teacher": 1800,
+      "min_eval": 1200,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_clients_iid_c5_r50_e5_fedavg.yaml",
+      "seed": 300001,
+      "clients": 5,
+      "dataset": "mnist",
+      "min_teacher": 1800,
+      "min_eval": 1200,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_clients_iid_c5_r50_e5_fedavg.yaml",
+      "seed": 300002,
+      "clients": 5,
+      "dataset": "mnist",
+      "min_teacher": 1800,
+      "min_eval": 1200,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_clients_iid_c20_r50_e5_fedavg.yaml",
+      "seed": 300000,
+      "clients": 20,
+      "dataset": "mnist",
+      "min_teacher": 450,
+      "min_eval": 300,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_clients_iid_c20_r50_e5_fedavg.yaml",
+      "seed": 300001,
+      "clients": 20,
+      "dataset": "mnist",
+      "min_teacher": 450,
+      "min_eval": 300,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_clients_iid_c20_r50_e5_fedavg.yaml",
+      "seed": 300002,
+      "clients": 20,
+      "dataset": "mnist",
+      "min_teacher": 450,
+      "min_eval": 300,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_rounds_iid_c10_r5_e5_fedavg.yaml",
+      "seed": 300000,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_rounds_iid_c10_r5_e5_fedavg.yaml",
+      "seed": 300001,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_rounds_iid_c10_r5_e5_fedavg.yaml",
+      "seed": 300002,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_rounds_iid_c10_r10_e5_fedavg.yaml",
+      "seed": 300000,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_rounds_iid_c10_r10_e5_fedavg.yaml",
+      "seed": 300001,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_rounds_iid_c10_r10_e5_fedavg.yaml",
+      "seed": 300002,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_rounds_iid_c10_r25_e5_fedavg.yaml",
+      "seed": 300000,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_rounds_iid_c10_r25_e5_fedavg.yaml",
+      "seed": 300001,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_rounds_iid_c10_r25_e5_fedavg.yaml",
+      "seed": 300002,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_epochs_iid_c10_r50_e1_fedavg.yaml",
+      "seed": 300000,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_epochs_iid_c10_r50_e1_fedavg.yaml",
+      "seed": 300001,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_epochs_iid_c10_r50_e1_fedavg.yaml",
+      "seed": 300002,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_epochs_iid_c10_r50_e2_fedavg.yaml",
+      "seed": 300000,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_epochs_iid_c10_r50_e2_fedavg.yaml",
+      "seed": 300001,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_epochs_iid_c10_r50_e2_fedavg.yaml",
+      "seed": 300002,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_epochs_iid_c10_r50_e10_fedavg.yaml",
+      "seed": 300000,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_epochs_iid_c10_r50_e10_fedavg.yaml",
+      "seed": 300001,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_epochs_iid_c10_r50_e10_fedavg.yaml",
+      "seed": 300002,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_optimizer_iid_c10_r50_e5_fedprox.yaml",
+      "seed": 300000,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_optimizer_iid_c10_r50_e5_fedprox.yaml",
+      "seed": 300001,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_optimizer_iid_c10_r50_e5_fedprox.yaml",
+      "seed": 300002,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 900,
+      "min_eval": 600,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_optimizer_noniid_005_c10_r50_e5_fedprox.yaml",
+      "seed": 300303,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 123,
+      "min_eval": 83,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_optimizer_noniid_005_c10_r50_e5_fedprox.yaml",
+      "seed": 300304,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 303,
+      "min_eval": 202,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_optimizer_noniid_005_c10_r50_e5_fedprox.yaml",
+      "seed": 300305,
+      "clients": 10,
+      "dataset": "mnist",
+      "min_teacher": 138,
+      "min_eval": 95,
+      "full_train": 60000
+    },
+    {
+      "config": "mnist_smoke_iid_c3_r5_e5_fedavg.yaml",
+      "seed": 301818,
+      "clients": 3,
+      "dataset": "mnist",
+      "min_teacher": 3000,
+      "min_eval": 2000,
+      "full_train": 60000
+    }
+  ],
+  "count": 69
+}

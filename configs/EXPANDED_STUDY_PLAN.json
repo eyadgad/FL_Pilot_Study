@@ -1,0 +1,623 @@
+{
+  "name": "QF-SCAD v8 extended published-baselines prospectively frozen design",
+  "status": "NOT_EXECUTED",
+  "matrix": {
+    "mnist_primary_iid_c10_r50_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "primary",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300000,
+        300001,
+        300002,
+        300003,
+        300004
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_primary_noniid_100_c10_r50_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "primary",
+      "split": "noniid_100",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300101,
+        300102,
+        300103,
+        300104,
+        300105
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_primary_noniid_035_c10_r50_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "primary",
+      "split": "noniid_035",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300202,
+        300203,
+        300204,
+        300205,
+        300206
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_primary_noniid_005_c10_r50_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "primary",
+      "split": "noniid_005",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300303,
+        300304,
+        300305,
+        300306,
+        300307
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_primary_rotation_c10_r50_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "primary",
+      "split": "rotation",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300404,
+        300405,
+        300406,
+        300407,
+        300408
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_primary_patch_c10_r50_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "primary",
+      "split": "patch",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300505,
+        300506,
+        300507,
+        300508,
+        300509
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_primary_partial_clients_c10_r50_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "primary",
+      "split": "partial_clients",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300606,
+        300607,
+        300608,
+        300609,
+        300610
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_clients_iid_c3_r50_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "clients",
+      "split": "iid",
+      "n_clients": 3,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300000,
+        300001,
+        300002
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_clients_iid_c5_r50_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "clients",
+      "split": "iid",
+      "n_clients": 5,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300000,
+        300001,
+        300002
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_clients_iid_c20_r50_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "clients",
+      "split": "iid",
+      "n_clients": 20,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300000,
+        300001,
+        300002
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_rounds_iid_c10_r5_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "rounds",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 5,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300000,
+        300001,
+        300002
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_rounds_iid_c10_r10_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "rounds",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 10,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300000,
+        300001,
+        300002
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_rounds_iid_c10_r25_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "rounds",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 25,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        300000,
+        300001,
+        300002
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_epochs_iid_c10_r50_e1_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "epochs",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 1,
+      "optimizer": "fedavg",
+      "seeds": [
+        300000,
+        300001,
+        300002
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_epochs_iid_c10_r50_e2_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "epochs",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 2,
+      "optimizer": "fedavg",
+      "seeds": [
+        300000,
+        300001,
+        300002
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_epochs_iid_c10_r50_e10_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "epochs",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 10,
+      "optimizer": "fedavg",
+      "seeds": [
+        300000,
+        300001,
+        300002
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_optimizer_iid_c10_r50_e5_fedprox.yaml": {
+      "dataset": "mnist",
+      "kind": "optimizer",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedprox",
+      "seeds": [
+        300000,
+        300001,
+        300002
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_optimizer_noniid_005_c10_r50_e5_fedprox.yaml": {
+      "dataset": "mnist",
+      "kind": "optimizer",
+      "split": "noniid_005",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedprox",
+      "seeds": [
+        300303,
+        300304,
+        300305
+      ],
+      "accuracy_gate": 0.95
+    },
+    "mnist_smoke_iid_c3_r5_e5_fedavg.yaml": {
+      "dataset": "mnist",
+      "kind": "smoke",
+      "split": "iid",
+      "n_clients": 3,
+      "rounds": 5,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        301818
+      ],
+      "accuracy_gate": 0.95
+    },
+    "cifar10_primary_iid_c10_r50_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "primary",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        301919,
+        301920,
+        301921,
+        301922,
+        301923
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_primary_noniid_100_c10_r50_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "primary",
+      "split": "noniid_100",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        302020,
+        302021,
+        302022,
+        302023,
+        302024
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_primary_noniid_035_c10_r50_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "primary",
+      "split": "noniid_035",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        302121,
+        302122,
+        302123,
+        302124,
+        302125
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_primary_noniid_005_c10_r50_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "primary",
+      "split": "noniid_005",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        302222,
+        302223,
+        302224,
+        302225,
+        302226
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_primary_rotation_c10_r50_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "primary",
+      "split": "rotation",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        302323,
+        302324,
+        302325,
+        302326,
+        302327
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_primary_patch_c10_r50_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "primary",
+      "split": "patch",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        302424,
+        302425,
+        302426,
+        302427,
+        302428
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_primary_partial_clients_c10_r50_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "primary",
+      "split": "partial_clients",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        302525,
+        302526,
+        302527,
+        302528,
+        302529
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_clients_iid_c3_r50_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "clients",
+      "split": "iid",
+      "n_clients": 3,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        301919,
+        301920,
+        301921
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_clients_iid_c5_r50_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "clients",
+      "split": "iid",
+      "n_clients": 5,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        301919,
+        301920,
+        301921
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_clients_iid_c20_r50_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "clients",
+      "split": "iid",
+      "n_clients": 20,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        301919,
+        301920,
+        301921
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_rounds_iid_c10_r5_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "rounds",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 5,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        301919,
+        301920,
+        301921
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_rounds_iid_c10_r10_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "rounds",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 10,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        301919,
+        301920,
+        301921
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_rounds_iid_c10_r25_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "rounds",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 25,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        301919,
+        301920,
+        301921
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_epochs_iid_c10_r50_e1_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "epochs",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 1,
+      "optimizer": "fedavg",
+      "seeds": [
+        301919,
+        301920,
+        301921
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_epochs_iid_c10_r50_e2_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "epochs",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 2,
+      "optimizer": "fedavg",
+      "seeds": [
+        301919,
+        301920,
+        301921
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_epochs_iid_c10_r50_e10_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "epochs",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 10,
+      "optimizer": "fedavg",
+      "seeds": [
+        301919,
+        301920,
+        301921
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_optimizer_iid_c10_r50_e5_fedprox.yaml": {
+      "dataset": "cifar10",
+      "kind": "optimizer",
+      "split": "iid",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedprox",
+      "seeds": [
+        301919,
+        301920,
+        301921
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_optimizer_noniid_005_c10_r50_e5_fedprox.yaml": {
+      "dataset": "cifar10",
+      "kind": "optimizer",
+      "split": "noniid_005",
+      "n_clients": 10,
+      "rounds": 50,
+      "local_epochs": 5,
+      "optimizer": "fedprox",
+      "seeds": [
+        302222,
+        302223,
+        302224
+      ],
+      "accuracy_gate": 0.55
+    },
+    "cifar10_smoke_iid_c3_r5_e5_fedavg.yaml": {
+      "dataset": "cifar10",
+      "kind": "smoke",
+      "split": "iid",
+      "n_clients": 3,
+      "rounds": 5,
+      "local_epochs": 5,
+      "optimizer": "fedavg",
+      "seeds": [
+        303737
+      ],
+      "accuracy_gate": 0.55
+    }
+  },
+  "no_download": true,
+  "no_synthetic": true,
+  "teacher_fit_per_client": 48,
+  "eval_per_client": 64,
+  "official_xfedalign_integrated": false,
+  "methods_official_or_source_derived": [
+    "FedAvg (McMahan et al. 2017)",
+    "FedProx (Li et al. 2020; independent implementation)",
+    "Grad-CAM (Selvaraju et al. 2017; independent implementation)",
+    "Vanilla saliency (Simonyan et al. 2013; independent implementation)",
+    "Integrated Gradients (Sundararajan et al. 2017; oracle)"
+  ],
+  "methods_heuristic_custom": [
+    "QF-SCAD v7",
+    "APGF v6",
+    "private_conv_48",
+    "fixed_fed_field_48",
+    "fedattr_class_template_proxy (nonofficial; not FedAttr-Agg reproduction)"
+  ],
+  "promotion_condition": "Official xFedAlign paired integration and equal-byte comparisons required for SOTA claims",
+  "smoke_min_rounds": 5,
+  "smoke_min_local_epochs": 5,
+  "run_count": 138
+}

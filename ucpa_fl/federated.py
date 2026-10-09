@@ -6,7 +6,6 @@ import torch.nn.functional as F
 from torch import nn
 from .datasets import DataBundle, make_loader
 from .models import build_model
-from .repro import move_state_dict
 
 
 def _weighted_average(states: list[dict], weights: list[float]) -> dict:
@@ -59,19 +58,65 @@ def train_fedavg(cfg, bundle: DataBundle, seed: int, device, logger):
             ll=train_local(local,loader,device,fed.local_epochs,fed.lr,fed.momentum,fed.weight_decay)
             states.append({k:v.detach().cpu() for k,v in local.state_dict().items()})
             weights.append(len(bundle.task_clients[cid])); local_losses.append(ll)
-        # Average on CPU for a device-independent reduction, then put the global model back
-        # on the training device. A CUDA run must not keep training on the CPU copies.
-        model.load_state_dict(move_state_dict(_weighted_average(states,weights), device))
-        model.to(device)
+        model.load_state_dict(_weighted_average(states,weights))
         if cfg.logging.log_every_round:
-            ev=evaluate(model,test_loader,device)
-            logger.metric('task_accuracy',ev['accuracy'],stage='train',round=r)
-            logger.metric('task_loss',ev['loss'],stage='train',round=r)
+            # Precommitted FL training diagnostics only: DO NOT repeatedly
+            # inspect the held-out 10,000-image TEST split during task training.
             logger.metric('local_train_loss_mean',float(np.mean(local_losses)),stage='train',round=r)
             logger.event('round_complete',round=r,selected_clients=[int(x) for x in selected])
     final=evaluate(model,test_loader,device)
     logger.metric('task_accuracy',final['accuracy'],stage='final')
     logger.metric('task_loss',final['loss'],stage='final')
     if cfg.logging.save_checkpoints:
-        torch.save({k:v.detach().cpu() for k,v in model.state_dict().items()}, logger.run_dir/'checkpoints'/'global_task_model.pt')
+        torch.save(model.state_dict(),logger.run_dir/'checkpoints'/'global_task_model.pt')
     return model, final
+
+
+def train_local_fedprox(model, loader, device, epochs, lr, momentum, weight_decay, reference, mu=0.01):
+    """FedProx: minimize local cross entropy + (mu/2)||w - w_global||^2.
+    mu=0 reduces precisely to local SGD objective. Reference held fixed within local solve.
+    """
+    if mu < 0: raise ValueError('FedProx mu must be nonnegative')
+    model.train()
+    parameters=list(model.parameters())
+    fixed=[v.detach().clone().to(device) for v in reference.parameters()]
+    opt=torch.optim.SGD(parameters,lr=lr,momentum=momentum,weight_decay=weight_decay)
+    loss_sum=0.; count=0
+    for _ in range(epochs):
+        for x,y in loader:
+            x=x.to(device);y=torch.as_tensor(y,dtype=torch.long,device=device)
+            opt.zero_grad(set_to_none=True)
+            loss=F.cross_entropy(model(x),y)
+            prox=sum(torch.sum((p-r)**2) for p,r in zip(parameters,fixed))
+            (loss+0.5*mu*prox).backward();opt.step()
+            loss_sum+=float(loss.detach())*len(y);count+=len(y)
+    return loss_sum/max(1,count)
+
+
+def train_fedprox(cfg,bundle,seed,device,logger,mu=0.01):
+    """Published FedProx task optimizer, compared as separate CNN checkpoints."""
+    fed=cfg.federation
+    model=build_model(cfg.dataset.name,bundle.input_shape,bundle.n_classes).to(device)
+    loader_test=make_loader(bundle.test,cfg.evaluation.eval_batch_size,False,seed+999,cfg.num_workers)
+    rng=np.random.default_rng(seed+4242)
+    for r in range(fed.rounds):
+        bundle.set_round(r)
+        k=max(1,int(np.ceil(fed.n_clients*fed.participation_rate)))
+        selected=np.sort(rng.choice(fed.n_clients,size=k,replace=False))
+        states=[];weights=[];losses=[]
+        for cid in selected:
+            local=deepcopy(model).to(device)
+            loader=make_loader(bundle.task_clients[cid],fed.batch_size,True,seed+r*10000+int(cid),cfg.num_workers)
+            l=train_local_fedprox(local,loader,device,fed.local_epochs,fed.lr,fed.momentum,fed.weight_decay,model,mu)
+            states.append({key:v.detach().cpu() for key,v in local.state_dict().items()})
+            weights.append(len(bundle.task_clients[cid]));losses.append(l)
+        model.load_state_dict(_weighted_average(states,weights))
+        if cfg.logging.log_every_round:
+            logger.metric('local_train_loss_mean',float(np.mean(losses)),stage='train',round=r)
+            logger.event('round_complete',round=r,selected_clients=[int(cid) for cid in selected],optimizer='fedprox')
+    final=evaluate(model,loader_test,device)
+    logger.metric('task_accuracy',final['accuracy'],stage='final')
+    logger.metric('task_loss',final['loss'],stage='final')
+    if cfg.logging.save_checkpoints:
+        torch.save(model.state_dict(),logger.run_dir/'checkpoints'/'global_task_model.pt')
+    return model,final

@@ -1,0 +1,99 @@
+{
+  "device": "cpu",
+  "elapsed_train_sec": 9.31,
+  "engineering_gate": 0.7,
+  "explanation_records": 48,
+  "five_round_five_epoch_observed": true,
+  "full10k_task_accuracy": 0.9327,
+  "local_epochs": 5,
+  "metrics": {
+    "fixed_field_48": {
+      "mean_oracle_jsd": 0.08288809041481149,
+      "mean_topk": 0.6197916666666666
+    },
+    "gradcam": {
+      "mean_oracle_jsd": 0.49720717523911967,
+      "mean_topk": 0.09418402777777775
+    },
+    "gradient_saliency": {
+      "mean_oracle_jsd": 0.18617117668235408,
+      "mean_topk": 0.6493055555555555
+    },
+    "private_conv_48": {
+      "mean_oracle_jsd": 0.0795430663786215,
+      "mean_topk": 0.6375868055555556
+    },
+    "qfscad_v7": {
+      "mean_oracle_jsd": 0.07781646664297133,
+      "mean_topk": 0.6471354166666666
+    }
+  },
+  "model_communication_bytes_per_client": [
+    465,
+    465,
+    465
+  ],
+  "no_synthetic_data": true,
+  "published_controls": [
+    "gradient_saliency",
+    "gradcam"
+  ],
+  "real_dataset": {
+    "dataset": "mnist",
+    "file_sha256": {
+      "t10k-images-idx3-ubyte": "0fa7898d509279e482958e8ce81c8e77db3f2f8254e26661ceb7762c4d494ce7",
+      "t10k-labels-idx1-ubyte": "ff7bcfd416de33731a308c3f266cc351222c34898ecbeaf847f06e48f7ec33f2",
+      "train-images-idx3-ubyte": "ba891046e6505d7aadcbbe25680a0738ad16aec93bde7f9b65e87a2fc25776db",
+      "train-labels-idx1-ubyte": "65a50cbbf4e906d70832878ad85ccda5333a97f0f4c3dd2ef09a8a9eef7101c5"
+    },
+    "sample_shape": [
+      1,
+      28,
+      28
+    ],
+    "source": "local original MNIST IDX; no download",
+    "test_count": 10000,
+    "train_count": 60000
+  },
+  "scientific_claim": false,
+  "smoke_model": "MNISTSmokeCNN 2 convolution blocks (full study remains unchanged)",
+  "static_communication_bytes_per_client": [
+    2366,
+    2366,
+    2366
+  ],
+  "status": "ENGINEERING_SMOKE_COMPLETE",
+  "train_per_client": [
+    500,
+    500,
+    500
+  ],
+  "train_rounds": [
+    {
+      "local_epochs": 5,
+      "loss": 2.2752230909983315,
+      "round": 1
+    },
+    {
+      "local_epochs": 5,
+      "loss": 1.5482985425472258,
+      "round": 2
+    },
+    {
+      "local_epochs": 5,
+      "loss": 0.5884168194055558,
+      "round": 3
+    },
+    {
+      "local_epochs": 5,
+      "loss": 0.2247898096283277,
+      "round": 4
+    },
+    {
+      "local_epochs": 5,
+      "loss": 0.1616887445901831,
+      "round": 5
+    }
+  ],
+  "training_rounds": 5
+}

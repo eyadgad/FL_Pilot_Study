@@ -1,0 +1,166 @@
+{
+  "title": "QF-SCAD v7 two-dataset prospective full study",
+  "status": "FROZEN_UNEXECUTED",
+  "scientific_claim": "none before full data-qualified results",
+  "scenarios": [
+    "iid",
+    "rotation",
+    "patch",
+    "noniid_035",
+    "noniid_005",
+    "partial_clients"
+  ],
+  "seed_matrix": {
+    "mnist_iid": [
+      17001,
+      17002,
+      17003,
+      17004,
+      17005
+    ],
+    "mnist_rotation": [
+      17101,
+      17102,
+      17103,
+      17104,
+      17105
+    ],
+    "mnist_patch": [
+      17201,
+      17202,
+      17203,
+      17204,
+      17205
+    ],
+    "mnist_noniid_035": [
+      17301,
+      17302,
+      17303,
+      17304,
+      17305
+    ],
+    "mnist_noniid_005": [
+      17401,
+      17402,
+      17403,
+      17404,
+      17405
+    ],
+    "mnist_partial_clients": [
+      17501,
+      17502,
+      17503,
+      17504,
+      17505
+    ],
+    "cifar10_iid": [
+      27001,
+      27002,
+      27003,
+      27004,
+      27005
+    ],
+    "cifar10_rotation": [
+      27101,
+      27102,
+      27103,
+      27104,
+      27105
+    ],
+    "cifar10_patch": [
+      27201,
+      27202,
+      27203,
+      27204,
+      27205
+    ],
+    "cifar10_noniid_035": [
+      27301,
+      27302,
+      27303,
+      27304,
+      27305
+    ],
+    "cifar10_noniid_005": [
+      27401,
+      27402,
+      27403,
+      27404,
+      27405
+    ],
+    "cifar10_partial_clients": [
+      27501,
+      27502,
+      27503,
+      27504,
+      27505
+    ]
+  },
+  "datasets": {
+    "mnist": {
+      "train": 60000,
+      "test": 10000,
+      "shape": [
+        1,
+        28,
+        28
+      ],
+      "accuracy_gate": 0.95
+    },
+    "cifar10": {
+      "train": 50000,
+      "test": 10000,
+      "shape": [
+        3,
+        32,
+        32
+      ],
+      "accuracy_gate": 0.55
+    }
+  },
+  "cnn_training": {
+    "mnist": {
+      "rounds": 25,
+      "local_epochs": 2,
+      "batch": 96,
+      "lr": 0.025
+    },
+    "cifar10": {
+      "rounds": 30,
+      "local_epochs": 2,
+      "batch": 64,
+      "lr": 0.01
+    }
+  },
+  "teachers_per_client": 48,
+  "evaluation_per_client": 64,
+  "ig_midpoint_steps": 8,
+  "ig_batch_size": 12,
+  "input_power": 1.2,
+  "peer_weight": 0.2,
+  "qf_rounds": 8,
+  "qf_local_steps": 30,
+  "qf_lr": 0.02,
+  "explanation_seed_offset": 710000,
+  "topk_spatial": {
+    "mnist": 48,
+    "cifar10": 64
+  },
+  "functional_records_per_client": 8,
+  "functional_steps": 20,
+  "primary_min_gain_over_private_conv": 0.005,
+  "require_nonregression_in_edi_and_functional": true,
+  "require_5_new_seeds_per_scenario": true,
+  "require_same_frozen_task_checkpoint_for_all_methods": true,
+  "protocol_constraints": [
+    "no dataset download",
+    "no synthetic data",
+    "no test set tuning",
+    "every seed predeclared",
+    "no weak baseline promotion",
+    "int8 communication includes upload and download",
+    "class prior control is not official xFedAlign",
+    "all methods share direct IG teacher budget and heldout evaluation"
+  ],
+  "note": "The full experiment has not been run; manifest states study intent, not results."
+}

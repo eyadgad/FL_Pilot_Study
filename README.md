@@ -1,63 +1,77 @@
-# APGF v6: Selective Federated Attribution Calibration — REAL MNIST ONLY
+# QF-SCAD v8 expanded real-data study — SOURCE + verified engineering smoke
 
-**Status:** EXPLORATORY / **DO NOT ADVANCE** to publication-scale claims.
+**Scientific status: experimental protocol and software verified, real-MNIST 5-round/5-local-epoch smoke complete; the full 138-run study is NOT executed. CUDA implementation is present but not physically tested here. Official xFedAlign is NOT integrated, so a publication-level SOTA comparison is still incomplete.**
 
-This is a standalone **implementation-only** supplement to FAGC v5. It includes no raw MNIST data, model checkpoints or simulated digit samples. It includes *metrics calculated from genuine MNIST* in `outputs/`.
+## Design
 
-## Why this iteration exists
+- **Datasets**: genuine MNIST (60,000 original train/10,000 test) and genuine CIFAR-10 (50,000 train/10,000 test), supplied separately. No synthetic dataset and no automatic downloads. Original MNIST IDX SHA-256 is pinned.
+- **Primary matrix**: 2 datasets × 7 IID/non-IID/shift/participation conditions × **5 new independent seeds** = **70 runs**; 10 clients, 50 rounds, 5 local epochs. 5-class, 10-class, and 20-client behavior is not inferred from this core experiment.
+- **Sensitivity matrix**: change exactly one main training dimension at a time, holding others fixed and pairing **the three seed values** used in the primary IID condition, plus matched FedProx comparisons. 3, 5, 10, 20 clients; 5/10/25/50 rounds; 1/2/5/10 local epochs; split controls IID, Dirichlet alpha 1.0, 0.35, 0.05, rotation, patch and partial participation. Total **138 planned run assignments**, including 2 separately tagged engineering smoke configs.
+- **Optimizer**: SGD momentum 0.9, FedAvg; additional separate task-model training optimizer **FedProx (mu=0.01)** on paired seeds. FedProx results are not a substitute for an FL-XAI explanation baseline.
+- **Frozen CNN**: every explanation method consumes the same CNN checkpoint for a seed; 95% complete-original-MNIST test accuracy floor and 55% complete-original-CIFAR-10 floor. Undertrained seeds fail closed, never tuned against test set.
+- **Evaluation**: 48 private genuine IG teachers/client, 64 disjoint genuine held-out records/client, spatial IG with eight midpoint steps for full study, top-k JSD/top-k overlap, class-summary disagreement, and 20-step deletion/insertion; exact explanation payload bytes and partition indices logged. Client-level pixels are not transmitted.
+- **Published explanation controls**: gradient saliency (Simonyan et al.) and Grad-CAM (Selvaraju et al.), independently implemented against the exact frozen CNN. IG (Sundararajan et al.) is the reference attribution.
+- **Strong matched controls**: same-architecture private convolution with 48 teachers, private convolution with shared prior, fixed and global gradient fields, class-template **PROXY (NOT official FedAttr-Agg)**, APGF v6, QF-SCAD v7 ablations.
+- **Outstanding baseline**: official xFedAlign (ICML 2026) needs a paired-source port. See `docs/PUBLISHED_BASELINE_AUDIT.md`. Until then **no SOTA / publication readiness claim**.
 
-The independent full-study audit of FAGC found a large margin versus xFedAlign-style but very small federated-only benefit versus a strong private field. The full class-aware mechanism often lost to class-free FAGC, and extreme non-IID (Dirichlet alpha=0.05) had consistent negative transfer. APGF removes the weak class exponent and lets each client choose whether to borrow quantized peer sufficient statistics based on *separate real IG teacher validation samples*. This is not a formal statistical certificate, privacy protection, nor original paper-level novelty by itself.
+## Prepare original datasets
 
-## What was actually tested
-
-Four **already-trained** and independently seeded MNIST CNN checkpoints from the previous v5 research package: rotation 6101/6103 and patch 6102/6104. All task accuracies were independently checked on the complete 10,000-image test split: 97.35%, 97.42%, 95.16%, 95.80%, respectively. No new CNN training occurred during the APGF smoke. Their training used genuine CSV-derived MNIST, 12k training-image development subset, 3 clients, 8 rounds, 2 local SGD epochs per round. We reuse the existing disjoint client index partitions.
-
-For each client we calculate 48 direct-task-CNN Integrated Gradients (IG) teacher records, of which 36 fit a quantized gain field and 12 are withheld to select the peer weight; a disjoint 48 genuine-image final evaluation set is never used to choose the peer weight. The stronger no-gate control uses **all 48** teacher records for private calibration. Five client-relative candidate weights: 0, 0.1, 0.2, 0.4, 0.8; accept a peer weight only if private-validation mean JSD gain >=0.001 and >=60% of validation records show improvement. Validation selection is heuristic, not a guaranteed upper bound. The wire transport consists of two 790-byte quantized statistic uplinks and five 786-byte candidate gain downlinks per client (5,510 bytes per simulated exchange). All methods use the same checkpoint within a seed.
-
-**A crucial negative result:** Compared with the *properly strengthened* 48-teacher fixed-sharing baseline, APGF is on average worse by 0.000310 JSD. APGF beats the 48-teacher private field by just 0.000652 mean JSD (3/4 seeds), with a seed-level 95% interval that includes zero. It fails the prior >=0.005 absolute improvement threshold. No research-readiness score >=75 is awarded.
-
-See `docs/APGF_V6_INDEPENDENT_SMOKE_REPORT.md` for the full numeric and failure analysis. Final-evaluation class-conditioned map disagreement is a *diagnostic* and must not be represented as the prior artifact-based EDI definition. We do not report deletion/insertion scores in this targeted smoke.
-
-## Setup: provide **real MNIST** separately
+To convert the user-provided CSV MNIST ZIP without downloading:
 
 ```bash
-python -m pip install -e '.[dev]'
-python scripts/import_mnist_csv.py --source-zip /path/to/project.zip --dataset-root data
-python scripts/verify_real_mnist.py --dataset-root data
+python scripts/import_mnist_csv.py --source-zip /path/to/mnist.zip --dataset-root data
+```
+
+CIFAR-10 requires official local `data/cifar-10-batches-py/{data_batch_1,..,data_batch_5,test_batch,batches.meta}`. No CIFAR images are bundled.
+
+## Install and verify
+
+```bash
+python -m pip install -r requirements.txt
 python -m pytest -q tests/
+python scripts/preflight_expanded.py --dataset mnist --data-root data --out mnist_preflight.json
+python scripts/preflight_expanded.py --dataset cifar10 --data-root data --out cifar_preflight.json
+python scripts/launch_expanded.py --dataset both --stage primary --dry-run
 ```
 
-The MNIST source ZIP must include 6 training CSV shards and 1 test CSV in the original `data/mnist/` layout. Do not substitute synthetic data, TorchVision downloads, or a different dataset. The CSV importer verifies 60,000/10,000 and records cryptographic provenance. The source package does **not** contain the original pre-trained v5 checkpoints. To reproduce the four development smokes, keep the complete original v5 archive extracted and use:
+## Re-execute engineering smoke — **5 rounds × 5 local epochs** on genuine MNIST
 
 ```bash
-python scripts/smoke_real_mnist.py --v5-root /path/to/verified_v5_package_root \
-  --kind rotation --seed 6101 --out outputs/recomputed
+python scripts/smoke_5r5e_real_mnist.py --data-root data --out smoke_5r5e --device auto --train-per-client 500 --test-gate 0.70
 ```
 
-Repeat for `patch 6102`, `rotation 6103`, `patch 6104`. The `--v5-root` must contain the original `data`, `fagc_independent_checkpoints`, `configs`, and `ucpa_fl` subfolders. Saved metrics are in `outputs/` and require **no** experimental data in this package.
+This uses an explicitly **reduced two-convolution CNN** and genuine disjoint subsets of original MNIST, and evaluates on ALL 10,000 test images. The low 70% **smoke-only** gate must never replace the 95% scientific full-run gate. The checkpoint is freshly trained in the smoke, not loaded from archival data. This smoke completed with 93.27% test accuracy in this CPU environment; see `evidence/real_mnist_5round_5epoch_smoke.json`.
 
-## Prospective full pipeline — not executed or validated as scientific evidence
-
-Six future scenarios × five **new** seeds = 30 prospective runs, with full original training image split, five clients, 25 rounds, two local epochs, and 10,000-image model gates. Frozen, SHA-256-pinned YAMLs are in `configs/apgf_full_*.yaml`. Important alpha=0.05 negative transfer checks are mandatory. Run one representative training seed first:
+## Full study (GPU, parallel / stages)
 
 ```bash
-python scripts/run_apgf_prospective.py --config configs/apgf_full_noniid_005.yaml \
-  --seed 8601 --device cuda --threads 4 --output-root apgf_prospective_outputs
+# Main confirmatory runs; 70 seeds, one process per GPU by default
+python scripts/launch_expanded.py --dataset both --stage primary --data-root data --output-root expanded_results --device auto --workers 1 --threads 4
+
+# On a two-GPU host: distinct CUDA subprocesses, no memory oversubscription
+python scripts/launch_expanded.py --dataset both --stage clients --data-root data --output-root expanded_results --device cuda --workers 2 --threads 3
+
+# On a single 16-GB GPU: optional explicit same-device parallelism, monitor VRAM
+python scripts/launch_expanded.py --dataset mnist --stage epochs --data-root data --output-root expanded_results --device cuda --workers 2 --allow-gpu-sharing --threads 2
+
+# Run each remaining stage; never overwrite an incomplete run
+python scripts/launch_expanded.py --dataset both --stage rounds --data-root data --output-root expanded_results --device auto
+python scripts/launch_expanded.py --dataset both --stage epochs --data-root data --output-root expanded_results --device auto
+python scripts/launch_expanded.py --dataset both --stage optimizer --data-root data --output-root expanded_results --device auto
+
+# All run assignment completeness and per-example arithmetic
+python scripts/aggregate_expanded.py --root expanded_results --out expanded_analysis
 ```
 
-`--device cpu` is supported if CUDA is unavailable. The new full runner trains from scratch and saves checkpoint and exact split indices; it fails closed if real-MNIST integrity or task accuracy is insufficient, and does not silently re-seed. Before CUDA runs set `CUBLAS_WORKSPACE_CONFIG=:4096:8` (also set automatically before torch import in the driver); verify deterministic behavior on your hardware. Do not rewrite or retune frozen YAMLs based on observed test output. After all 30 seeds:
+Every launcher job is a separate subprocess, CPU threading is limited per process, outputs are isolated, and completed outputs can be resumed after verifying their frozen config SHA. The `--workers` switch controls independent **run-level parallelism**, not client training concurrently inside a single run. CUDA process support is source-verified but untested on actual NVIDIA hardware in this environment (`torch 2.10.0+cpu`). For single-GPU hosts, default one job per GPU is safest; `--allow-gpu-sharing` must be used explicitly and risks OOM.
 
-```bash
-python scripts/aggregate_apgf_prospective.py --root apgf_prospective_outputs \
-  --out apgf_prospective_aggregate.json
-```
+## Verification and research limitations
 
-Numeric promotion gates include positive gains versus full-48 private and fixed-sharing controls, a predeclared ≥0.005 absolute improvement versus private, no alpha=.05 negative-transfer seeds, and nonregression on top-k. Passing numeric gates would **not** independently establish novelty, privacy, communication efficiency, or superiority over *official* xFedAlign code. The current package is an **engineering/prospective protocol**, not a prospective experimental result.
+- Real MNIST source validates against pinned original image/label checksums. All **69 MNIST prospective+smoke seed/split feasibility checks** passed on real images. CIFAR-10 data are absent here: no CIFAR smoke/preflight pass is claimed.
+- **18/18 code tests** passed (plus fresh extraction test after packaging). Five real-MNIST rounds × five local epochs ran to completion with 93.27% full-test accuracy using the smaller smoke CNN.
+- The smoke results (48 held-out records) are not independently seeded, not trained on the full data, and cannot justify publication-level claims.
+- The main study has a 95% MNIST / 55% CIFAR accuracy gate and never silently bypasses either. No full study runs were executed here.
+- The **official xFedAlign implementation is not integrated**. A source-verified, equal-budget, paired official xFedAlign comparison is mandatory before manuscript claims about popular FL-XAI SOTA. The internal class-template method must NEVER be renamed or reported as actual FedAttr-Agg.
+- Task optimizer comparisons (FedAvg versus FedProx) use separately trained CNN checkpoints; explanation comparisons within a training run reuse exactly one frozen CNN. Interpret as two distinct experimental questions.
 
-## Important limitations
-
-- Literature overlap with existing personalized federated learning, adaptive fusion, and global-local attribution alignment must be checked before proposing novelty.
-- The true private-only method needs no peer communication: its smaller wire footprint is a separate efficiency advantage. The matched quantized gain codecs do **not** erase this cost.
-- The exploratory smoke has only four previously used checkpoint seeds, not independent future confirmation, and excludes extreme non-IID direct IG measurements.
-- Prior `Results.zip` contained CIFAR outcomes but not the matching CIFAR implementation; this v6 code does not claim CIFAR support.
-- Only validation teaches the selector; the full 48-teacher private baseline is a stricter control than the 36-teacher private calibration used to build the selector.
+The run manager freezes `configs/expanded/*.yaml` via `configs/EXPANDED_CONFIG_HASHES.json`; the experiments and their precommitted seed assignments are defined in `configs/EXPANDED_STUDY_PLAN.json`. All analysis recomputes raw mean JSD, top-k and deletion/insertion AUC from saved per-example measurements and refuses a publication SOTA promotion while official xFedAlign is absent.

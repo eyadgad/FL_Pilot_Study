@@ -1,0 +1,112 @@
+alignment:
+  beta: 0.2
+  cfba_calibration_samples_per_client: 12
+  cfba_min_calibration_samples: 4
+  methods:
+  - local
+  - xfedalign_median
+  - rwssa_binary
+  - resid_private
+  - resid_shared
+  - resid_fixed
+  - resid_loo
+  - resid_ebloo
+  residual_alpha: 0.6
+  residual_beta: 0.4
+  residual_teacher_budget: 12
+  residual_topk: 48
+  rwssa_alpha: 0.05
+  rwssa_calibration_samples: 0
+  rwssa_grid:
+  - 0.0
+  - 0.25
+  - 0.5
+  - 0.75
+  - 1.0
+  rwssa_rho: 0.3
+  rwssa_risk_mode: jsd_topk
+  rwssa_selection_samples: 6
+artifact:
+  clip_radius: 5.0
+  dp_sigma: 0.0
+  missing_variance_scale: 4.0
+  quant_bits: 8
+  send_variance: false
+  sparse_intersection_only: true
+  topk: 64
+attack:
+  enabled: false
+  fraction: 0.25
+  kind: artifact_shift
+  strength: 0.3
+dataset:
+  download: false
+  name: mnist
+  root: ./data
+  test_limit: 0
+  train_limit: 0
+deterministic: true
+device: auto
+evaluation:
+  bootstrap_samples: 4000
+  compute_oracle_local_fidelity: true
+  deletion_insertion_samples_per_client: 5
+  deletion_steps: 10
+  eval_batch_size: 256
+  max_eval_samples: 20
+  oracle_samples_per_class: 24
+  primary_metric: sample_fidelity_jsd
+  topk_overlap_k: 48
+experiment_name: mnist_primary_noniid_100_c10_r50_e5_fedavg
+federation:
+  batch_size: 96
+  dirichlet_alpha: 1.0
+  local_epochs: 5
+  lr: 0.025
+  min_client_samples: 600
+  momentum: 0.9
+  n_clients: 10
+  participation_rate: 1.0
+  partition: dirichlet
+  rounds: 50
+  sample_size_sigma: 0.0
+  weight_decay: 0.0001
+logging:
+  log_every_round: true
+  output_root: ./full_study_outputs
+  save_artifacts: true
+  save_checkpoints: true
+num_workers: 0
+seeds:
+- 300101
+- 300102
+- 300103
+- 300104
+- 300105
+shift:
+  drift_end_round: 18
+  drift_start_round: 7
+  kind: none
+  patch_size: 3
+  patch_value: 1.0
+  rotation_max_deg: 18
+  strength: 1.0
+surrogate:
+  artifact_samples_per_class: 24
+  epochs: 3
+  eval_samples_per_class: 8
+  hidden_dim: 128
+  ig_steps: 8
+  kind: linear
+  l1: 0.0001
+  lr: 0.1
+  max_samples_per_class: 8
+  source: linear_surrogate
+  temperature: 3.0
+tags:
+  dataset_origin: offline_original_MNIST_IDX_or_CIFAR10_batches
+  never_synthetic: true
+  no_test_set_hyperparameter_tuning: true
+  pub_baseline_vs_proxy_separated: true
+  research_stage: primary
+  task_optimizer: fedavg

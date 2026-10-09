@@ -1,0 +1,56 @@
+{
+  "teachers_per_client": 48,
+  "evaluation_per_client": 64,
+  "ig_midpoint_steps": 8,
+  "ig_batch_size": 12,
+  "input_power": 1.2,
+  "peer_weight": 0.2,
+  "qf_rounds": 8,
+  "qf_local_steps": 30,
+  "qf_lr": 0.02,
+  "explanation_seed_offset": 710000,
+  "topk_spatial": {
+    "mnist": 48,
+    "cifar10": 64
+  },
+  "functional_records_per_client": 8,
+  "functional_steps": 20,
+  "primary_min_gain_over_private_conv": 0.005,
+  "require_nonregression_in_edi_and_functional": true,
+  "require_5_new_seeds_per_scenario": true,
+  "require_same_frozen_task_checkpoint_for_all_methods": true,
+  "protocol_constraints": [
+    "no dataset download",
+    "no synthetic data",
+    "no test set tuning",
+    "every seed predeclared",
+    "no weak baseline promotion",
+    "int8 communication includes upload and download",
+    "class prior control is not official xFedAlign",
+    "all methods share direct IG teacher budget and heldout evaluation"
+  ],
+  "datasets": {
+    "mnist": {
+      "train": 60000,
+      "test": 10000,
+      "shape": [
+        1,
+        28,
+        28
+      ],
+      "accuracy_gate": 0.95
+    },
+    "cifar10": {
+      "train": 50000,
+      "test": 10000,
+      "shape": [
+        3,
+        32,
+        32
+      ],
+      "accuracy_gate": 0.55
+    }
+  },
+  "title": "Shared explanation evaluation constants for QF-SCAD v8 (training axes are in EXPANDED_STUDY_PLAN.json)",
+  "accuracy_gate_smoke_override_prohibited_in_full_study": true
+}

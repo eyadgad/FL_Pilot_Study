@@ -1,0 +1,275 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_iid",
+      "seed": 17001,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_iid",
+      "seed": 17002,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_iid",
+      "seed": 17003,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_iid",
+      "seed": 17004,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_iid",
+      "seed": 17005,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_rotation",
+      "seed": 17101,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_rotation",
+      "seed": 17102,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_rotation",
+      "seed": 17103,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_rotation",
+      "seed": 17104,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_rotation",
+      "seed": 17105,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_patch",
+      "seed": 17201,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_patch",
+      "seed": 17202,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_patch",
+      "seed": 17203,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_patch",
+      "seed": 17204,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_patch",
+      "seed": 17205,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1800,
+      "min_eval": 1200
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_noniid_035",
+      "seed": 17301,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 922,
+      "min_eval": 616
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_noniid_035",
+      "seed": 17302,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 918,
+      "min_eval": 614
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_noniid_035",
+      "seed": 17303,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 437,
+      "min_eval": 293
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_noniid_035",
+      "seed": 17304,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 943,
+      "min_eval": 631
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_noniid_035",
+      "seed": 17305,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 602,
+      "min_eval": 403
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_noniid_005",
+      "seed": 17401,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 369,
+      "min_eval": 249
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_noniid_005",
+      "seed": 17402,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 723,
+      "min_eval": 484
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_noniid_005",
+      "seed": 17403,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 384,
+      "min_eval": 257
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_noniid_005",
+      "seed": 17404,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1081,
+      "min_eval": 724
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_noniid_005",
+      "seed": 17405,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 719,
+      "min_eval": 481
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_partial_clients",
+      "seed": 17501,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 898,
+      "min_eval": 600
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_partial_clients",
+      "seed": 17502,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 945,
+      "min_eval": 633
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_partial_clients",
+      "seed": 17503,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 724,
+      "min_eval": 486
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_partial_clients",
+      "seed": 17504,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 1187,
+      "min_eval": 794
+    },
+    {
+      "dataset": "mnist",
+      "scenario": "mnist_partial_clients",
+      "seed": 17505,
+      "n_train": 60000,
+      "n_test": 10000,
+      "min_teacher": 460,
+      "min_eval": 308
+    }
+  ]
+}
