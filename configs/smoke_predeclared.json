@@ -1,0 +1,51 @@
+{
+  "data": "user-supplied genuine MNIST, all 60000 train/10000 test, no download",
+  "checkpoint_accuracy_gate": 0.95,
+  "eval_seeds": [
+    {
+      "kind": "rotation",
+      "seed": 6101
+    },
+    {
+      "kind": "patch",
+      "seed": 6102
+    },
+    {
+      "kind": "rotation",
+      "seed": 6103
+    },
+    {
+      "kind": "patch",
+      "seed": 6104
+    }
+  ],
+  "teacher_fit_per_client": 36,
+  "teacher_validation_per_client": 12,
+  "final_heldout_eval_per_client": 48,
+  "ig_steps": 4,
+  "teacher_input_power": 1.2,
+  "private_field_blur_sigma": 1.0,
+  "peer_candidates": [
+    0.0,
+    0.1,
+    0.2,
+    0.4,
+    0.8
+  ],
+  "validation_min_improvement_jsd": 0.001,
+  "validation_min_fraction_positive": 0.6,
+  "evaluated_methods": [
+    "input_only",
+    "private_field",
+    "private_field_48",
+    "fixed_peer_0p2",
+    "fixed_peer_0p2_full48",
+    "adaptive_peer"
+  ],
+  "promotion_threshold": 75,
+  "frozen_before_smoke": true,
+  "this_smoke_is_exploratory": true,
+  "no_claim_of_statistical_novelty": true,
+  "control_revision": "v6b: added full-48 private and fixed baselines after identifying teacher-utilization asymmetry; all newly reported results exploratory",
+  "scientific_pass_requires_improvement_vs": "private_field_48"
+}

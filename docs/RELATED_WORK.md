@@ -1,8 +1,0 @@
-# Related work and positioning (accessed October 2026)
-
-- **xFedAlign**: Wasif et al., *Explainable Federated Learning via Global–Local Attribution Alignment*, ICML 2026, https://proceedings.mlr.press/v306/wasif26a.html. Official experiment repository: https://github.com/dawoodwasif/xFedAlign. Includes MNIST/CIFAR vision experiments and script-level baseline suite. This project contains an **independent protocol-inspired reproduction**, not the official script.
-- **iFLASH**, Bonsignori et al., *Interpreting Federated Learning by Aggregating SHAP Explanations*, IEEE Access (2026), DOI 10.1109/ACCESS.2026.3696009. This paper evaluates faithfulness-weighted client SHAP aggregation, including cross-silo and cross-device settings. Our `iflash_proxy` is **not a faithful author-equivalent implementation**; it is a relevant quality-weighted control sharing the same local artifacts as RWSSA.
-- **Conformal Risk Control**: Angelopoulos et al., *Conformal Risk Control*, ICLR 2024. Calibration of bounded monotone risks is a known statistical idea, not RWSSA's invention. The primary smoke-mode bounds apply **only** to the bounded monotone surrogate (JSD/top-k excess) conditional on independent selection/calibration data.
-- Additional nearest work: explanation-quality-weighted aggregation, feature attribution fusion, federated uncertainty/calibration. A separate systematic, peer-reviewed novelty comparison remains necessary before paper drafting.
-
-**Narrow candidate claim:** client-private direct-IG-derived per-coordinate benefit scores collectively determine a continuous *shared* safety map, allowing common but feature-selective alignment and private client-level scaling. Neither quality-aware aggregation nor conformal calibration alone is novel.

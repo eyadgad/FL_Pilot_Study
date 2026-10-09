@@ -91,6 +91,10 @@ class AlignmentConfig:
     rwssa_selection_samples: int = 24
     rwssa_calibration_samples: int = 32
     rwssa_risk_mode: str = 'jsd_topk'  # full four-metric CRC; jsd_topk is exploratory
+    residual_teacher_budget: int = 16
+    residual_topk: int = 64
+    residual_alpha: float = 0.6
+    residual_beta: float = 0.4
 
 @dataclass
 class EvaluationConfig:

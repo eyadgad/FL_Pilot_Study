@@ -174,25 +174,11 @@ def _split_client_indices(indices: np.ndarray, seed: int):
     return a,b,c,d,e
 
 
-def _synthetic(seed: int, n=1600, test_n=400, n_classes=4, shape=(1,16,16)):
-    g=torch.Generator().manual_seed(int(seed))
-    means=torch.randn(n_classes, int(np.prod(shape)), generator=g)*0.35
-    # sparse class-specific regions create explainable structure
-    d=int(np.prod(shape))
-    for c in range(n_classes): means[c, (c*d//n_classes):((c+1)*d//n_classes)] += 1.5
-    y=torch.randint(0,n_classes,(n,),generator=g)
-    X=(means[y]+0.8*torch.randn(n,d,generator=g)).reshape(n,*shape)
-    yt=torch.randint(0,n_classes,(test_n,),generator=g)
-    Xt=(means[yt]+0.8*torch.randn(test_n,d,generator=g)).reshape(test_n,*shape)
-    X=(X-X.min())/(X.max()-X.min()+1e-8); Xt=(Xt-Xt.min())/(Xt.max()-Xt.min()+1e-8)
-    return TensorDataset(X,y), TensorDataset(Xt,yt), n_classes, shape
-
-
 def load_data(cfg: ExperimentConfig, seed: int) -> DataBundle:
     name=cfg.dataset.name.lower()
     root=Path(cfg.dataset.root)
     if name=='synthetic':
-        train,test,n_classes,shape=_synthetic(seed,n=int(cfg.dataset.train_limit or 1600),test_n=int(cfg.dataset.test_limit or 400))
+        raise ValueError('Synthetic data prohibited for APGF scientific evaluation')
     elif name=='mnist':
         train=tvd.MNIST(root=str(root),train=True,download=cfg.dataset.download,transform=transforms.ToTensor())
         test=tvd.MNIST(root=str(root),train=False,download=cfg.dataset.download,transform=transforms.ToTensor())

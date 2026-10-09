@@ -15,6 +15,7 @@ from .attacks import apply_artifact_attack
 from .metrics import pairwise_edi, reference_edi, summary_jsd, normalize_np, prepare_client_evaluation, evaluate_method_cache
 from .risk_control import calibration_loss_matrix, choose_largest_certified_beta, evaluate_beta_on_records
 from .privacy import artifact_membership_audit
+from .residual import fit_wire_residual_policies,corrected_map
 from .rwssa import learn_client_gain, global_safety, safety_weight, select_scale, iflash_style_prior, weight_map, evaluate_maps, sparse_quantized_client_gains
 
 
@@ -102,7 +103,58 @@ def _evaluate_artifacts(label, artifacts, locals_, calibration_caches, eval_cach
           'sparse_gain_bytes_per_client':int(rw_sparse_bytes),
           'gain_channel_privacy':'unprotected dense float32 proxy; no differential privacy claim'})
     
+    residual_names={'resid_private','resid_shared','resid_fixed','resid_loo','resid_ebloo','resid_private_no_prior'}
+    need_residual=any(m in residual_names for m in cfg.alignment.methods)
+    if need_residual:
+        # Calibration is strictly disjoint from task, surrogate, artifact and final evaluation.
+        teacher_records=[x['records'][:int(cfg.alignment.residual_teacher_budget)] for x in calibration_caches]
+        correction, residual_meta=fit_wire_residual_policies(teacher_records,bundle.n_classes,means.shape[-1],cfg.alignment.residual_topk)
+        logger.save_json(f'artifacts/{label}__residual_protocol.json',residual_meta)
+        residual_priors=xfedalign_prior(means)
+
     for method in cfg.alignment.methods:
+        if method in residual_names:
+            kind='private' if method=='resid_private_no_prior' else method[len('resid_'):]
+            beta=0.0 if method=='resid_private_no_prior' else float(cfg.alignment.residual_beta)
+            corrected=np.stack([np.stack([corrected_map(means[i,c],residual_priors[i,c],correction[kind][i,c],
+                                      cfg.alignment.residual_alpha,beta) for c in range(bundle.n_classes)]) for i in range(n)])
+            p_edi=pairwise_edi(corrected,counts)
+            edi=reference_edi(corrected,residual_priors,counts)
+            fidelity=[summary_jsd(corrected[i],oracle_summaries[i],(counts[i]>0)&(oracle_counts[i]>0)) for i in range(n)]
+            sample=[]
+            from .alignment import jsd as _jsd
+            from .metrics import topk_overlap as _topk
+            from .risk_control import perturbation_auc_many as _pauc
+            for i in range(n):
+                values={k:[] for k in ('sample_fidelity_jsd','deletion_auc','insertion_auc','topk_oracle_overlap','excess_fidelity_risk')}
+                records=eval_caches[i]['records'][:int(cfg.evaluation.deletion_insertion_samples_per_client)]
+                for rec in records:
+                    c=int(rec['pred']);o=normalize_np(rec['oracle_map'][None])[0];l=normalize_np(rec['local_map'][None])[0]
+                    output=corrected_map(l,residual_priors[i,c],correction[kind][i,c],cfg.alignment.residual_alpha,beta)
+                    js0=float(_jsd(l,o));js1=float(_jsd(output,o))
+                    k0=_topk(l,o,cfg.evaluation.topk_overlap_k);k1=_topk(output,o,cfg.evaluation.topk_overlap_k)
+                    dm,im=_pauc(task_model,torch.as_tensor(rec['x'],dtype=torch.float32),c,np.stack([l,output]),device,cfg.evaluation.deletion_steps)
+                    harm=max(0.,float(dm[1]-dm[0]),float(im[0]-im[1]),float(k0-k1),js1-js0)
+                    for key,v in [('sample_fidelity_jsd',js1),('deletion_auc',dm[1]),('insertion_auc',im[1]),('topk_oracle_overlap',k1),('excess_fidelity_risk',harm)]:values[key].append(float(v))
+                sample.append({k:float(np.mean(v)) if v else float('nan') for k,v in values.items()})
+            avg=lambda k:float(np.mean([z[k] for z in sample]))
+            uplink=np.mean(residual_meta['bytes_per_client_up']) if kind!='private' else 0.
+            downlink=np.mean(residual_meta['bytes_per_client_down']) if kind!='private' else 0.
+            # Residual overhead is counted as an *additional* per-client channel;
+            # shared prior cost is calculated exactly as for xFedAlign below.
+            artifact_comm=float(np.mean([_mean_only_bytes(a,cfg.artifact) for a in artifacts]))
+            outcome={'artifact_fidelity_jsd':float(np.nanmean(fidelity)),'sample_fidelity_jsd':avg('sample_fidelity_jsd'),
+              'pairwise_edi':p_edi,'reference_edi':edi,'deletion_auc':avg('deletion_auc'),'insertion_auc':avg('insertion_auc'),
+              'topk_oracle_overlap':avg('topk_oracle_overlap'),'excess_fidelity_risk':avg('excess_fidelity_risk'),
+              'communication_bytes_per_client_artifact':artifact_comm+uplink+downlink,
+              'extra_residual_uplink_bytes':float(uplink),'extra_residual_downlink_bytes':float(downlink),
+              'n_teacher_ig_records_mean':float(np.mean(residual_meta['n_teacher_per_client'])),
+              'n_eval_explanations':int(sum(min(len(x['records']),cfg.evaluation.deletion_insertion_samples_per_client) for x in eval_caches)),
+              'selected_beta_mean':beta}
+            results[method]=outcome
+            for k,v in outcome.items():
+                if isinstance(v,(int,float)) and np.isfinite(v):logger.metric(k,v,stage='explanation',scenario=label,method=method)
+            continue
         if method in rw_methods:
             prior=rw_iflash if method=='iflash_proxy' else rw_prior
             priors=prior
@@ -209,9 +261,7 @@ def _evaluate_artifacts(label, artifacts, locals_, calibration_caches, eval_cach
 
 def run_one(cfg: ExperimentConfig, seed: int):
     set_seed(seed,cfg.deterministic); device=resolve_device(cfg.device)
-    env=environment_snapshot(); env['resolved_device']=str(device)
-    logger=RunLogger(cfg.logging.output_root,cfg.experiment_name,seed,cfg.to_dict(),env)
-    logger.event('device_resolved', device=str(device), cuda_available=bool(torch.cuda.is_available()))
+    env=environment_snapshot(); logger=RunLogger(cfg.logging.output_root,cfg.experiment_name,seed,cfg.to_dict(),env)
     try:
         logger.event('data_loading_started')
         bundle=load_data(cfg,seed)
@@ -257,7 +307,7 @@ def run_one(cfg: ExperimentConfig, seed: int):
 
         calibration_caches=[]
         for cid in range(cfg.federation.n_clients):
-            cc=prepare_client_evaluation(task_model,bundle.calibration_clients[cid],locals_[cid].surrogate_state,cfg.surrogate.source,bundle.input_shape,bundle.n_classes,device,cfg.surrogate.ig_steps,seed+9000+cid*211,cfg.num_workers,max(int(cfg.alignment.cfba_calibration_samples_per_client),int(cfg.alignment.cfba_min_calibration_samples), int(cfg.alignment.rwssa_selection_samples)+int(cfg.alignment.rwssa_calibration_samples)))
+            cc=prepare_client_evaluation(task_model,bundle.calibration_clients[cid],locals_[cid].surrogate_state,cfg.surrogate.source,bundle.input_shape,bundle.n_classes,device,cfg.surrogate.ig_steps,seed+9000+cid*211,cfg.num_workers,max(int(cfg.alignment.cfba_calibration_samples_per_client),int(cfg.alignment.cfba_min_calibration_samples), int(cfg.alignment.rwssa_selection_samples)+int(cfg.alignment.rwssa_calibration_samples),int(cfg.alignment.residual_teacher_budget)))
             calibration_caches.append(cc)
         eval_caches=[];oracle=[];oc=[]
         for cid in range(cfg.federation.n_clients):

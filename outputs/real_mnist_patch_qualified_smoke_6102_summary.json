@@ -1,0 +1,102 @@
+{
+  "kind": "patch",
+  "scenario": "real_mnist_patch_qualified_smoke",
+  "seed": 6102,
+  "status": "EXPLORATORY",
+  "dataset_provenance": "genuine CSV-origin MNIST via v5 verified IDX",
+  "checkpoint_sha256": "e3610431f3c698092cd2c4fd091b6e908a055414b302681addcd5a01d79927bf",
+  "partition_sha256": "5a1a1879ed33b915603effa0822c03a4501aebde030a520b70dd0b7c1db00a48",
+  "config_sha256": "ff558c5e8b5d88d9f682e2f8edbae0cd11d78893da4700cdc6fef6f617635bee",
+  "protocol_sha256": "c67818a8f694522a411d6bc13e5016a8d3690e0624e74d7b8b7ad51b18717532",
+  "full10k_accuracy": 0.9516,
+  "n_teacher_fit_per_client": 36,
+  "n_teacher_validation_per_client": 12,
+  "n_heldout_eval_per_client": 48,
+  "n_clients": 3,
+  "all_data_partitions_disjoint": true,
+  "methods": {
+    "input_only": {
+      "mean_jsd": 0.08372515937441839,
+      "mean_top48_overlap": 0.5554108796296295,
+      "n_eval": 144,
+      "heldout_predclass_summary_disagreement_jsd": 0.13800885911385588
+    },
+    "private_field": {
+      "mean_jsd": 0.0778655341441227,
+      "mean_top48_overlap": 0.5847800925925927,
+      "n_eval": 144,
+      "heldout_predclass_summary_disagreement_jsd": 0.1503684702285973
+    },
+    "private_field_48": {
+      "mean_jsd": 0.0771537201686805,
+      "mean_top48_overlap": 0.5844907407407407,
+      "n_eval": 144,
+      "heldout_predclass_summary_disagreement_jsd": 0.14771078776314867
+    },
+    "fixed_peer_0p2": {
+      "mean_jsd": 0.07569262559459261,
+      "mean_top48_overlap": 0.5921585648148148,
+      "n_eval": 144,
+      "heldout_predclass_summary_disagreement_jsd": 0.14768510531435133
+    },
+    "fixed_peer_0p2_full48": {
+      "mean_jsd": 0.0758559189891926,
+      "mean_top48_overlap": 0.5918692129629629,
+      "n_eval": 144,
+      "heldout_predclass_summary_disagreement_jsd": 0.14594072555861803
+    },
+    "adaptive_peer": {
+      "mean_jsd": 0.07519600426593372,
+      "mean_top48_overlap": 0.5925925925925926,
+      "n_eval": 144,
+      "heldout_predclass_summary_disagreement_jsd": 0.14903192507128274
+    }
+  },
+  "selected_gates": [
+    {
+      "selected_weight": 0.8,
+      "val_gain": 0.0023375283280163747,
+      "n_val": 12,
+      "private_validation_jsd": 0.07295674042195555,
+      "selected_validation_jsd": 0.07061921209393916,
+      "reason": "PEER_GAIN_ON_RESERVED_TEACHERS",
+      "weight_validated": true
+    },
+    {
+      "selected_weight": 0.0,
+      "val_gain": 0.0,
+      "n_val": 12,
+      "private_validation_jsd": 0.07320639909479142,
+      "selected_validation_jsd": 0.07320639909479142,
+      "reason": "NO_VALIDATED_PEER_GAIN",
+      "weight_validated": false
+    },
+    {
+      "selected_weight": 0.8,
+      "val_gain": 0.006680452749676572,
+      "n_val": 12,
+      "private_validation_jsd": 0.0794000293877589,
+      "selected_validation_jsd": 0.07271957663808233,
+      "reason": "PEER_GAIN_ON_RESERVED_TEACHERS",
+      "weight_validated": true
+    }
+  ],
+  "ledger": {
+    "per_client_uplink_bytes": [
+      1580,
+      1580,
+      1580
+    ],
+    "per_client_downlink_bytes": 786,
+    "transport": "quantized uint16 support plus two uint8 784-pixel stats; uint8 downlink",
+    "peer_only_excludes_self": true,
+    "privacy_guarantee": false
+  },
+  "notes": [
+    "Already-trained CNNs were reused; this is not new independent FedAvg training.",
+    "The decision rule was designed after looking at previous studies; this is exploratory, not publishable confirmation.",
+    "Strong private-only and fixed-sharing controls also fit with all 48 available teachers.",
+    "No class-conditioning or xFedAlign surrogate included in this focused peer-gain smoke.",
+    "Validation records never enter fit statistics or final evaluation."
+  ]
+}

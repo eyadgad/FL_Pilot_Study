@@ -1,0 +1,15 @@
+{
+  "issue": "v6b simulated ledger counted only chosen 786-byte downlink; private validation needs five candidate fields",
+  "original_outbound_per_client_bytes": 786,
+  "corrected_outbound_per_client_bytes": 3930,
+  "uplink_per_client_bytes": 1580,
+  "corrected_total_per_client_bytes": 5510,
+  "JSD_unaffected": true,
+  "original_unmodified_file_sha256": {
+    "real_mnist_patch_qualified_smoke_6102_summary.json": "f48f3e2c20da0e5a784964139dcd853f21a878d8f5980cc37833ec1568b7d658",
+    "real_mnist_patch_qualified_smoke_6104_summary.json": "c8ded1d686a2cbfdd4bb03cbc13da3ae477de04be4c3bee2d2a6ad240e15afb8",
+    "real_mnist_rotation_qualified_smoke_6101_summary.json": "7cdae0d41a95ef7114257580f732a1c475f3d7cd6022d14c5cd64b70863814bb",
+    "real_mnist_rotation_qualified_smoke_6103_summary.json": "59656d0e8aa760f4e651110b7579b6be3e3c3b621bf5eb6a572b157ba207fcd2"
+  },
+  "status": "engineering accounting correction; no actual network deployment measured"
+}

@@ -1,0 +1,108 @@
+alignment:
+  beta: 0.2
+  cfba_calibration_samples_per_client: 12
+  cfba_min_calibration_samples: 4
+  methods:
+  - local
+  - xfedalign_median
+  - rwssa_binary
+  - resid_private
+  - resid_shared
+  - resid_fixed
+  - resid_loo
+  - resid_ebloo
+  residual_alpha: 0.6
+  residual_beta: 0.4
+  residual_teacher_budget: 12
+  residual_topk: 48
+  rwssa_alpha: 0.05
+  rwssa_calibration_samples: 0
+  rwssa_grid:
+  - 0.0
+  - 0.25
+  - 0.5
+  - 0.75
+  - 1.0
+  rwssa_rho: 0.3
+  rwssa_risk_mode: jsd_topk
+  rwssa_selection_samples: 6
+artifact:
+  clip_radius: 5.0
+  dp_sigma: 0.0
+  missing_variance_scale: 4.0
+  quant_bits: 8
+  send_variance: false
+  sparse_intersection_only: true
+  topk: 64
+attack:
+  enabled: false
+  fraction: 0.25
+  kind: artifact_shift
+  strength: 0.3
+dataset:
+  download: false
+  name: mnist
+  root: ./data
+  test_limit: 900
+  train_limit: 12000
+deterministic: true
+device: cpu
+evaluation:
+  bootstrap_samples: 4000
+  compute_oracle_local_fidelity: true
+  deletion_insertion_samples_per_client: 5
+  deletion_steps: 3
+  eval_batch_size: 128
+  max_eval_samples: 20
+  oracle_samples_per_class: 24
+  primary_metric: sample_fidelity_jsd
+  topk_overlap_k: 48
+experiment_name: real_mnist_rotation_qualified_smoke
+federation:
+  batch_size: 96
+  dirichlet_alpha: 0.35
+  local_epochs: 2
+  lr: 0.025
+  min_client_samples: 250
+  momentum: 0.9
+  n_clients: 3
+  participation_rate: 1.0
+  partition: iid
+  rounds: 12
+  sample_size_sigma: 0.0
+  weight_decay: 0.0001
+logging:
+  log_every_round: true
+  output_root: ./real_mnist_smoke_outputs
+  save_artifacts: true
+  save_checkpoints: true
+num_workers: 0
+seeds:
+- 5911
+shift:
+  drift_end_round: 18
+  drift_start_round: 7
+  kind: rotation
+  patch_size: 3
+  patch_value: 1.0
+  rotation_max_deg: 18
+  strength: 1.0
+surrogate:
+  artifact_samples_per_class: 8
+  epochs: 2
+  eval_samples_per_class: 8
+  hidden_dim: 128
+  ig_steps: 4
+  kind: linear
+  l1: 0.0001
+  lr: 0.1
+  max_samples_per_class: 8
+  source: linear_surrogate
+  temperature: 3.0
+tags:
+  tier: MNIST_REAL_SMOKE
+  status: development
+  dataset_provenance: MNIST CSV from supplied project.zip
+  role: rotation
+  quality_gate_min_test_accuracy: 0.75
+  qualification: full_mnist_task_training

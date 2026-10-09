@@ -1,0 +1,155 @@
+{
+  "scientific_status": "EXPLORATORY_NOT_PROMOTED",
+  "n_qualified_checkpoints": 4,
+  "n_real_mnist_eval_records": 576,
+  "methods": {
+    "input_only": {
+      "jsd": 0.08325757016500328,
+      "top48": 0.5479239004629629,
+      "eval_class_summary_disagreement": 0.14991118519948962
+    },
+    "private_field": {
+      "jsd": 0.07946009403919203,
+      "top48": 0.5732783564814814,
+      "eval_class_summary_disagreement": 0.14667954792910515
+    },
+    "private_field_48": {
+      "jsd": 0.07839624951957332,
+      "top48": 0.5761357060185185,
+      "eval_class_summary_disagreement": 0.14645590420038823
+    },
+    "fixed_peer_0p2": {
+      "jsd": 0.07794677305925371,
+      "top48": 0.5765697337962963,
+      "eval_class_summary_disagreement": 0.14446047628543857
+    },
+    "fixed_peer_0p2_full48": {
+      "jsd": 0.07743396682710559,
+      "top48": 0.5797887731481481,
+      "eval_class_summary_disagreement": 0.1445809236898316
+    },
+    "adaptive_peer": {
+      "jsd": 0.07774431991599035,
+      "top48": 0.5784505208333333,
+      "eval_class_summary_disagreement": 0.14512320307713045
+    }
+  },
+  "runs": [
+    {
+      "seed": 6102,
+      "kind": "patch",
+      "full_test_accuracy": 0.9516,
+      "gate_weights": [
+        0.8,
+        0.0,
+        0.8
+      ],
+      "input_only_jsd": 0.08372515937441839,
+      "private_field_jsd": 0.0778655341441227,
+      "private_field_48_jsd": 0.0771537201686805,
+      "fixed_peer_0p2_jsd": 0.07569262559459261,
+      "fixed_peer_0p2_full48_jsd": 0.0758559189891926,
+      "adaptive_peer_jsd": 0.07519600426593372
+    },
+    {
+      "seed": 6104,
+      "kind": "patch",
+      "full_test_accuracy": 0.958,
+      "gate_weights": [
+        0.8,
+        0.0,
+        0.8
+      ],
+      "input_only_jsd": 0.08242364218816678,
+      "private_field_jsd": 0.07424609813931383,
+      "private_field_48_jsd": 0.07332954423125236,
+      "fixed_peer_0p2_jsd": 0.073135824417225,
+      "fixed_peer_0p2_full48_jsd": 0.07264860259027288,
+      "adaptive_peer_jsd": 0.07305461581741074
+    },
+    {
+      "seed": 6101,
+      "kind": "rotation",
+      "full_test_accuracy": 0.9735,
+      "gate_weights": [
+        0.8,
+        0.4,
+        0.8
+      ],
+      "input_only_jsd": 0.08466679837144366,
+      "private_field_jsd": 0.08473210155802974,
+      "private_field_48_jsd": 0.08289966208393354,
+      "fixed_peer_0p2_jsd": 0.08342673922904534,
+      "fixed_peer_0p2_full48_jsd": 0.0822085653818155,
+      "adaptive_peer_jsd": 0.08310476429898223
+    },
+    {
+      "seed": 6103,
+      "kind": "rotation",
+      "full_test_accuracy": 0.9742,
+      "gate_weights": [
+        0.0,
+        0.8,
+        0.0
+      ],
+      "input_only_jsd": 0.08221468072598433,
+      "private_field_jsd": 0.08099664231530183,
+      "private_field_48_jsd": 0.08020207159442687,
+      "fixed_peer_0p2_jsd": 0.07953190299615191,
+      "fixed_peer_0p2_full48_jsd": 0.07902278034714137,
+      "adaptive_peer_jsd": 0.0796218952816347
+    }
+  ],
+  "statistical_warnings": [
+    "Four task seeds had been used in prior research; not independent prospective confirmation",
+    "Seed-level intervals are underpowered and not correct for model selection",
+    "No official xFedAlign, no new independent CNN training, no extreme non-IID, no deletion/insertion in this focused smoke",
+    "See initial run versions under research_history; v6b adds stronger full-48 controls"
+  ],
+  "promotion_allowed": false,
+  "comparison_vs_private_field": {
+    "mean_jsd_gain": 0.0017157741232016813,
+    "wins": 4,
+    "n": 4,
+    "t95ci_seed_level": [
+      0.0006648227319551627,
+      0.0027667255144481996
+    ]
+  },
+  "comparison_vs_private_field_48": {
+    "mean_jsd_gain": 0.0006519296035829708,
+    "wins": 3,
+    "n": 4,
+    "t95ci_seed_level": [
+      -0.000825670491130857,
+      0.0021295296982967987
+    ]
+  },
+  "comparison_vs_fixed_peer_0p2": {
+    "mean_jsd_gain": 0.00020245314326337166,
+    "wins": 3,
+    "n": 4,
+    "t95ci_seed_level": [
+      -0.00020947080629058395,
+      0.0006143770928173273
+    ]
+  },
+  "comparison_vs_fixed_peer_0p2_full48": {
+    "mean_jsd_gain": -0.00031035308888476,
+    "wins": 1,
+    "n": 4,
+    "t95ci_seed_level": [
+      -0.0013884656767592742,
+      0.0007677594989897543
+    ]
+  },
+  "comparison_vs_input_only": {
+    "mean_jsd_gain": 0.005513250249012943,
+    "wins": 4,
+    "n": 4,
+    "t95ci_seed_level": [
+      -0.000858528339330443,
+      0.011885028837356329
+    ]
+  }
+}

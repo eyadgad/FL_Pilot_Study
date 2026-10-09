@@ -7,7 +7,7 @@ try:
 except Exception:
     wilcoxon=None
 
-METRICS=['artifact_fidelity_jsd','sample_fidelity_jsd','pairwise_edi','reference_edi','deletion_auc','insertion_auc','topk_oracle_overlap','excess_fidelity_risk','excess_fidelity_risk_p90','communication_bytes_per_client_artifact','selected_beta_mean','selected_beta_min','selected_beta_max','certified_fraction','extra_safety_bytes_per_client']
+METRICS=['artifact_fidelity_jsd','sample_fidelity_jsd','pairwise_edi','reference_edi','deletion_auc','insertion_auc','topk_oracle_overlap','excess_fidelity_risk','excess_fidelity_risk_p90','communication_bytes_per_client_artifact','selected_beta_mean','selected_beta_min','selected_beta_max','certified_fraction','extra_safety_bytes_per_client','extra_residual_uplink_bytes','extra_residual_downlink_bytes','n_teacher_ig_records_mean']
 
 def _ci(vals,seed=0,B=2000):
     vals=np.asarray(vals,float); vals=vals[np.isfinite(vals)]
@@ -70,13 +70,13 @@ def aggregate(output_root, out_dir):
     paired=[]
     by={(r['experiment'],r['scenario'],r['seed'],r['method']):r for r in rows}
     exps=sorted(set((r['experiment'],r['scenario']) for r in rows))
-    for comparator in ('xfedalign_median','iflash_proxy','fedattr_mean','rwssa_binary','rwssa_no_safety'):
+    for comparator in ('xfedalign_median','iflash_proxy','fedattr_mean','resid_private','resid_loo','resid_ebloo','rwssa_binary'):
         for exp,sc in exps:
             seeds=sorted(set(r['seed'] for r in rows if r['experiment']==exp and r['scenario']==sc))
             for metric in METRICS:
                 dif=[]
                 for seed in seeds:
-                    a=by.get((exp,sc,seed,'rwssa')); b=by.get((exp,sc,seed,comparator))
+                    a=by.get((exp,sc,seed,'resid_fixed')); b=by.get((exp,sc,seed,comparator))
                     if a and b and np.isfinite(a.get(metric,np.nan)) and np.isfinite(b.get(metric,np.nan)):
                         dif.append(a[metric]-b[metric])
                 if dif:
@@ -87,12 +87,12 @@ def aggregate(output_root, out_dir):
                     if wilcoxon is not None and len(dif)>=3 and not np.allclose(dif,0):
                         try:pval=float(wilcoxon(dif,alternative='two-sided',zero_method='wilcox').pvalue)
                         except Exception:pass
-                    paired.append({'experiment':exp,'scenario':sc,'comparator':comparator,'metric':metric,'n':len(dif),'rwssa_minus_comparator_mean':mean,'sd':sd,'ci95_lo':lo,'ci95_hi':hi,'directional_wins':wins,'wilcoxon_two_sided_p':pval})
+                    paired.append({'experiment':exp,'scenario':sc,'comparator':comparator,'metric':metric,'n':len(dif),'residual_fixed_minus_comparator_mean':mean,'sd':sd,'ci95_lo':lo,'ci95_hi':hi,'directional_wins':wins,'wilcoxon_two_sided_p':pval})
     if paired:
         cols=list(paired[0])
-        with open(out/'paired_rwssa_comparisons.csv','w',newline='',encoding='utf-8') as f:
+        with open(out/'paired_residual_comparisons.csv','w',newline='',encoding='utf-8') as f:
             w=csv.DictWriter(f,fieldnames=cols);w.writeheader();w.writerows(paired)
-    md=['# Aggregate results','',f'Runs found: {len(rows)}','', 'Primary paired tables compare RWSSA against xFedAlign-style, iFLASH-inspired, global-mean, and ablation controls. Negative differences are favorable for lower-is-better metrics; positive for insertion/overlap.','']
+    md=['# Aggregate results','',f'Runs found: {len(rows)}','', 'Primary paired tables compare fixed residual pooling against private-only, leave-one-out pooling, xFedAlign-style, iFLASH-inspired and other controls. Negative differences are favorable for lower-is-better metrics; positive for insertion/overlap.','']
     for rec in summary:
         md.append(f"## {rec['experiment']} / {rec['scenario']} / {rec['method']} (n={rec['n_seeds']})")
         md.append(f"- artifact fidelity JSD: {rec['artifact_fidelity_jsd_mean']:.6f} [{rec['artifact_fidelity_jsd_ci95_lo']:.6f}, {rec['artifact_fidelity_jsd_ci95_hi']:.6f}]")
