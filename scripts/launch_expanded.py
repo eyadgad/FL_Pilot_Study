@@ -3,7 +3,7 @@
 CPU parallelism available via --workers, with bounded CPU threads per worker.
 """
 from __future__ import annotations
-import argparse,concurrent.futures,json,os,subprocess,sys,hashlib,time
+import argparse,concurrent.futures,json,os,queue,subprocess,sys,hashlib,time
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -68,13 +68,20 @@ def main():
         print(json.dumps({'count':len(targets),'num_workers':a.workers,'dataset':a.dataset,'stage':a.stage,
           'devices':[f'cuda:{i%available}' if mode=='cuda' else 'cpu' for i in range(a.workers)],
           'configs':sorted(set(z[0].stem for z in targets))},indent=2));return
-    # Parallel per-GPU subprocesses, not Python threads sharing a CUDA context.
-    # No hidden uploads, no automatic data downloads.
+    # One device token per worker. A finished job returns its GPU before the next
+    # job starts, so two runs cannot share a device unless --allow-gpu-sharing
+    # put that device in the pool more than once.
+    slots=queue.Queue()
+    for i in range(a.workers):
+        slots.put(f'cuda:{i%available}' if mode=='cuda' else 'cpu')
+    def _job(entry):
+        assigned=slots.get()
+        try:
+            return run_one(entry,assigned,root,out,a.threads)
+        finally:
+            slots.put(assigned)
     with concurrent.futures.ThreadPoolExecutor(max_workers=a.workers) as pool:
-        futures=[]
-        for i,e in enumerate(targets):
-            assigned=f'cuda:{i%available}' if mode=='cuda' else 'cpu'
-            futures.append(pool.submit(run_one,e,assigned,root,out,a.threads))
+        futures=[pool.submit(_job,e) for e in targets]
         for f in concurrent.futures.as_completed(futures):print(json.dumps(f.result()),flush=True)
 
 if __name__=='__main__':main()

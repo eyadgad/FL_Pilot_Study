@@ -6,6 +6,7 @@ import torch.nn.functional as F
 from torch import nn
 from .datasets import DataBundle, make_loader
 from .models import build_model
+from .repro import move_state_dict
 
 
 def _weighted_average(states: list[dict], weights: list[float]) -> dict:
@@ -58,7 +59,8 @@ def train_fedavg(cfg, bundle: DataBundle, seed: int, device, logger):
             ll=train_local(local,loader,device,fed.local_epochs,fed.lr,fed.momentum,fed.weight_decay)
             states.append({k:v.detach().cpu() for k,v in local.state_dict().items()})
             weights.append(len(bundle.task_clients[cid])); local_losses.append(ll)
-        model.load_state_dict(_weighted_average(states,weights))
+        model.load_state_dict(move_state_dict(_weighted_average(states,weights), device))
+        model.to(device)
         if cfg.logging.log_every_round:
             # Precommitted FL training diagnostics only: DO NOT repeatedly
             # inspect the held-out 10,000-image TEST split during task training.
@@ -68,7 +70,7 @@ def train_fedavg(cfg, bundle: DataBundle, seed: int, device, logger):
     logger.metric('task_accuracy',final['accuracy'],stage='final')
     logger.metric('task_loss',final['loss'],stage='final')
     if cfg.logging.save_checkpoints:
-        torch.save(model.state_dict(),logger.run_dir/'checkpoints'/'global_task_model.pt')
+        torch.save({k:v.detach().cpu() for k,v in model.state_dict().items()}, logger.run_dir/'checkpoints'/'global_task_model.pt')
     return model, final
 
 
@@ -110,7 +112,8 @@ def train_fedprox(cfg,bundle,seed,device,logger,mu=0.01):
             l=train_local_fedprox(local,loader,device,fed.local_epochs,fed.lr,fed.momentum,fed.weight_decay,model,mu)
             states.append({key:v.detach().cpu() for key,v in local.state_dict().items()})
             weights.append(len(bundle.task_clients[cid]));losses.append(l)
-        model.load_state_dict(_weighted_average(states,weights))
+        model.load_state_dict(move_state_dict(_weighted_average(states,weights), device))
+        model.to(device)
         if cfg.logging.log_every_round:
             logger.metric('local_train_loss_mean',float(np.mean(losses)),stage='train',round=r)
             logger.event('round_complete',round=r,selected_clients=[int(cid) for cid in selected],optimizer='fedprox')
@@ -118,5 +121,5 @@ def train_fedprox(cfg,bundle,seed,device,logger,mu=0.01):
     logger.metric('task_accuracy',final['accuracy'],stage='final')
     logger.metric('task_loss',final['loss'],stage='final')
     if cfg.logging.save_checkpoints:
-        torch.save(model.state_dict(),logger.run_dir/'checkpoints'/'global_task_model.pt')
+        torch.save({k:v.detach().cpu() for k,v in model.state_dict().items()}, logger.run_dir/'checkpoints'/'global_task_model.pt')
     return model,final

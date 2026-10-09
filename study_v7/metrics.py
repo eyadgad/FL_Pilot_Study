@@ -45,4 +45,5 @@ def functional_auc(model,x,target,spatial_map,device,steps=20):
         with torch.no_grad():probs=torch.softmax(model(bat),dim=1)[:,int(target)].cpu().numpy()
         dele.append(float(probs[0]));inse.append(float(probs[1]))
     s=np.linspace(0,1,steps+1)
-    return float(np.trapezoid(dele,s)),float(np.trapezoid(inse,s))
+    trapz = np.trapezoid if hasattr(np, 'trapezoid') else np.trapz
+    return float(trapz(dele, s)), float(trapz(inse, s))
